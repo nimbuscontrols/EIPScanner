@@ -20,7 +20,7 @@ namespace utils {
 
 	class Logger {
 	public:
-		static void logLevel(LogLevel level);
+		static void setLogLevel(LogLevel level);
 
 		Logger(LogLevel level);
 

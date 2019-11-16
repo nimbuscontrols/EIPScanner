@@ -13,12 +13,12 @@ namespace utils {
 	}
 
 	Logger::~Logger() {
-		if (_logLevel >= _globalLogLevel) {
+		if (_logLevel <= _globalLogLevel) {
 			std::cout << _stream.str() << std::endl;
 		}
 	}
 
-	void Logger::logLevel(LogLevel level) {
+	void Logger::setLogLevel(LogLevel level) {
 		_globalLogLevel = level;
 	}
 

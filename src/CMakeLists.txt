@@ -3,6 +3,8 @@ add_library(EIPScanner SHARED
         eip/EncapsPacket.cpp
         eip/EncapsPacketFactory.cpp
 
+        sockets/TCPSocket.cpp
+
         utils/Logger.cpp
         utils/Buffer.cpp
 

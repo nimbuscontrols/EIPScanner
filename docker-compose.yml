@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  eip_scanner:
+    build: .
+    volumes:
+      - .:/code
+
+  opener_adapter:
+    build: Dockers/opener
+    working_dir: /OpENer/bin/posix/src/ports/POSIX
+    command: ./OpENer eth0
+    ports:
+      - "44818:44818"
+
+  gdbserver:
+    build:
+      context: Dockers/gdbserver
+    security_opt: # options needed for gdb debugging
+      - seccomp:unconfined
+      - apparmor:unconfined
+    ports:
+      - "7776:22"
+      - "7777:7777"

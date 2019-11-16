@@ -2,52 +2,55 @@
 // Created by Aleksey Timin  on 11/16/19.
 //
 
+
+
 #include "SessionInfo.h"
 #include "utils/Logger.h"
-#include <system_error>
-
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
+#include "eip/EncapsPacket.h"
+#include "eip/EncapsPacketFactory.h"
 
 namespace eipScanner {
+
 	using utils::Logger;
 	using utils::LogLevel;
+	using eip::EncapsPacket;
+	using eip::EncapsPacketFactory;
+	using eip::EncapsStatusCodes;
 
-	SessionInfo::SessionInfo(const std::string &host, int port) {
-		Logger(LogLevel::DEBUG) << "Open socket";
 
-		_sockedFd = socket(AF_INET, SOCK_STREAM, 0);
-		if (_sockedFd < 0) {
-			throw std::system_error(errno, std::generic_category());
+	SessionInfo::SessionInfo(const std::string &host, int port)
+			:_socket{host, port, 504} {
+
+		EncapsPacket packet = EncapsPacketFactory().createRegisterSessionPacket();
+		packet = sendAndReceive(packet);
+
+		if (packet.getStatusCode() != EncapsStatusCodes::SUCCESS) {
+			throw std::runtime_error("Failed to register session in " +
+				_socket.getHost() + ":" + std::to_string(_socket.getPort()));
 		}
 
-		Logger(LogLevel::DEBUG) << "Resolving host";
-		struct sockaddr_in addr{};
-		if (inet_aton(host.c_str(), &addr.sin_addr) < 0) {
-			close(_sockedFd);
-			throw std::system_error(errno, std::generic_category());
-		}
-
-		addr.sin_family = AF_INET;
-		addr.sin_port = htons(port);
-
-		Logger(LogLevel::DEBUG) << "Connecting";
-		if (connect(_sockedFd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-			close(_sockedFd);
-			throw std::system_error(errno, std::generic_category());
-		}
+		_sessionHandle = packet.getSessionHandle();
+		Logger(LogLevel::INFO) << "Registered session " << _sessionHandle;
 	}
 
 	SessionInfo::~SessionInfo() {
-		Logger(LogLevel::DEBUG) << "Close socket";
-		shutdown(_sockedFd, SHUT_RDWR);
-		close(_sockedFd);
+		EncapsPacket packet = EncapsPacketFactory().createUnRegisterSessionPacket(_sessionHandle);
+		_socket.Send(packet.pack());
+		Logger(LogLevel::INFO) << "Unregistered session " << _sessionHandle;
 	}
 
-	void SessionInfo::sendAndReceive() const {
+	EncapsPacket SessionInfo::sendAndReceive(const EncapsPacket& packet) {
+		_socket.Send(packet.pack());
+		auto header = _socket.Receive(EncapsPacket::HEADER_SIZE);
+		auto length = EncapsPacket::GetLengthFromHeader(header);
+		auto data = _socket.Receive(length);
 
+		header.insert(header.end(), data.begin(), data.end());
+
+		EncapsPacket recvPacket;
+		recvPacket.expand(header);
+
+		//TODO: The status of the packet must be checked
+		return recvPacket;
 	}
 }

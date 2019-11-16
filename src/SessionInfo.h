@@ -6,16 +6,21 @@
 #define _SRC_SESSIONINFO_H_
 
 #include <string>
+#include <vector>
+
+#include "eip/EncapsPacket.h"
+#include "sockets/TCPSocket.h"
+
 namespace eipScanner {
 	class SessionInfo {
 	public:
 		SessionInfo(const std::string &host, int port);
 		~SessionInfo();
-		virtual void sendAndReceive() const;
+		virtual eip::EncapsPacket sendAndReceive(const eip::EncapsPacket& packet);
 	private:
-		std::string _host;
-		int _port;
-		int _sockedFd;
+		sockets::TCPSocket _socket;
+		cip::CipUdint _sessionHandle;
+
 	};
 }
 

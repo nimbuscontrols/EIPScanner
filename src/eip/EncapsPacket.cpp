@@ -87,5 +87,14 @@ namespace eip {
 		_data = data;
 		_length = data.size();
 	}
+
+	size_t EncapsPacket::GetLengthFromHeader(const std::vector<uint8_t> data) {
+		std::vector<uint8_t> lengthVector(data.begin() + 2, data.begin() + 4);
+		Buffer buf(lengthVector);
+
+		cip::CipUint len;
+		buf >> len;
+		return len;
+	}
 }
 }
