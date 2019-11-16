@@ -5,6 +5,8 @@
 #ifndef EIPSCANNER_CIP_TYPES_H
 #define EIPSCANNER_CIP_TYPES_H
 
+#include <cstdint>
+
 namespace eipScanner {
 namespace cip {
 	typedef uint8_t CipOctet; /**< 8 bit value that indicates particular data type */
@@ -22,5 +24,4 @@ namespace cip {
 	typedef double CipLreal; /**< 64-bit IEEE 754 floating point */
 }
 }
-
 #endif //EIPSCANNER_CIP_TYPES_H

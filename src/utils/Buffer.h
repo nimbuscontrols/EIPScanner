@@ -49,6 +49,7 @@ namespace utils {
 
 		std::vector<uint8_t> data() const { return buffer; }
 		size_t size() const { return buffer.size(); }
+		size_t pos() const { return _position; }
 	private:
 		std::vector<uint8_t> buffer;
 		size_t _position;

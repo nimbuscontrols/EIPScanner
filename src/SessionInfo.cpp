@@ -53,4 +53,8 @@ namespace eipScanner {
 		//TODO: The status of the packet must be checked
 		return recvPacket;
 	}
+
+	cip::CipUdint SessionInfo::getSessionHandle() const {
+		return _sessionHandle;
+	}
 }

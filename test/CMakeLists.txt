@@ -7,6 +7,8 @@ enable_testing()
 find_package(GTest REQUIRED)
 
 add_executable(test_eipscanner
+        eip/TestCommonPacketItem.cpp
+        eip/TestCommonPacketItemFactory.cpp
         eip/TestEncapsPacket.cpp
         eip/TestEncapsPacketFactory.cpp
         utils/TestBuffer.cpp

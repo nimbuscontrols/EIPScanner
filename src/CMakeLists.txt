@@ -1,5 +1,13 @@
 include_directories(${CMAKE_SOURCE_DIR}/src)
 add_library(EIPScanner SHARED
+
+        cip/EPath.cpp
+        cip/MessageRouterRequest.cpp
+        cip/MessageRouterResponse.cpp
+
+        eip/CommonPacket.cpp
+        eip/CommonPacketItem.cpp
+        eip/CommonPacketItemFactory.cpp
         eip/EncapsPacket.cpp
         eip/EncapsPacketFactory.cpp
 
@@ -8,4 +16,5 @@ add_library(EIPScanner SHARED
         utils/Logger.cpp
         utils/Buffer.cpp
 
+        MessageRouter.cpp
         SessionInfo.cpp)
