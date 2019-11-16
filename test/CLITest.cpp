@@ -6,12 +6,12 @@
 #include "SessionInfo.h"
 #include "MessageRouter.h"
 #include "utils/Logger.h"
+#include "utils/Buffer.h"
 
 using eipScanner::SessionInfo;
 using eipScanner::MessageRouter;
-using eipScanner::cip::ServiceCodes;
-using eipScanner::cip::GeneralStatusCodes;
-using eipScanner::cip::EPath;
+using namespace eipScanner::cip;
+using eipScanner::utils::Buffer;
 using eipScanner::utils::Logger;
 using eipScanner::utils::LogLevel;
 
@@ -21,15 +21,22 @@ int main() {
 
 	MessageRouter messageRouter;
 
+
 	auto response = messageRouter.sendRequest(si,
 			ServiceCodes::GET_ATTRIBUTE_SINGLE,
-			EPath(0x04, 100, 3),
-			std::vector<uint8_t>());
+			EPath(0x01, 1, 1),
+			{});
 
 	if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
-		Logger(LogLevel::INFO) << "We did it!";
+		Buffer buffer(response.getData());
+
+		CipUint vendorId;
+		buffer >> vendorId;
+
+		Logger(LogLevel::INFO) << "Vendor ID is " << vendorId;
+
 	} else {
-		Logger(LogLevel::ERROR) << "We got error=" << response.getGeneralStatusCode();
+		Logger(LogLevel::ERROR) << "We got error=0x" << std::hex << response.getGeneralStatusCode();
 	}
 	exit(0);
 }

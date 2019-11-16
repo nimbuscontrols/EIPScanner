@@ -33,18 +33,18 @@ namespace cip {
 	}
 
 	std::vector<uint8_t> EPath::packPaddedPath() const {
-		Buffer buffer(2 +_size*2);
+		Buffer buffer(_size*4);
 
 		CipUint classSegment = 0x21;
-		buffer << _size << classSegment << _classId;
+		buffer << classSegment << _classId;
 
 		if (_size > 1) {
-			CipUint objectSegment = 0x24;
+			CipUint objectSegment = 0x25;
 			buffer << objectSegment << _objectId;
 
 			if (_size > 2) {
-				CipUint attributeSegment = 0x30;
-				buffer << attributeSegment;
+				CipUint attributeSegment = 0x31;
+				buffer << attributeSegment << _attributeId;
 			}
 		}
 
@@ -63,8 +63,8 @@ namespace cip {
 		return _attributeId;
 	}
 
-	CipUint EPath::getSize() const {
-		return _size;
+	CipUsint EPath::getSizeInWords() const {
+		return _size*2;
 	}
 
 	std::string EPath::toString() const {

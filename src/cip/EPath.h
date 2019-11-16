@@ -23,7 +23,7 @@ namespace cip {
 		CipUint getClassId() const;
 		CipUint getObjectId() const;
 		CipUint getAttributeId() const;
-		CipUint getSize() const;
+		CipUsint getSizeInWords() const;
 
 		std::string toString() const;
 
@@ -31,7 +31,7 @@ namespace cip {
 		CipUint _classId;
 		CipUint _objectId;
 		CipUint _attributeId;
-		CipUint _size;
+		CipUsint _size;
 	};
 }
 }
