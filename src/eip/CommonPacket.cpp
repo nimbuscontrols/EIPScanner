@@ -1,7 +1,7 @@
 //
 // Created by Aleksey Timin on 11/16/19.
 //
-
+#include <stdexcept>
 #include "CommonPacket.h"
 #include "utils/Buffer.h"
 #include "cip/Types.h"
@@ -45,6 +45,10 @@ namespace eip {
 
 			std::vector<uint8_t> itemData(length);
 			buffer >> itemData;
+
+			if (!buffer.isValid()) {
+				throw std::runtime_error("Wrong Common Packet format");
+			}
 
 			_items.push_back(CommonPacketItem(static_cast<CommonPacketIds>(typeId), itemData));
 		}

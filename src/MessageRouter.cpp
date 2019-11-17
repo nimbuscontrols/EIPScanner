@@ -22,7 +22,6 @@ namespace eipScanner {
 
 	MessageRouter::MessageRouter(SessionInfo::SPtr si)
 		: _si(si) {
-
 	}
 
 	MessageRouterResponse

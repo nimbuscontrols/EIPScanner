@@ -9,6 +9,7 @@ find_package(GTest REQUIRED)
 add_executable(test_eipscanner
         cip/TestMessageRouterResponse.cpp
 
+        eip/TestCommonPacket.cpp
         eip/TestCommonPacketItem.cpp
         eip/TestCommonPacketItemFactory.cpp
         eip/TestEncapsPacket.cpp

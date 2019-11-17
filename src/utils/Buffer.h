@@ -47,11 +47,12 @@ namespace utils {
 		Buffer& operator >> (std::vector<uint16_t>& val);
 
 
-		std::vector<uint8_t> data() const { return buffer; }
-		size_t size() const { return buffer.size(); }
+		std::vector<uint8_t> data() const { return _buffer; }
+		size_t size() const { return _buffer.size(); }
 		size_t pos() const { return _position; }
+		bool isValid() const { return _position < _buffer.size(); }
 	private:
-		std::vector<uint8_t> buffer;
+		std::vector<uint8_t> _buffer;
 		size_t _position;
 	};
 }
