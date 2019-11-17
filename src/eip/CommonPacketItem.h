@@ -12,7 +12,7 @@
 
 namespace eipScanner {
 namespace eip {
-	enum class CommonPacketIds : cip::CipUint {
+	enum class CommonPacketItemIds : cip::CipUint {
 		NULL_ADDR = 0x0000,
 		LIST_IDENTITY = 0x000C,
 		CONNECTION_BASED = 0x00A1,
@@ -25,17 +25,17 @@ namespace eip {
 		using Vec = std::vector<CommonPacketItem>;
 
 		CommonPacketItem();
-		CommonPacketItem(CommonPacketIds typeId, const std::vector<uint8_t>& data);
+		CommonPacketItem(CommonPacketItemIds typeId, const std::vector<uint8_t>& data);
 		~CommonPacketItem();
 
 		std::vector<uint8_t> pack() const;
 
-		CommonPacketIds getTypeId() const;
+		CommonPacketItemIds getTypeId() const;
 		cip::CipUint getLength() const;
 		const std::vector<uint8_t> &getData() const;
 
 	private:
-		CommonPacketIds _typeId;
+		CommonPacketItemIds _typeId;
 		cip::CipUint _length;
 		std::vector<uint8_t> _data;
 	};

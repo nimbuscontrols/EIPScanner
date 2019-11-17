@@ -12,7 +12,7 @@ namespace eip {
 	}
 
 	CommonPacketItem CommonPacketItemFactory::createUnconnectedDataItem(const std::vector<uint8_t> &data) const {
-		return CommonPacketItem(CommonPacketIds::UNCONNECTED_MESSAGE, data);
+		return CommonPacketItem(CommonPacketItemIds::UNCONNECTED_MESSAGE, data);
 	}
 }
 }

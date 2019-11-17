@@ -50,7 +50,7 @@ namespace eip {
 				throw std::runtime_error("Wrong Common Packet format");
 			}
 
-			_items.push_back(CommonPacketItem(static_cast<CommonPacketIds>(typeId), itemData));
+			_items.push_back(CommonPacketItem(static_cast<CommonPacketItemIds>(typeId), itemData));
 		}
 	}
 
