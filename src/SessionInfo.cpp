@@ -17,20 +17,24 @@ namespace eipScanner {
 	using eip::EncapsPacketFactory;
 	using eip::EncapsStatusCodes;
 
-
-	SessionInfo::SessionInfo(const std::string &host, int port)
-			:_socket{host, port, 504} {
+	SessionInfo::SessionInfo(const std::string &host, int port, const std::chrono::milliseconds &recvTimeout)
+			: _socket{host, port, 504} {
+		_socket.setRecvTimeout(recvTimeout);
 
 		EncapsPacket packet = EncapsPacketFactory().createRegisterSessionPacket();
 		packet = sendAndReceive(packet);
 
 		if (packet.getStatusCode() != EncapsStatusCodes::SUCCESS) {
 			throw std::runtime_error("Failed to register session in " +
-				_socket.getHost() + ":" + std::to_string(_socket.getPort()));
+									 _socket.getHost() + ":" + std::to_string(_socket.getPort()));
 		}
 
 		_sessionHandle = packet.getSessionHandle();
 		Logger(LogLevel::INFO) << "Registered session " << _sessionHandle;
+	}
+
+	SessionInfo::SessionInfo(const std::string &host, int port)
+			: SessionInfo(host, port, std::chrono::milliseconds(1000)) {
 	}
 
 	SessionInfo::~SessionInfo() {
@@ -57,4 +61,5 @@ namespace eipScanner {
 	cip::CipUdint SessionInfo::getSessionHandle() const {
 		return _sessionHandle;
 	}
+
 }

@@ -19,7 +19,7 @@ namespace sockets {
 	TCPSocket::TCPSocket(std::string host, int port, size_t bufferSize)
 			: _host{host}
 			, _port{port}
-			, _recvBuffer(bufferSize){
+			, _recvBuffer(bufferSize) {
 
 		_sockedFd = socket(AF_INET, SOCK_STREAM, 0);
 		if (_sockedFd < 0) {
@@ -63,14 +63,21 @@ namespace sockets {
 	std::vector<uint8_t> TCPSocket::Receive(size_t size) {
 		int count = 0;
 		while (size > count) {
-			count = recv(_sockedFd, _recvBuffer.data(), size, 0);
-			if (count < 0) {
+			auto len = recv(_sockedFd, _recvBuffer.data(), size, 0);
+			count += len;
+			if (len < 0) {
 				throw std::system_error(errno, std::generic_category());
+			}
+
+			if (len == 0) {
+				break;
 			}
 		}
 
-		Logger(LogLevel::TRACE) << "Received from TCP socket #" << _sockedFd
-					<< " " << count << " bytes.";
+		if (size != count) {
+			Logger(LogLevel::WARNING) << "Received from " << _host << ":" << _port
+									  << " " << count << " of " << size;
+		}
 
 		std::vector<uint8_t> data(count);
 		std::copy(_recvBuffer.data(), _recvBuffer.data() + count, data.begin());
@@ -88,5 +95,19 @@ namespace sockets {
 
 	int TCPSocket::getPort() const {
 		return _port;
+	}
+
+	const std::chrono::milliseconds &TCPSocket::getRecvTimeout() const {
+		return _recvTimeout;
+	}
+
+	void TCPSocket::setRecvTimeout(const std::chrono::milliseconds &recvTimeout) {
+		_recvTimeout = recvTimeout;
+
+		struct timeval tv = {
+				.tv_sec = recvTimeout.count()/1000,
+				.tv_usec =  (recvTimeout.count()%1000)*1000
+		};
+		setsockopt(_sockedFd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
 	}
 }

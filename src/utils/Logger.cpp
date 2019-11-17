@@ -1,8 +1,10 @@
 //
 // Created by Aleksey Timin on 11/16/19.
 //
-#include "Logger.h"
 #include <iostream>
+#include <map>
+
+#include "Logger.h"
 
 namespace eipScanner {
 namespace utils {
@@ -13,8 +15,16 @@ namespace utils {
 	}
 
 	Logger::~Logger() {
+		std::map<LogLevel, std::string> logNames = {
+			std::make_pair(LogLevel::TRACE, "[TRACE] "),
+			std::make_pair(LogLevel::DEBUG, "[DEBUG] "),
+			std::make_pair(LogLevel::INFO, "[INFO] "),
+			std::make_pair(LogLevel::WARNING, "[WARNING] "),
+			std::make_pair(LogLevel::ERROR, "[ERROR] "),
+		};
+
 		if (_logLevel <= _globalLogLevel) {
-			std::cout << _stream.str() << std::endl;
+			std::cout << logNames[_logLevel] << _stream.str() << std::endl;
 		}
 	}
 

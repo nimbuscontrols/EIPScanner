@@ -13,8 +13,12 @@
 namespace eipScanner {
 	class MessageRouter {
 	public:
-		cip::MessageRouterResponse sendRequest(SessionInfo::SPtr si,
-			cip::ServiceCodes service, const cip::EPath& path, const std::vector<uint8_t>& data);
+		explicit MessageRouter(SessionInfo::SPtr si);
+		cip::MessageRouterResponse sendRequest(cip::ServiceCodes service,
+				const cip::EPath& path, const std::vector<uint8_t>& data);
+
+	private:
+		SessionInfo::SPtr _si;
 	};
 }
 

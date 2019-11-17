@@ -20,8 +20,13 @@ namespace eipScanner {
 	using eip::EncapsPacket;
 	using eip::EncapsPacketFactory;
 
+	MessageRouter::MessageRouter(SessionInfo::SPtr si)
+		: _si(si) {
+
+	}
+
 	MessageRouterResponse
-	MessageRouter::sendRequest(SessionInfo::SPtr si, ServiceCodes service, const EPath &path,
+	MessageRouter::sendRequest(ServiceCodes service, const EPath &path,
 							   const std::vector<uint8_t> &data) {
 
 
@@ -36,9 +41,9 @@ namespace eipScanner {
 		commonPacket << commonPacketItemFactory.createUnconnectedDataItem(request.pack());
 
 		auto packetToSend = EncapsPacketFactory()
-				.createSendRRDataPacket(si->getSessionHandle(), 0, commonPacket.pack());
+				.createSendRRDataPacket(_si->getSessionHandle(), 0, commonPacket.pack());
 
-		auto receivedPacket = si->sendAndReceive(packetToSend);
+		auto receivedPacket = _si->sendAndReceive(packetToSend);
 		// TODO: Add checks for received data
 
 		Buffer buffer(receivedPacket.getData());
@@ -55,4 +60,5 @@ namespace eipScanner {
 
 		return response;
 	}
+
 }

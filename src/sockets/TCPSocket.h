@@ -6,6 +6,7 @@
 #define EIPSCANNER_SOCKETS_TCPSOCKET_H
 
 #include <vector>
+#include <chrono>
 
 namespace sockets {
 
@@ -17,6 +18,9 @@ namespace sockets {
 		void Send(const std::vector<uint8_t>& data) const;
 		std::vector<uint8_t> Receive(size_t size);
 
+		const std::chrono::milliseconds &getRecvTimeout() const;
+		void setRecvTimeout(const std::chrono::milliseconds &recvTimeout);
+
 		int getSockedFd() const;
 		const std::string &getHost() const;
 		int getPort() const;
@@ -26,6 +30,7 @@ namespace sockets {
 		std::string _host;
 		int _port;
 		std::vector<uint8_t> _recvBuffer;
+		std::chrono::milliseconds _recvTimeout;
 	};
 }
 

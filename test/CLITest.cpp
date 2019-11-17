@@ -19,11 +19,8 @@ int main() {
 	Logger::setLogLevel(LogLevel::DEBUG);
 	auto si = std::make_shared<SessionInfo>("127.0.0.1", 0xAF12);
 
-	MessageRouter messageRouter;
-
-
-	auto response = messageRouter.sendRequest(si,
-			ServiceCodes::GET_ATTRIBUTE_SINGLE,
+	MessageRouter messageRouter(si);
+	auto response = messageRouter.sendRequest(ServiceCodes::GET_ATTRIBUTE_SINGLE,
 			EPath(0x01, 1, 1),
 			{});
 
