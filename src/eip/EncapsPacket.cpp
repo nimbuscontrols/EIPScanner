@@ -2,6 +2,7 @@
 // Created by flipback on 11/16/19.
 //
 
+#include <stdexcept>
 #include "EncapsPacket.h"
 #include "utils/Buffer.h"
 
@@ -23,7 +24,10 @@ namespace eip {
 	EncapsPacket::~EncapsPacket() = default;
 
 	void EncapsPacket::expand(const std::vector<uint8_t> &data) {
-		//TODO: The package must be validated!
+		if (data.size() < HEADER_SIZE) {
+			throw std::length_error("EncapsPacket header must be 24 bytes");
+		}
+		
 		Buffer buffer(data);
 		buffer >> reinterpret_cast<cip::CipUint&>(_command)
 			>> _length
@@ -32,6 +36,12 @@ namespace eip {
 			>> _context
 			>> _options;
 
+		auto dataSize = data.size() - HEADER_SIZE;
+		if (dataSize != _length) {
+			throw std::length_error("EncapsPacket data must be "  + std::to_string(_length)
+				+ " but we have only " + std::to_string(dataSize) + " bytes");
+		}
+		
 		_data.resize(_length);
 		buffer >> _data;
 	}

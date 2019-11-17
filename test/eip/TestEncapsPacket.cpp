@@ -24,3 +24,20 @@ TEST(TestEncapsPacket, ShouldExpandData) {
 	EXPECT_EQ(std::vector<uint8_t >({0, 0, 0, 0,
 				  0x64, 0, 1, 2, 3, 4, 5}), packet.getData());
 }
+
+TEST(TestEncapsPacket, ShouldThrowErrorIfThePackageTooShort) {
+	std::vector<uint8_t> data = {0x6F, 0, 0xB, 0, 0xDD, 0xCC, 0xBB, 0xAA, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+								 0, 0, 0};
+
+	EncapsPacket packet;
+	EXPECT_THROW(packet.expand(data), std::length_error);
+}
+
+TEST(TestEncapsPacket, ShouldThrowErrorIfThePackageHasWrongLenghtOfData) {
+	std::vector<uint8_t> data = {0x6F, 0, 0xB, 0, 0xDD, 0xCC, 0xBB, 0xAA, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+								 0, 0, 0, 0, 0, 0, 0, 0,
+								 0x64, 0, 1, 2, 3, 4, 5, 10};
+
+	EncapsPacket packet;
+	EXPECT_THROW(packet.expand(data), std::length_error);
+}
