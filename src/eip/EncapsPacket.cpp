@@ -18,14 +18,13 @@ namespace eip {
 		, _context(8)
 		, _options{0}
 		, _data(0) {
-
 	}
 
 	EncapsPacket::~EncapsPacket() = default;
 
 	void EncapsPacket::expand(const std::vector<uint8_t> &data) {
 		if (data.size() < HEADER_SIZE) {
-			throw std::length_error("EncapsPacket header must be 24 bytes");
+			throw std::runtime_error("EncapsPacket header must be 24 bytes");
 		}
 		
 		Buffer buffer(data);
@@ -38,7 +37,7 @@ namespace eip {
 
 		auto dataSize = data.size() - HEADER_SIZE;
 		if (dataSize != _length) {
-			throw std::length_error("EncapsPacket data must be "  + std::to_string(_length)
+			throw std::runtime_error("EncapsPacket data must be "  + std::to_string(_length)
 				+ " but we have only " + std::to_string(dataSize) + " bytes");
 		}
 		

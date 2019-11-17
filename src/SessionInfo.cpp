@@ -18,7 +18,8 @@ namespace eipScanner {
 	using eip::EncapsStatusCodes;
 
 	SessionInfo::SessionInfo(const std::string &host, int port, const std::chrono::milliseconds &recvTimeout)
-			: _socket{host, port, 504} {
+			: _socket{host, port, 504}
+			, _sessionHandle{0} {
 		_socket.setRecvTimeout(recvTimeout);
 
 		EncapsPacket packet = EncapsPacketFactory().createRegisterSessionPacket();
@@ -54,7 +55,16 @@ namespace eipScanner {
 		EncapsPacket recvPacket;
 		recvPacket.expand(header);
 
-		//TODO: The status of the packet must be checked
+		if (recvPacket.getStatusCode() != EncapsStatusCodes::SUCCESS) {
+			throw std::runtime_error("Bad encaps packet code =" + std::to_string(
+					static_cast<int>(recvPacket.getStatusCode())));
+		}
+
+		if (_sessionHandle != 0 && recvPacket.getSessionHandle() != _sessionHandle) {
+			throw std::runtime_error("Wrong session handle received");
+		}
+
+
 		return recvPacket;
 	}
 

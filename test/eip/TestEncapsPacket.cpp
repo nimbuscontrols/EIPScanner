@@ -30,7 +30,7 @@ TEST(TestEncapsPacket, ShouldThrowErrorIfThePackageTooShort) {
 								 0, 0, 0};
 
 	EncapsPacket packet;
-	EXPECT_THROW(packet.expand(data), std::length_error);
+	EXPECT_THROW(packet.expand(data), std::runtime_error);
 }
 
 TEST(TestEncapsPacket, ShouldThrowErrorIfThePackageHasWrongLenghtOfData) {
@@ -39,5 +39,5 @@ TEST(TestEncapsPacket, ShouldThrowErrorIfThePackageHasWrongLenghtOfData) {
 								 0x64, 0, 1, 2, 3, 4, 5, 10};
 
 	EncapsPacket packet;
-	EXPECT_THROW(packet.expand(data), std::length_error);
+	EXPECT_THROW(packet.expand(data), std::runtime_error);
 }

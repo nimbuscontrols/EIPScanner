@@ -17,16 +17,17 @@ namespace sockets {
 	using eipScanner::utils::LogLevel;
 
 	TCPSocket::TCPSocket(std::string host, int port, size_t bufferSize)
-			: _host{host}
+			: _host{std::move(host)}
 			, _port{port}
-			, _recvBuffer(bufferSize) {
+			, _recvBuffer(bufferSize)
+			, _recvTimeout(0){
 
 		_sockedFd = socket(AF_INET, SOCK_STREAM, 0);
 		if (_sockedFd < 0) {
 			throw std::system_error(errno, std::generic_category());
 		}
 
-		Logger(LogLevel::DEBUG) << "Opened socket " << _sockedFd;
+		Logger(LogLevel::DEBUG) << "Opened socket fd=" << _sockedFd;
 
 		Logger(LogLevel::DEBUG) << "Parsing IP from " << _host;
 		struct sockaddr_in addr{};
@@ -46,7 +47,7 @@ namespace sockets {
 	}
 
 	TCPSocket::~TCPSocket() {
-		Logger(LogLevel::DEBUG) << "Close socket " << _sockedFd;
+		Logger(LogLevel::DEBUG) << "Close socket fd=" << _sockedFd;
 		shutdown(_sockedFd, SHUT_RDWR);
 		close(_sockedFd);
 	}
