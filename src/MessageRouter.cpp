@@ -28,9 +28,7 @@ namespace eipScanner {
 	MessageRouterResponse
 	MessageRouter::sendRequest(ServiceCodes service, const EPath &path,
 							   const std::vector<uint8_t> &data) {
-
-
-		Logger(LogLevel::INFO) << "Send request: service=" << service
+		Logger(LogLevel::INFO) << "Send request: service=0x" << std::hex << service
 			<< " epath=" << path.toString();
 
 		MessageRouterRequest request{service, path, data};
@@ -44,7 +42,6 @@ namespace eipScanner {
 				.createSendRRDataPacket(_si->getSessionHandle(), 0, commonPacket.pack());
 
 		auto receivedPacket = _si->sendAndReceive(packetToSend);
-		// TODO: Add checks for received data
 
 		Buffer buffer(receivedPacket.getData());
 		cip::CipUdint interfaceHandle;
@@ -60,5 +57,4 @@ namespace eipScanner {
 
 		return response;
 	}
-
 }

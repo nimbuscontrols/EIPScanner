@@ -1,7 +1,7 @@
 //
 // Created by Aleksey Timin on 11/16/19.
 //
-
+#include <stdexcept>
 #include "MessageRouterResponse.h"
 #include "utils/Buffer.h"
 
@@ -15,18 +15,25 @@ namespace cip {
 		, _generalStatusCode{GeneralStatusCodes::SUCCESS}
 		, _additionalStatus(0)
 		, _data(0) {
-
 	}
 
 	MessageRouterResponse::~MessageRouterResponse() = default;
 
 	void MessageRouterResponse::expand(const std::vector<uint8_t> &data) {
+		if (data.size() < 4) {
+			throw std::runtime_error("Message Router response must have at least 4 bytes");
+		}
+
 		Buffer buffer(data);
 		CipUsint reserved, additionalStatusSize;
 		buffer >> reinterpret_cast<CipUsint&>(_serviceCode)
 			>> reserved
 			>> reinterpret_cast<CipUsint&>(_generalStatusCode)
 			>> additionalStatusSize;
+
+		if (additionalStatusSize*2 > data.size() - 4) {
+			throw std::runtime_error("Additional status has wrong size");
+		}
 
 		_additionalStatus.resize(additionalStatusSize);
 		buffer >> _additionalStatus;
