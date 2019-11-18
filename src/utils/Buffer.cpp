@@ -126,7 +126,7 @@ namespace utils {
 	Buffer &Buffer::operator>>(std::vector<uint16_t> &val) {
 		for (auto& v : val) {
 			v = static_cast<int16_t>(_buffer[_position++]);
-			v += static_cast<int16_t>(_position++ << 8);
+			v += static_cast<int16_t>(_buffer[_position++] << 8);
 		}
 
 		return *this;

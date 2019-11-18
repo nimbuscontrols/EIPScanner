@@ -3,14 +3,19 @@
 //
 
 #include <cstdlib>
+#include <cip/connectionManager/NetworkConnectionParams.h>
 #include "SessionInfo.h"
 #include "MessageRouter.h"
+#include "ConnectionManager.h"
 #include "utils/Logger.h"
 #include "utils/Buffer.h"
 
+using namespace eipScanner::cip;
 using eipScanner::SessionInfo;
 using eipScanner::MessageRouter;
-using namespace eipScanner::cip;
+using eipScanner::ConnectionManager;
+using eipScanner::cip::connectionManager::ConnectionParameters;
+using eipScanner::cip::connectionManager::NetworkConnectionParams;
 using eipScanner::utils::Buffer;
 using eipScanner::utils::Logger;
 using eipScanner::utils::LogLevel;
@@ -18,12 +23,10 @@ using eipScanner::utils::LogLevel;
 int main() {
 	Logger::setLogLevel(LogLevel::DEBUG);
 	auto si = std::make_shared<SessionInfo>("127.0.0.1", 0xAF12);
-
-	MessageRouter messageRouter(si);
+	auto messageRouter = std::make_shared<MessageRouter>(si);
 
 	// Read attribute
-	auto response = messageRouter
-			.sendRequest(ServiceCodes::GET_ATTRIBUTE_SINGLE,
+	auto response = messageRouter->sendRequest(ServiceCodes::GET_ATTRIBUTE_SINGLE,
 						 EPath(0x01, 1, 1),
 						 {});
 
@@ -52,8 +55,7 @@ int main() {
 				<< CipUsint(10);
 
 
-	response = messageRouter
-			.sendRequest(ServiceCodes::SET_ATTRIBUTE_SINGLE,
+	response = messageRouter->sendRequest(ServiceCodes::SET_ATTRIBUTE_SINGLE,
 						 EPath(0x04, 151, 3),
 						 assembly151.data());
 
@@ -62,6 +64,19 @@ int main() {
 	} else {
 		Logger(LogLevel::ERROR) << "We got error=0x" << std::hex << response.getGeneralStatusCode();
 	}
+
+	// Implicit messaging
+	ConnectionManager connectionManager(messageRouter);
+
+	ConnectionParameters parameters;
+	parameters.connectionPath = {0x20, 0x04, 0x24, 0x97, 0x2C, 0x96, 0x2C, 0x64};  // config Assm151, output Assm150, intput Assm100
+	parameters.t2oNetworkConnectionParams |= NetworkConnectionParams::P2P;
+	parameters.t2oNetworkConnectionParams |= 32;
+	parameters.o2tNetworkConnectionParams |= NetworkConnectionParams::P2P;
+	parameters.o2tNetworkConnectionParams |= 36; // size of Assm150
+
+
+	connectionManager.forwardOpen(parameters);
 
 	return 0;
 }

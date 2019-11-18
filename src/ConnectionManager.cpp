@@ -36,6 +36,9 @@ namespace eipScanner {
 			connectionParameters.t2oNetworkConnectionId = idCount;
 		}
 
+		connectionParameters.connectionPathSize =  (connectionParameters.connectionPath .size() / 2)
+				+ (connectionParameters.connectionPath .size() % 2);
+
 		ForwardOpenRequest request(connectionParameters);
 		auto response = _messageRouter->sendRequest(
 				static_cast<cip::CipUsint>(ConnectionManagerServiceCodes::FORWARD_OPEN),
@@ -45,8 +48,16 @@ namespace eipScanner {
 		if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
 
 		} else {
-			Logger(LogLevel::ERROR) << "Failed to establish connection with error="
-				<< std::hex << response.getGeneralStatusCode();
+
+			Logger logger(LogLevel::ERROR);
+			logger << "Failed to establish connection with error="
+				<< std::hex << response.getGeneralStatusCode()
+				<< " additional statuses ";
+			for (auto& additionalStatus : response.getAdditionalStatus()) {
+				logger << "[0x"
+						<< additionalStatus
+						<< "]";
+			}
 		}
 
 		return ioConnection;
