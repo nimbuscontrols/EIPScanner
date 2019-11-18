@@ -5,6 +5,7 @@
 #ifndef EIPSCANNER_EIP_ENCAPSPACKET_H
 #define EIPSCANNER_EIP_ENCAPSPACKET_H
 
+#include <cstddef>
 #include <cstdint>
 #include <vector>
 

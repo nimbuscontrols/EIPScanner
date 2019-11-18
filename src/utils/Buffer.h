@@ -5,6 +5,7 @@
 #ifndef EIPSCANNER_UTILS_BUFFER_H
 #define EIPSCANNER_UTILS_BUFFER_H
 
+#include <cstddef>
 #include <cstdint>
 #include <vector>
 
