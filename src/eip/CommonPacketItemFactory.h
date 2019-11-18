@@ -7,14 +7,16 @@
 
 #include <vector>
 #include "CommonPacketItem.h"
+#include "cip/Types.h"
 
 namespace eipScanner {
 namespace eip {
 	class CommonPacketItemFactory {
 	public:
 		CommonPacketItem createNullAddressItem() const;
-
 		CommonPacketItem createUnconnectedDataItem(const std::vector<uint8_t> &data) const;
+		CommonPacketItem createSequenceAddressItem(cip::CipUdint connectionId, cip::CipUdint seqNumber) const;
+		CommonPacketItem createConnectedDataItem(const std::vector<uint8_t> &data) const;
 	};
 }
 }

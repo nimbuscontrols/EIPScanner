@@ -137,9 +137,9 @@ namespace eipScanner {
 				buffer >> connectionId;
 				Logger(LogLevel::DEBUG) << "Received data from connection T2O_ID=" << connectionId;
 
-				auto io = _connectionMap[connectionId];
-				if (io) {
-					io->notifyReceiveData(commonPacket[1].getData());
+				auto io = _connectionMap.find(connectionId);
+				if (io != _connectionMap.end()) {
+					io->second->notifyReceiveData(commonPacket[1].getData());
 				} else {
 					Logger(LogLevel::ERROR) << "Received data from unknow connection T2O_ID=" << connectionId;
 				}

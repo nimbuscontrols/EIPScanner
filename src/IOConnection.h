@@ -39,7 +39,7 @@ namespace eipScanner {
 		cip::CipUdint _o2tAPI;
 		cip::CipUdint _t2oAPI;
 
-		cip::CipUdint _o2t_timer;
+		cip::CipUdint _o2tTimer;
 		cip::CipUdint _t2o_timer;
 
 		cip::CipUsint _connectionTimeoutMultiplier;
