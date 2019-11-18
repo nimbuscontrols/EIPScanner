@@ -19,7 +19,7 @@ namespace sockets {
 		using WPtr = std::weak_ptr<UDPSocket>;
 		using SPtr = std::shared_ptr<UDPSocket>;
 
-		UDPSocket(std::string host, int port, size_t bufferSize);
+		UDPSocket(std::string host, int port);
 		virtual ~UDPSocket();
 
 		void Send(const std::vector<uint8_t>& data) const override;

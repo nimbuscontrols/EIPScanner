@@ -17,7 +17,8 @@ namespace eipScanner {
 		, _o2tSequenceNumber{0}
 		, _t2oSequenceNumber{0}
 		, _inputData()
-		, _outputData() {
+		, _outputData()
+		, _receiveDataHandle() {
 	}
 
 	IOConnection::~IOConnection() = default;
@@ -27,10 +28,14 @@ namespace eipScanner {
 	}
 
 	void IOConnection::setReceiveDataListener(eipScanner::IOConnection::ReceiveDataHandle handle) {
-
+		_receiveDataHandle = std::move(handle);
 	}
 
 	void IOConnection::setCloseListener(eipScanner::IOConnection::CloseHandle handle) {
 
+	}
+
+	void IOConnection::NotifyReceiveData(const std::vector<uint8_t> &data) {
+		_receiveDataHandle(data);
 	}
 }

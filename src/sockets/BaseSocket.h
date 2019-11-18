@@ -9,30 +9,42 @@
 #include <cstdint>
 #include <string>
 #include <chrono>
+#include <functional>
+#include <memory>
 
 namespace eipScanner {
 namespace sockets {
 	class BaseSocket {
 	public:
-		BaseSocket(std::string host, int port, size_t bufferSize);
+		using BeginReceiveHandler = std::function<void(BaseSocket&)>;
+		using SPtr = std::shared_ptr<BaseSocket>;
+
+		BaseSocket(std::string host, int port);
 		virtual ~BaseSocket();
 
 		virtual void Send(const std::vector<uint8_t>& data) const = 0;
 		virtual std::vector<uint8_t> Receive(size_t size) = 0;
+		void setBeginReceiveHandler(BeginReceiveHandler handler);
+
 
 		const std::chrono::milliseconds &getRecvTimeout() const;
 		void setRecvTimeout(const std::chrono::milliseconds &recvTimeout);
 
-		int getSockedFd() const;
+		int getSocketFd() const;
 		const std::string &getHost() const;
 		int getPort() const;
 
+		static void select(std::vector<BaseSocket::SPtr> sockets, std::chrono::milliseconds timeout);
+
 	protected:
+		void BeginReceive();
+
 		int _sockedFd;
 		std::string _host;
 		int _port;
-		std::vector<uint8_t> _recvBuffer;
+
 		std::chrono::milliseconds _recvTimeout;
+		BeginReceiveHandler _beginReceiveHandler;
 	};
 }
 }

@@ -17,8 +17,8 @@ namespace sockets {
 	using eipScanner::utils::Logger;
 	using eipScanner::utils::LogLevel;
 
-	UDPSocket::UDPSocket(std::string host, int port, size_t bufferSize)
-			: BaseSocket{host, port, bufferSize} {
+	UDPSocket::UDPSocket(std::string host, int port)
+			: BaseSocket{host, port} {
 
 		_sockedFd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 		if (_sockedFd < 0) {
@@ -36,6 +36,16 @@ namespace sockets {
 
 		_addr.sin_family = AF_INET;
 		_addr.sin_port = htons(_port);
+		_addr.sin_addr.s_addr = INADDR_ANY;
+
+		int on = 1;
+		if (setsockopt(_sockedFd, SOL_SOCKET, SO_REUSEADDR, (char *) &on, sizeof(on)) < 0) {
+			throw std::system_error(errno, std::generic_category());
+		}
+
+		if (bind(_sockedFd, (struct sockaddr *)&_addr, sizeof(_addr)) < 0) {
+			throw std::system_error(errno, std::generic_category());
+		}
 	}
 
 	UDPSocket::~UDPSocket() {
@@ -55,28 +65,14 @@ namespace sockets {
 	}
 
 	std::vector<uint8_t> UDPSocket::Receive(size_t size) {
-		int count = 0;
-		while (size > count) {
-			auto len = recvfrom(_sockedFd, _recvBuffer.data(), size, 0, NULL, NULL);
-			count += len;
-			if (len < 0) {
-				throw std::system_error(errno, std::generic_category());
-			}
+		std::vector<uint8_t> recvBuffer(size);
 
-			if (len == 0) {
-				break;
-			}
+		auto len = recvfrom(_sockedFd, recvBuffer.data(), recvBuffer.size(), 0, NULL, NULL);
+		if (len < 0) {
+			throw std::system_error(errno, std::generic_category());
 		}
 
-		if (size != count) {
-			Logger(LogLevel::WARNING) << "Received from " << _host << ":" << _port
-									  << " " << count << " of " << size;
-		}
-
-		std::vector<uint8_t> data(count);
-		std::copy(_recvBuffer.data(), _recvBuffer.data() + count, data.begin());
-
-		return data;
+		return recvBuffer;
 	}
 }
 }

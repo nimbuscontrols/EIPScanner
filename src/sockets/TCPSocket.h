@@ -13,7 +13,7 @@ namespace eipScanner {
 namespace sockets {
 	class TCPSocket : public BaseSocket {
 	public:
-		TCPSocket(std::string host, int port, size_t bufferSize);
+		TCPSocket(std::string host, int port);
 		virtual ~TCPSocket();
 
 		void Send(const std::vector<uint8_t>& data) const override;

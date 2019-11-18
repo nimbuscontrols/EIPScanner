@@ -10,18 +10,10 @@
 #include "IOConnection.h"
 #include "cip/connectionManager/ConnectionParameters.h"
 #include "cip/Services.h"
+#include "cip/Types.h"
 #include "sockets/UDPSocket.h"
 
 namespace eipScanner {
-	struct IOConnectionKey {
-		cip::CipUdint	o2tNetworkId;
-		cip::CipUdint	t2oNetworkId;
-
-		inline bool operator< (const IOConnectionKey& rhs) const {
-			return o2tNetworkId < rhs.o2tNetworkId
-				&& t2oNetworkId < rhs.t2oNetworkId;
-		}
-	};
 
 	struct SocketKey {
 		std::string host;
@@ -44,9 +36,11 @@ namespace eipScanner {
 
 		IOConnection::WPtr forwardOpen(cip::connectionManager::ConnectionParameters connectionParameters);
 
+		void handleConnections(std::chrono::milliseconds timeout);
+
 	private:
 		MessageRouter::SPtr _messageRouter;
-		std::map<IOConnectionKey, IOConnection::SPtr> _connectionMap;
+		std::map<cip::CipUint, IOConnection::SPtr> _connectionMap;
 		std::map<SocketKey, std::shared_ptr<sockets::UDPSocket>> _socketMap;
 
 		sockets::UDPSocket::SPtr  findOrCreateSocket(const std::string& host, int port);

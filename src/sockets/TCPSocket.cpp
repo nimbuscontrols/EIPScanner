@@ -18,8 +18,8 @@ namespace sockets {
 	using eipScanner::utils::Logger;
 	using eipScanner::utils::LogLevel;
 
-	TCPSocket::TCPSocket(std::string host, int port, size_t bufferSize)
-			: BaseSocket{host, port, bufferSize} {
+	TCPSocket::TCPSocket(std::string host, int port)
+			: BaseSocket{host, port} {
 
 		_sockedFd = socket(AF_INET, SOCK_STREAM, 0);
 		if (_sockedFd < 0) {
@@ -61,9 +61,11 @@ namespace sockets {
 	}
 
 	std::vector<uint8_t> TCPSocket::Receive(size_t size) {
+		std::vector<uint8_t> recvBuffer(size);
+
 		int count = 0;
 		while (size > count) {
-			auto len = recv(_sockedFd, _recvBuffer.data(), size, 0);
+			auto len = recv(_sockedFd, recvBuffer.data() + count, size-count, 0);
 			count += len;
 			if (len < 0) {
 				throw std::system_error(errno, std::generic_category());
@@ -79,10 +81,7 @@ namespace sockets {
 									  << " " << count << " of " << size;
 		}
 
-		std::vector<uint8_t> data(count);
-		std::copy(_recvBuffer.data(), _recvBuffer.data() + count, data.begin());
-
-		return data;
+		return recvBuffer;
 	}
 
 
