@@ -2,18 +2,20 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
-#ifndef EIPSCANNER_CIP_CONNECTIONMANAGERRESPONSE_H
-#define EIPSCANNER_CIP_CONNECTIONMANAGERRESPONSE_H
+#ifndef EIPSCANNER_CIP_CONNECTIONMANAGER_FORWARDOPENRESPONSE_H
+#define EIPSCANNER_CIP_CONNECTIONMANAGER_FORWARDOPENRESPONSE_H
 
 #include <vector>
-#include "Types.h"
+#include "cip/Types.h"
 
 namespace eipScanner {
 namespace cip {
-	class ConnectionManagerResponse {
+namespace connectionManager {
+
+	class ForwardOpenResponse {
 	public:
-		ConnectionManagerResponse();
-		~ConnectionManagerResponse();
+		ForwardOpenResponse();
+		~ForwardOpenResponse();
 		void expand(const std::vector<uint8_t>& data);
 
 		CipUdint getO2TNetworkConnectionId() const;
@@ -41,6 +43,6 @@ namespace cip {
 
 }
 }
+}
 
-
-#endif  // EIPSCANNER_CIP_CONNECTIONMANAGERRESPONSE_H
+#endif  // EIPSCANNER_CIP_CONNECTIONMANAGER_FORWARDOPENRESPONSE_H

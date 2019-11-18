@@ -2,14 +2,16 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
-#include "ConnectionManagerResponse.h"
+#include "ForwardOpenResponse.h"
 #include "utils/Buffer.h"
 
 namespace eipScanner {
 namespace cip {
+namespace connectionManager {
+
 	using utils::Buffer;
 
-	ConnectionManagerResponse::ConnectionManagerResponse()
+	ForwardOpenResponse::ForwardOpenResponse()
 		: _o2tNetworkConnectionId{0}
 		, _t2oNetworkConnectionId{0}
 		, _connectionSerialNumber{0}
@@ -21,9 +23,9 @@ namespace cip {
 		, _applicationReplay{0} {
 	}
 
-	ConnectionManagerResponse::~ConnectionManagerResponse() = default;
+	ForwardOpenResponse::~ForwardOpenResponse() = default;
 
-	void ConnectionManagerResponse::expand(const std::vector<uint8_t> &data) {
+	void ForwardOpenResponse::expand(const std::vector<uint8_t> &data) {
 		Buffer buffer(data);
 		CipUsint reserved = 0;
 
@@ -41,40 +43,41 @@ namespace cip {
 		buffer >> _applicationReplay;
 	}
 
-	CipUdint ConnectionManagerResponse::getO2TNetworkConnectionId() const {
+	CipUdint ForwardOpenResponse::getO2TNetworkConnectionId() const {
 		return _o2tNetworkConnectionId;
 	}
 
-	CipUdint ConnectionManagerResponse::getT2ONetworkConnectionId() const {
+	CipUdint ForwardOpenResponse::getT2ONetworkConnectionId() const {
 		return _t2oNetworkConnectionId;
 	}
 
-	CipUint ConnectionManagerResponse::getConnectionSerialNumber() const {
+	CipUint ForwardOpenResponse::getConnectionSerialNumber() const {
 		return _connectionSerialNumber;
 	}
 
-	CipUint ConnectionManagerResponse::getOriginatorVendorId() const {
+	CipUint ForwardOpenResponse::getOriginatorVendorId() const {
 		return _originatorVendorId;
 	}
 
-	CipUdint ConnectionManagerResponse::getOriginatorSerialNumber() const {
+	CipUdint ForwardOpenResponse::getOriginatorSerialNumber() const {
 		return _originatorSerialNumber;
 	}
 
-	CipUdint ConnectionManagerResponse::getO2TApi() const {
+	CipUdint ForwardOpenResponse::getO2TApi() const {
 		return _o2tAPI;
 	}
 
-	CipUdint ConnectionManagerResponse::getT2OApi() const {
+	CipUdint ForwardOpenResponse::getT2OApi() const {
 		return _t2oAPI;
 	}
 
-	CipUsint ConnectionManagerResponse::getApplicationReplaySize() const {
+	CipUsint ForwardOpenResponse::getApplicationReplaySize() const {
 		return _applicationReplaySize;
 	}
 
-	const std::vector<uint8_t> &ConnectionManagerResponse::getApplicationReplay() const {
+	const std::vector<uint8_t> &ForwardOpenResponse::getApplicationReplay() const {
 		return _applicationReplay;
 	}
+}
 }
 }

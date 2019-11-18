@@ -25,7 +25,7 @@ namespace eipScanner {
 	}
 
 	MessageRouterResponse
-	MessageRouter::sendRequest(ServiceCodes service, const EPath &path,
+	MessageRouter::sendRequest(CipUsint service, const EPath &path,
 							   const std::vector<uint8_t> &data) {
 		Logger(LogLevel::INFO) << "Send request: service=0x" << std::hex << service
 			<< " epath=" << path.toString();
