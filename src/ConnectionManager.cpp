@@ -31,7 +31,9 @@ namespace eipScanner {
 
 	IOConnection::WPtr
 	ConnectionManager::forwardOpen(ConnectionParameters connectionParameters) {
-		connectionParameters.connectionSerialNumber = 10;
+		static int serialNumberCount = 0;
+		connectionParameters.connectionSerialNumber = ++serialNumberCount;
+
 		if ((connectionParameters.o2tNetworkConnectionParams
 			& NetworkConnectionParams::MULTICAST) > 0) {
 			static cip::CipUdint idCount = 0;
@@ -67,6 +69,7 @@ namespace eipScanner {
 			ioConnection->_o2tAPI = response.getO2TApi();
 			ioConnection->_t2oAPI = response.getT2OApi();
 			ioConnection->_connectionTimeoutMultiplier = 4 << connectionParameters.connectionTimeoutMultiplier;
+			ioConnection->_serialNumber = response.getConnectionSerialNumber();
 
 			ioConnection->_socket = findOrCreateSocket(_messageRouter->getSessionInfo()->getHost(), 2222);
 
@@ -96,6 +99,17 @@ namespace eipScanner {
 		});
 
 		BaseSocket::select(sockets, timeout);
+
+		std::vector<cip::CipUdint> connectionsToclose;
+		for (auto& entry : _connectionMap) {
+			if (!entry.second->notifyTick()) {
+				connectionsToclose.push_back(entry.first);
+			}
+		}
+
+		for (auto& id : connectionsToclose) {
+			_connectionMap.erase(id);
+		}
 	}
 
 	UDPSocket::SPtr ConnectionManager::findOrCreateSocket(const std::string& host, int port) {
@@ -121,13 +135,13 @@ namespace eipScanner {
 				Buffer buffer(commonPacket[0].getData());
 				cip::CipUdint connectionId;
 				buffer >> connectionId;
-				Logger(LogLevel::DEBUG) << "Received data from connection ID=" << connectionId;
+				Logger(LogLevel::DEBUG) << "Received data from connection T2O_ID=" << connectionId;
 
 				auto io = _connectionMap[connectionId];
 				if (io) {
-					io->NotifyReceiveData(commonPacket[1].getData());
+					io->notifyReceiveData(commonPacket[1].getData());
 				} else {
-					Logger(LogLevel::ERROR) << "Received data from unknow connection ID=" << connectionId;
+					Logger(LogLevel::ERROR) << "Received data from unknow connection T2O_ID=" << connectionId;
 				}
 			});
 
@@ -135,5 +149,9 @@ namespace eipScanner {
 		}
 
 		return socket->second;
+	}
+
+	bool ConnectionManager::hasOpenConnections() const {
+		return !_connectionMap.empty();
 	}
 }

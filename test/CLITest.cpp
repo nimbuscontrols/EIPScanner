@@ -80,16 +80,23 @@ int main() {
 	parameters.transportTypeTrigger |= NetworkConnectionParams::TRANSP_SERVER; // Enable watchdog in adapter
 
 	auto io = connectionManager.forwardOpen(parameters);
-	io.lock()->setReceiveDataListener([](auto data) {
-		std::ostringstream ss;
-		for (auto& byte : data) {
-			ss << "[" << std::hex << (int)byte << "]";
-		}
+	{
+		auto ptr = io.lock();
+		ptr->setReceiveDataListener([](auto data) {
+			std::ostringstream ss;
+			for (auto &byte : data) {
+				ss << "[" << std::hex << (int) byte << "]";
+			}
 
-		Logger(LogLevel::INFO) << "Received: " << ss.str();
-	});
+			Logger(LogLevel::INFO) << "Received: " << ss.str();
+		});
 
-	while (true) {
+		ptr->setCloseListener([]() {
+			Logger(LogLevel::INFO) << "Closed";
+		});
+	}
+
+	while (connectionManager.hasOpenConnections()) {
 		connectionManager.handleConnections(std::chrono::milliseconds(100));
 	}
 

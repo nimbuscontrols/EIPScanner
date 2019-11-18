@@ -18,7 +18,7 @@ namespace eipScanner {
 		friend class ConnectionManager;
 	public:
 		using ReceiveDataHandle = std::function<void(const std::vector<uint8_t>&)>;
-		using CloseHandle = std::function<void(const IOConnection&)>;
+		using CloseHandle = std::function<void()>;
 
 		using WPtr=std::weak_ptr<IOConnection>;
 		using SPtr=std::shared_ptr<IOConnection>;
@@ -31,7 +31,8 @@ namespace eipScanner {
 
 	private:
 		IOConnection();
-		void NotifyReceiveData(const std::vector<uint8_t> &data);
+		void notifyReceiveData(const std::vector<uint8_t> &data);
+		bool notifyTick();
 
 		cip::CipUdint _o2tNetworkConnectionId;
 		cip::CipUdint _t2oNetworkConnectionId;
@@ -46,13 +47,14 @@ namespace eipScanner {
 
 		cip::CipUdint _o2tSequenceNumber;
 		cip::CipUdint _t2oSequenceNumber;
+		cip::CipUdint _serialNumber;
 
-		std::vector<uint8_t> _inputData;
 		std::vector<uint8_t> _outputData;
 
 		sockets::UDPSocket::WPtr _socket;
 
 		ReceiveDataHandle _receiveDataHandle;
+		CloseHandle _closeHandle;
 	};
 }
 
