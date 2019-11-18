@@ -1,5 +1,5 @@
 //
-// Created by Aleksey Timin on 11/16/19.
+// Created by Aleksey Timin on 11/18/19.
 //
 
 #include <system_error>
@@ -10,18 +10,17 @@
 #include <unistd.h>
 
 #include "utils/Logger.h"
-#include "TCPSocket.h"
-
+#include "UDPSocket.h"
 
 namespace eipScanner {
 namespace sockets {
 	using eipScanner::utils::Logger;
 	using eipScanner::utils::LogLevel;
 
-	TCPSocket::TCPSocket(std::string host, int port, size_t bufferSize)
+	UDPSocket::UDPSocket(std::string host, int port, size_t bufferSize)
 			: BaseSocket{host, port, bufferSize} {
 
-		_sockedFd = socket(AF_INET, SOCK_STREAM, 0);
+		_sockedFd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 		if (_sockedFd < 0) {
 			throw std::system_error(errno, std::generic_category());
 		}
@@ -29,41 +28,36 @@ namespace sockets {
 		Logger(LogLevel::DEBUG) << "Opened socket fd=" << _sockedFd;
 
 		Logger(LogLevel::DEBUG) << "Parsing IP from " << _host;
-		struct sockaddr_in addr{};
-		if (inet_aton(_host.c_str(), &addr.sin_addr) < 0) {
+
+		if (inet_aton(_host.c_str(), &_addr.sin_addr) < 0) {
 			close(_sockedFd);
 			throw std::system_error(errno, std::generic_category());
 		}
 
-		addr.sin_family = AF_INET;
-		addr.sin_port = htons(_port);
-
-		Logger(LogLevel::DEBUG) << "Connecting to " << _host << ":" << _port;
-		if (connect(_sockedFd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-			close(_sockedFd);
-			throw std::system_error(errno, std::generic_category());
-		}
+		_addr.sin_family = AF_INET;
+		_addr.sin_port = htons(_port);
 	}
 
-	TCPSocket::~TCPSocket() {
+	UDPSocket::~UDPSocket() {
 		Logger(LogLevel::DEBUG) << "Close socket fd=" << _sockedFd;
 		shutdown(_sockedFd, SHUT_RDWR);
 		close(_sockedFd);
 	}
 
-	void TCPSocket::Send(const std::vector <uint8_t> &data) const {
+	void UDPSocket::Send(const std::vector <uint8_t> &data) const {
 		Logger(LogLevel::TRACE) << "Send " << data.size() << " bytes from TCP socket #" << _sockedFd << ".";
 
-		int count = send(_sockedFd, data.data(), data.size(), 0);
+		int count = sendto(_sockedFd, data.data(), data.size(), 0,
+				(struct sockaddr *)&_addr, sizeof(_addr));
 		if (count < data.size()) {
 			throw std::system_error(errno, std::generic_category());
 		}
 	}
 
-	std::vector<uint8_t> TCPSocket::Receive(size_t size) {
+	std::vector<uint8_t> UDPSocket::Receive(size_t size) {
 		int count = 0;
 		while (size > count) {
-			auto len = recv(_sockedFd, _recvBuffer.data(), size, 0);
+			auto len = recvfrom(_sockedFd, _recvBuffer.data(), size, 0, NULL, NULL);
 			count += len;
 			if (len < 0) {
 				throw std::system_error(errno, std::generic_category());
@@ -84,7 +78,5 @@ namespace sockets {
 
 		return data;
 	}
-
-
 }
 }

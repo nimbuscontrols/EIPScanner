@@ -72,4 +72,8 @@ namespace eipScanner {
 		return _sessionHandle;
 	}
 
+	std::string SessionInfo::getHost() const {
+		return _socket.getHost();
+	}
+
 }

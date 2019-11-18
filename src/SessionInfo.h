@@ -23,6 +23,7 @@ namespace eipScanner {
 		virtual eip::EncapsPacket sendAndReceive(const eip::EncapsPacket& packet);
 
 		cip::CipUdint getSessionHandle() const;
+		std::string getHost() const;
 
 	private:
 		sockets::TCPSocket _socket;

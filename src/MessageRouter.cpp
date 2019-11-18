@@ -56,4 +56,8 @@ namespace eipScanner {
 
 		return response;
 	}
+
+	SessionInfo::SPtr MessageRouter::getSessionInfo() const {
+		return _si;
+	}
 }

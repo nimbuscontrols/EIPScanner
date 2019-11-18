@@ -20,6 +20,8 @@ namespace eipScanner {
 		cip::MessageRouterResponse sendRequest(cip::CipUsint service,
 				const cip::EPath& path, const std::vector<uint8_t>& data);
 
+		SessionInfo::SPtr getSessionInfo() const;
+
 	private:
 		SessionInfo::SPtr _si;
 	};
