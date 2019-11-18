@@ -46,8 +46,9 @@ namespace eipScanner {
 		_receiveDataHandle(data);
 	}
 
-	bool IOConnection::notifyTick() {
-		if (++_connectionTimeoutCount > _connectionTimeoutMultiplier) {
+	bool IOConnection::notifyTick(std::chrono::milliseconds period) {
+		_connectionTimeoutCount += period.count() * 1000;
+		if (_connectionTimeoutCount > _connectionTimeoutMultiplier * _t2oAPI) {
 			Logger(LogLevel::WARNING) << "Connection SeriaNumber=" << _serialNumber << " is closed by timeout";
 			_closeHandle();
 			return false;

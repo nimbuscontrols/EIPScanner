@@ -102,7 +102,7 @@ namespace eipScanner {
 
 		std::vector<cip::CipUdint> connectionsToclose;
 		for (auto& entry : _connectionMap) {
-			if (!entry.second->notifyTick()) {
+			if (!entry.second->notifyTick(std::chrono::milliseconds(100))) {
 				connectionsToclose.push_back(entry.first);
 			}
 		}

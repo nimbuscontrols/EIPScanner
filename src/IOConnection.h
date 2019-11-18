@@ -32,7 +32,7 @@ namespace eipScanner {
 	private:
 		IOConnection();
 		void notifyReceiveData(const std::vector<uint8_t> &data);
-		bool notifyTick();
+		bool notifyTick(std::chrono::milliseconds period);
 
 		cip::CipUdint _o2tNetworkConnectionId;
 		cip::CipUdint _t2oNetworkConnectionId;
@@ -43,7 +43,7 @@ namespace eipScanner {
 		cip::CipUdint _t2o_timer;
 
 		cip::CipUsint _connectionTimeoutMultiplier;
-		cip::CipUsint _connectionTimeoutCount;
+		cip::CipUdint _connectionTimeoutCount;
 
 		cip::CipUdint _o2tSequenceNumber;
 		cip::CipUdint _t2oSequenceNumber;

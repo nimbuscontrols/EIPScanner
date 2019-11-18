@@ -75,8 +75,8 @@ int main() {
 	parameters.t2oNetworkConnectionParams |= 32;
 	parameters.o2tNetworkConnectionParams |= NetworkConnectionParams::P2P;
 	parameters.o2tNetworkConnectionParams |= 36; //TODO size of Assm150 = 32 but we need +4 I forgot why it is so!
-	parameters.o2tRPI = 200000;
-	parameters.t2oRPI = 200000;
+	parameters.o2tRPI = 1000000;
+	parameters.t2oRPI = 1000000;
 	parameters.transportTypeTrigger |= NetworkConnectionParams::TRANSP_SERVER; // Enable watchdog in adapter
 
 	auto io = connectionManager.forwardOpen(parameters);
