@@ -2,6 +2,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 add_library(EIPScanner SHARED
 
         cip/ConnectionManagerRequest.cpp
+        cip/ConnectionManagerResponse.cpp
         cip/EPath.cpp
         cip/MessageRouterRequest.cpp
         cip/MessageRouterResponse.cpp
