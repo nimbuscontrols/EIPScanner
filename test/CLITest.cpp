@@ -100,9 +100,12 @@ int main() {
 		});
 	}
 
-	while (connectionManager.hasOpenConnections()) {
+	int count = 100;
+	while (connectionManager.hasOpenConnections() && count-- > 0) {
 		connectionManager.handleConnections(std::chrono::milliseconds(100));
 	}
+
+	connectionManager.forwardClose(io);
 
 	return 0;
 }

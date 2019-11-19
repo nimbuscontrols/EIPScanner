@@ -1,6 +1,6 @@
 include_directories(${CMAKE_SOURCE_DIR}/src)
 add_library(EIPScanner SHARED
-
+        cip/connectionManager/ForwardCloseRequest.cpp
         cip/connectionManager/ForwardOpenRequest.cpp
         cip/connectionManager/ForwardOpenResponse.cpp
         cip/EPath.cpp

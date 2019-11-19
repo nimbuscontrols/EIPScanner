@@ -53,6 +53,9 @@ namespace eipScanner {
 		cip::CipBool  _o2tRealTimeFormat;
 		cip::CipBool  _t2oRealTimeFormat;
 		cip::CipUint  _sequenceValueCount;
+		std::vector<uint8_t> _connectionPath;
+		cip::CipUint _originatorVendorId;
+		cip::CipUdint _originatorSerialNumber;
 
 		std::vector<uint8_t> _outputData;
 

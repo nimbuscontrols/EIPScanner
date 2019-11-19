@@ -26,7 +26,8 @@ namespace eipScanner {
 	};
 
 	enum class ConnectionManagerServiceCodes : cip::CipUsint {
-		FORWARD_OPEN = 0x54
+		FORWARD_OPEN = 0x54,
+		FORWARD_CLOSE = 0x4E
 	};
 
 	class ConnectionManager {
@@ -35,6 +36,7 @@ namespace eipScanner {
 		~ConnectionManager();
 
 		IOConnection::WPtr forwardOpen(cip::connectionManager::ConnectionParameters connectionParameters);
+		void forwardClose(const IOConnection::WPtr& ioConnection);
 
 		void handleConnections(std::chrono::milliseconds timeout);
 		bool hasOpenConnections() const;

@@ -32,6 +32,9 @@ namespace eipScanner {
 			, _t2oRealTimeFormat{0}
 			, _t2oSequenceNumber{0}
 			, _sequenceValueCount{0}
+			, _connectionPath(0)
+			, _originatorVendorId{0}
+			, _originatorSerialNumber{0}
 			, _serialNumber{0}
 			, _outputData()
 			, _receiveDataHandle([](auto a, auto b, auto data) {})

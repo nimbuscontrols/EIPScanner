@@ -2,11 +2,12 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 #include <algorithm>
-
+#include <assert.h>
 
 #include "ConnectionManager.h"
 #include "eip/CommonPacket.h"
 #include "cip/connectionManager/ForwardOpenRequest.h"
+#include "cip/connectionManager/ForwardCloseRequest.h"
 #include "cip/connectionManager/ForwardOpenResponse.h"
 #include "cip/connectionManager/NetworkConnectionParams.h"
 #include "utils/Logger.h"
@@ -88,6 +89,9 @@ namespace eipScanner {
 			ioConnection->_transportTypeTrigger = connectionParameters.transportTypeTrigger;
 			ioConnection->_o2tRealTimeFormat = connectionParameters.o2tRealTimeFormat;
 			ioConnection->_t2oRealTimeFormat = connectionParameters.t2oRealTimeFormat;
+			ioConnection->_connectionPath = connectionParameters.connectionPath;
+			ioConnection->_originatorVendorId = connectionParameters.originatorVendorId;
+			ioConnection->_originatorSerialNumber = connectionParameters.originatorSerialNumber;
 			ioConnection->_socket = findOrCreateSocket(_messageRouter->getSessionInfo()->getHost(), 2222);
 
 			//TODO: Need checking if the connection already exists
@@ -107,6 +111,35 @@ namespace eipScanner {
 		return ioConnection;
 	}
 
+	void ConnectionManager::forwardClose(const IOConnection::WPtr& ioConnection) {
+		if (auto ptr = ioConnection.lock()) {
+			ForwardCloseRequest request;
+
+			request.setConnectionPath(ptr->_connectionPath);
+			request.setConnectionSerialNumber(ptr->_serialNumber);
+			request.setOriginatorVendorId(ptr->_originatorVendorId);
+			request.setOriginatorSerialNumber(ptr->_originatorSerialNumber);
+
+			Logger(LogLevel::INFO) << "Close connection connection T2O="
+								   << ptr->_t2oNetworkConnectionId;
+
+			auto messageRouterResponse = _messageRouter->sendRequest(
+					static_cast<cip::CipUsint>(ConnectionManagerServiceCodes::FORWARD_CLOSE),
+					EPath(6, 1), request.pack());
+
+			if (messageRouterResponse.getGeneralStatusCode() != GeneralStatusCodes::SUCCESS) {
+				Logger(LogLevel::WARNING)
+					<< "Failed to close the connection in target with error="
+					<< messageRouterResponse.getGeneralStatusCode()
+					<< ". But the connection is removed from ConnectionManager anyway";
+			}
+
+			auto rc = _connectionMap.erase(ptr->_t2oNetworkConnectionId);
+			assert(rc);
+		} else {
+			Logger(LogLevel::WARNING) << "Attempt to close an already closed connection";
+		}
+	}
 
 	void ConnectionManager::handleConnections(std::chrono::milliseconds timeout) {
 		std::vector<BaseSocket::SPtr > sockets;
@@ -175,4 +208,5 @@ namespace eipScanner {
 	bool ConnectionManager::hasOpenConnections() const {
 		return !_connectionMap.empty();
 	}
+
 }
