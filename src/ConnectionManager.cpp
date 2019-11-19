@@ -24,7 +24,8 @@ namespace eipScanner {
 
 	ConnectionManager::ConnectionManager(MessageRouter::SPtr messageRouter)
 		: _messageRouter(messageRouter)
-		, _connectionMap() {
+		, _connectionMap()
+		, _lastHandleTime(std::chrono::steady_clock::now()){
 	}
 
 	ConnectionManager::~ConnectionManager() = default;
@@ -116,17 +117,20 @@ namespace eipScanner {
 
 		BaseSocket::select(sockets, timeout);
 
-		std::vector<cip::CipUdint> connectionsToclose;
+		auto currentTime = std::chrono::steady_clock::now();
+		std::vector<cip::CipUdint> connectionsToClose;
 		for (auto& entry : _connectionMap) {
-			if (!entry.second->notifyTick(std::chrono::milliseconds(100))) {
-				connectionsToclose.push_back(entry.first);
+			if (!entry.second->notifyTick(
+					std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - _lastHandleTime))) {
+				connectionsToClose.push_back(entry.first);
 			}
 		}
 
-		for (auto& id : connectionsToclose) {
+		for (auto& id : connectionsToClose) {
 			_connectionMap.erase(id);
 		}
 
+		_lastHandleTime = currentTime;
 	}
 
 	UDPSocket::SPtr ConnectionManager::findOrCreateSocket(const std::string& host, int port) {

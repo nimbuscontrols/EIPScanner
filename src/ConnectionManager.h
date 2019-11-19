@@ -45,6 +45,7 @@ namespace eipScanner {
 		std::map<SocketKey, std::shared_ptr<sockets::UDPSocket>> _socketMap;
 
 		sockets::UDPSocket::SPtr  findOrCreateSocket(const std::string& host, int port);
+		std::chrono::steady_clock::time_point _lastHandleTime;
 	};
 }
 
