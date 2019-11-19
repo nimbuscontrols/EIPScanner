@@ -69,8 +69,20 @@ namespace sockets {
 	void BaseSocket::select(std::vector<BaseSocket::SPtr> sockets, std::chrono::milliseconds timeout) {
 		// Receive data
 		struct timeval tv = {
-				.tv_sec = static_cast<__time_t>(timeout.count()/1000),
-				.tv_usec =  static_cast<__time_t>((timeout.count()%1000)*1000)
+				
+#ifdef __APPLE__
+                .tv_sec = static_cast<__darwin_suseconds_t>(timeout.count()/1000),
+                .tv_usec =  static_cast<__darwin_suseconds_t>((timeout.count()%1000)*1000)
+#elif __linux__
+        .tv_sec = static_cast<__time_t>(recvTimeout.count()/1000),
+				.tv_usec =  static_cast<__time_t>((recvTimeout.count()%1000)*1000)
+
+#elif _WIN32
+		// not sure what the macro is for windows
+				.tv_sec = static_cast<_time64>(recvTimeout.count()/1000),
+				.tv_usec =  static_cast<_time64>((recvTimeout.count()%1000)*1000)
+#endif
+			
 		};
 
 		fd_set recvSet;
