@@ -23,6 +23,7 @@ namespace connectionManager {
 		Buffer buffer;
 		CipUsint timeTick = 0;
 		CipUsint timeOutTicks = 0;
+		CipUsint reserved = 0;
 
 		buffer << timeTick
 			<< timeOutTicks
@@ -30,6 +31,7 @@ namespace connectionManager {
 			<< _originatorVendorID
 			<< _originatorSerialNumber
 			<< static_cast<CipUsint>(_connectionPath.size()/2)
+			<< reserved
 			<< _connectionPath;
 
 		return buffer.data();

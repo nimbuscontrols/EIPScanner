@@ -72,9 +72,13 @@ int main() {
 	ConnectionParameters parameters;
 	parameters.connectionPath = {0x20, 0x04,0x24, 151, 0x2C, 150, 0x2C, 100};  // config Assm151, output Assm150, intput Assm100
 	parameters.o2tRealTimeFormat = true;
+	parameters.originatorVendorId = 342;
+	parameters.originatorSerialNumber = 32423;
 	parameters.t2oNetworkConnectionParams |= NetworkConnectionParams::P2P;
+	parameters.t2oNetworkConnectionParams |= NetworkConnectionParams::SCHEDULED_PRIORITY;
 	parameters.t2oNetworkConnectionParams |= 32; //size of Assm100 =32
 	parameters.o2tNetworkConnectionParams |= NetworkConnectionParams::P2P;
+	parameters.o2tNetworkConnectionParams |= NetworkConnectionParams::SCHEDULED_PRIORITY;
 	parameters.o2tNetworkConnectionParams |= 32; //size of Assm150 = 32
 
 	parameters.o2tRPI = 1000000;

@@ -134,7 +134,8 @@ namespace eipScanner {
 
 			if (messageRouterResponse.getGeneralStatusCode() != GeneralStatusCodes::SUCCESS) {
 				Logger(LogLevel::WARNING)
-					<< "Failed to close the connection in target with error="
+					<< "Failed to close the connection in target with error=0x"
+					<< std::hex
 					<< messageRouterResponse.getGeneralStatusCode()
 					<< ". But the connection is removed from ConnectionManager anyway";
 			}
