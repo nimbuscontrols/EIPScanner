@@ -17,7 +17,7 @@ namespace eipScanner {
 	class IOConnection {
 		friend class ConnectionManager;
 	public:
-		using ReceiveDataHandle = std::function<void(const std::vector<uint8_t>&)>;
+		using ReceiveDataHandle = std::function<void(cip::CipUdint, cip::CipUint, const std::vector<uint8_t>&)>;
 		using CloseHandle = std::function<void()>;
 
 		using WPtr=std::weak_ptr<IOConnection>;
@@ -48,6 +48,11 @@ namespace eipScanner {
 		cip::CipUdint _o2tSequenceNumber;
 		cip::CipUdint _t2oSequenceNumber;
 		cip::CipUdint _serialNumber;
+
+		cip::CipUsint _transportTypeTrigger;
+		cip::CipBool  _o2tRealTimeFormat;
+		cip::CipBool  _t2oRealTimeFormat;
+		cip::CipUint  _sequenceValueCount;
 
 		std::vector<uint8_t> _outputData;
 

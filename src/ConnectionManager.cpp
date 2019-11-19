@@ -49,6 +49,20 @@ namespace eipScanner {
 		connectionParameters.connectionPathSize =  (connectionParameters.connectionPath .size() / 2)
 				+ (connectionParameters.connectionPath .size() % 2);
 
+		if ((connectionParameters.transportTypeTrigger & NetworkConnectionParams::CLASS1) > 0
+			|| (connectionParameters.transportTypeTrigger & NetworkConnectionParams::CLASS3) > 0) {
+			connectionParameters.o2tNetworkConnectionParams += 2;
+			connectionParameters.t2oNetworkConnectionParams += 2;
+		}
+
+		if (connectionParameters.o2tRealTimeFormat) {
+			connectionParameters.o2tNetworkConnectionParams += 4;
+		}
+
+		if (connectionParameters.t2oRealTimeFormat) {
+			connectionParameters.t2oNetworkConnectionParams += 4;
+		}
+
 		ForwardOpenRequest request(connectionParameters);
 		auto messageRouterResponse = _messageRouter->sendRequest(
 				static_cast<cip::CipUsint>(ConnectionManagerServiceCodes::FORWARD_OPEN),
@@ -70,7 +84,9 @@ namespace eipScanner {
 			ioConnection->_t2oAPI = response.getT2OApi();
 			ioConnection->_connectionTimeoutMultiplier = 4 << connectionParameters.connectionTimeoutMultiplier;
 			ioConnection->_serialNumber = response.getConnectionSerialNumber();
-
+			ioConnection->_transportTypeTrigger = connectionParameters.transportTypeTrigger;
+			ioConnection->_o2tRealTimeFormat = connectionParameters.o2tRealTimeFormat;
+			ioConnection->_t2oRealTimeFormat = connectionParameters.t2oRealTimeFormat;
 			ioConnection->_socket = findOrCreateSocket(_messageRouter->getSessionInfo()->getHost(), 2222);
 
 			//TODO: Need checking if the connection already exists
@@ -110,6 +126,7 @@ namespace eipScanner {
 		for (auto& id : connectionsToclose) {
 			_connectionMap.erase(id);
 		}
+
 	}
 
 	UDPSocket::SPtr ConnectionManager::findOrCreateSocket(const std::string& host, int port) {

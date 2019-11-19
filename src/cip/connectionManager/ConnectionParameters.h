@@ -26,6 +26,8 @@ namespace connectionManager {
 		CipUint t2oNetworkConnectionParams = 0;
 		CipUsint transportTypeTrigger = 0;
 		CipUsint connectionPathSize = 0;
+		CipBool o2tRealTimeFormat = 0;
+		CipBool t2oRealTimeFormat = 0;
 		std::vector<uint8_t> connectionPath = {};
 	};
 }

@@ -71,12 +71,12 @@ int main() {
 
 	ConnectionParameters parameters;
 	parameters.connectionPath = {0x20, 0x04,0x24, 151, 0x2C, 150, 0x2C, 100};  // config Assm151, output Assm150, intput Assm100
+	parameters.o2tRealTimeFormat = true;
 	parameters.t2oNetworkConnectionParams |= NetworkConnectionParams::P2P;
-	parameters.t2oNetworkConnectionParams |= 34; //size of Assm100 =32 + 2 sequence count (Class1, Class2)
+	parameters.t2oNetworkConnectionParams |= 32; //size of Assm100 =32
 	parameters.o2tNetworkConnectionParams |= NetworkConnectionParams::P2P;
-	parameters.o2tNetworkConnectionParams |= 38; //size of Assm150 = 32
-												 //+4 Real time transfer format (first bit must RUN\IDLE)
-												 //+2 sequence count (Class1, Class2)
+	parameters.o2tNetworkConnectionParams |= 32; //size of Assm150 = 32
+
 	parameters.o2tRPI = 1000000;
 	parameters.t2oRPI = 1000000;
 	parameters.transportTypeTrigger |= NetworkConnectionParams::CLASS1;
@@ -85,8 +85,9 @@ int main() {
 	if (auto ptr = io.lock()) {
 		ptr->setDataToSend(std::vector<uint8_t>(32));
 
-		ptr->setReceiveDataListener([](auto data) {
+		ptr->setReceiveDataListener([](auto realTimeHeader, auto sequence, auto data) {
 			std::ostringstream ss;
+			ss << "secNum=" << sequence << " data=";
 			for (auto &byte : data) {
 				ss << "[" << std::hex << (int) byte << "]";
 			}
