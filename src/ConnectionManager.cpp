@@ -94,8 +94,13 @@ namespace eipScanner {
 			ioConnection->_originatorSerialNumber = connectionParameters.originatorSerialNumber;
 			ioConnection->_socket = findOrCreateSocket(_messageRouter->getSessionInfo()->getHost(), 2222);
 
-			//TODO: Need checking if the connection already exists
-			_connectionMap.insert(std::make_pair(response.getT2ONetworkConnectionId(), ioConnection));
+			auto result = _connectionMap
+					.insert(std::make_pair(response.getT2ONetworkConnectionId(), ioConnection));
+			if (!result.second) {
+				Logger(LogLevel::ERROR)
+					<< "Connection with T2O_ID=" << response.getT2ONetworkConnectionId()
+					<< " already exists.";
+			}
 		} else {
 			Logger logger(LogLevel::ERROR);
 			logger << "Failed to establish connection with error="
@@ -120,8 +125,8 @@ namespace eipScanner {
 			request.setOriginatorVendorId(ptr->_originatorVendorId);
 			request.setOriginatorSerialNumber(ptr->_originatorSerialNumber);
 
-			Logger(LogLevel::INFO) << "Close connection connection T2O="
-								   << ptr->_t2oNetworkConnectionId;
+			Logger(LogLevel::INFO) << "Close connection connection T2O_ID="
+					<< ptr->_t2oNetworkConnectionId;
 
 			auto messageRouterResponse = _messageRouter->sendRequest(
 					static_cast<cip::CipUsint>(ConnectionManagerServiceCodes::FORWARD_CLOSE),
