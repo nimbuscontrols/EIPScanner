@@ -35,6 +35,11 @@ namespace connectionManager {
 		TRIG_CYCLIC = 0,
 		TRIG_CHANGE = (1 << 4),
 		TRIG_APP = (2 << 4),
+
+		CLASS0 = 0,
+		CLASS1 = 1,
+		CLASS2 = 2,
+		CLASS3 = 3,
 		TRANSP_SERVER = 0x80
 	};
 

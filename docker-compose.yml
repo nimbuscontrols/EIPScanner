@@ -5,6 +5,12 @@ services:
     build: .
     volumes:
       - .:/code
+    command: test/cli_test
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.1
+    depends_on:
+      - opener_adapter
 
   opener_adapter:
     build: Dockers/opener
@@ -12,6 +18,9 @@ services:
     command: ./OpENer eth0
     ports:
       - "44818:44818"
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.3
 
   gdbserver:
     build:
@@ -22,3 +31,9 @@ services:
     ports:
       - "7776:22"
       - "7777:7777"
+networks:
+  testing_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16

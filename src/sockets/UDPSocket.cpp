@@ -36,14 +36,15 @@ namespace sockets {
 
 		_addr.sin_family = AF_INET;
 		_addr.sin_port = htons(_port);
-		_addr.sin_addr.s_addr = INADDR_ANY;
 
 		int on = 1;
 		if (setsockopt(_sockedFd, SOL_SOCKET, SO_REUSEADDR, (char *) &on, sizeof(on)) < 0) {
 			throw std::system_error(errno, std::generic_category());
 		}
 
-		if (bind(_sockedFd, (struct sockaddr *)&_addr, sizeof(_addr)) < 0) {
+		auto addr = _addr;
+		addr.sin_addr.s_addr = INADDR_ANY;
+		if (bind(_sockedFd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
 			throw std::system_error(errno, std::generic_category());
 		}
 	}
