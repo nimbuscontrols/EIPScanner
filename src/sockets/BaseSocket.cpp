@@ -72,7 +72,6 @@ namespace sockets {
 	}
 
 	void BaseSocket::select(std::vector<BaseSocket::SPtr> sockets, std::chrono::milliseconds timeout) {
-
 		BaseSocket::SPtr socketWithMaxFd = *std::max_element(sockets.begin(), sockets.end(), [](auto sock1, auto sock2) {
 			return sock1->getSocketFd() < sock2->getSocketFd();
 		});

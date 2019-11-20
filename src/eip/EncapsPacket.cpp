@@ -2,6 +2,7 @@
 // Created by flipback on 11/16/19.
 //
 
+#include <string>
 #include <stdexcept>
 #include "EncapsPacket.h"
 #include "utils/Buffer.h"
