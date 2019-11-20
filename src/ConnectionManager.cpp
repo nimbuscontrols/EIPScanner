@@ -24,7 +24,7 @@ namespace eipScanner {
 	using sockets::BaseSocket;
 
 	ConnectionManager::ConnectionManager(MessageRouter::SPtr messageRouter)
-		: _messageRouter(messageRouter)
+		: _messageRouter(std::move(messageRouter))
 		, _connectionMap()
 		, _lastHandleTime(std::chrono::steady_clock::now()){
 	}
@@ -32,7 +32,7 @@ namespace eipScanner {
 	ConnectionManager::~ConnectionManager() = default;
 
 	IOConnection::WPtr
-	ConnectionManager::forwardOpen(ConnectionParameters connectionParameters) {
+	ConnectionManager::forwardOpen(SessionInfo::SPtr si, ConnectionParameters connectionParameters) {
 		static int serialNumberCount = 0;
 		connectionParameters.connectionSerialNumber = ++serialNumberCount;
 
@@ -66,7 +66,7 @@ namespace eipScanner {
 		}
 
 		ForwardOpenRequest request(connectionParameters);
-		auto messageRouterResponse = _messageRouter->sendRequest(
+		auto messageRouterResponse = _messageRouter->sendRequest(si,
 				static_cast<cip::CipUsint>(ConnectionManagerServiceCodes::FORWARD_OPEN),
 				EPath(6, 1), request.pack());
 
@@ -92,7 +92,7 @@ namespace eipScanner {
 			ioConnection->_connectionPath = connectionParameters.connectionPath;
 			ioConnection->_originatorVendorId = connectionParameters.originatorVendorId;
 			ioConnection->_originatorSerialNumber = connectionParameters.originatorSerialNumber;
-			ioConnection->_socket = findOrCreateSocket(_messageRouter->getSessionInfo()->getHost(), 2222);
+			ioConnection->_socket = findOrCreateSocket(si->getHost(), 2222);
 
 			auto result = _connectionMap
 					.insert(std::make_pair(response.getT2ONetworkConnectionId(), ioConnection));
@@ -116,7 +116,7 @@ namespace eipScanner {
 		return ioConnection;
 	}
 
-	void ConnectionManager::forwardClose(const IOConnection::WPtr& ioConnection) {
+	void ConnectionManager::forwardClose(SessionInfo::SPtr si, const IOConnection::WPtr& ioConnection) {
 		if (auto ptr = ioConnection.lock()) {
 			ForwardCloseRequest request;
 
@@ -128,7 +128,7 @@ namespace eipScanner {
 			Logger(LogLevel::INFO) << "Close connection connection T2O_ID="
 					<< ptr->_t2oNetworkConnectionId;
 
-			auto messageRouterResponse = _messageRouter->sendRequest(
+			auto messageRouterResponse = _messageRouter->sendRequest(si,
 					static_cast<cip::CipUsint>(ConnectionManagerServiceCodes::FORWARD_CLOSE),
 					EPath(6, 1), request.pack());
 
@@ -160,7 +160,7 @@ namespace eipScanner {
 		std::vector<cip::CipUdint> connectionsToClose;
 		auto sinceLastHandle =
 				std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastHandleTime);
-		Logger(LogLevel::DEBUG) << "Last call was " << sinceLastHandle.count() << "ms ago";
+		Logger(LogLevel::TRACE) << "Last call was " << sinceLastHandle.count() << "ms ago";
 		for (auto& entry : _connectionMap) {
 			if (!entry.second->notifyTick(sinceLastHandle)) {
 				connectionsToClose.push_back(entry.first);

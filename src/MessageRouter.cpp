@@ -20,12 +20,10 @@ namespace eipScanner {
 	using eip::EncapsPacket;
 	using eip::EncapsPacketFactory;
 
-	MessageRouter::MessageRouter(SessionInfo::SPtr si)
-		: _si(si) {
-	}
+	MessageRouter::MessageRouter() = default;
 
 	MessageRouterResponse
-	MessageRouter::sendRequest(CipUsint service, const EPath &path,
+	MessageRouter::sendRequest(SessionInfo::SPtr si, CipUsint service, const EPath &path,
 							   const std::vector<uint8_t> &data) {
 		Logger(LogLevel::INFO) << "Send request: service=0x" << std::hex << static_cast<int>(service)
 			<< " epath=" << path.toString();
@@ -38,9 +36,9 @@ namespace eipScanner {
 		commonPacket << commonPacketItemFactory.createUnconnectedDataItem(request.pack());
 
 		auto packetToSend = EncapsPacketFactory()
-				.createSendRRDataPacket(_si->getSessionHandle(), 0, commonPacket.pack());
+				.createSendRRDataPacket(si->getSessionHandle(), 0, commonPacket.pack());
 
-		auto receivedPacket = _si->sendAndReceive(packetToSend);
+		auto receivedPacket = si->sendAndReceive(packetToSend);
 
 		Buffer buffer(receivedPacket.getData());
 		cip::CipUdint interfaceHandle;
@@ -57,7 +55,4 @@ namespace eipScanner {
 		return response;
 	}
 
-	SessionInfo::SPtr MessageRouter::getSessionInfo() const {
-		return _si;
-	}
 }

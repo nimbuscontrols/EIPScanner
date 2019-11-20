@@ -24,10 +24,10 @@ using eipScanner::utils::LogLevel;
 int main() {
 	Logger::setLogLevel(LogLevel::DEBUG);
 	auto si = std::make_shared<SessionInfo>("172.28.1.3", 0xAF12);
-	auto messageRouter = std::make_shared<MessageRouter>(si);
+	auto messageRouter = std::make_shared<MessageRouter>();
 
 	// Read attribute
-	auto response = messageRouter->sendRequest(ServiceCodes::GET_ATTRIBUTE_SINGLE,
+	auto response = messageRouter->sendRequest(si, ServiceCodes::GET_ATTRIBUTE_SINGLE,
 											   EPath(0x01, 1, 1),
 											   {});
 
@@ -56,7 +56,7 @@ int main() {
 				<< CipUsint(10);
 
 
-	response = messageRouter->sendRequest(ServiceCodes::SET_ATTRIBUTE_SINGLE,
+	response = messageRouter->sendRequest(si, ServiceCodes::SET_ATTRIBUTE_SINGLE,
 										  EPath(0x04, 151, 3),
 										  assembly151.data());
 
@@ -85,7 +85,7 @@ int main() {
 	parameters.t2oRPI = 1000000;
 	parameters.transportTypeTrigger |= NetworkConnectionParams::CLASS1;
 
-	auto io = connectionManager.forwardOpen(parameters);
+	auto io = connectionManager.forwardOpen(si, parameters);
 	if (auto ptr = io.lock()) {
 		ptr->setDataToSend(std::vector<uint8_t>(32));
 
@@ -109,7 +109,7 @@ int main() {
 		connectionManager.handleConnections(std::chrono::milliseconds(100));
 	}
 
-	connectionManager.forwardClose(io);
+	connectionManager.forwardClose(si, io);
 
 	return 0;
 }

@@ -35,8 +35,8 @@ namespace eipScanner {
 		explicit ConnectionManager(MessageRouter::SPtr messageRouter);
 		~ConnectionManager();
 
-		IOConnection::WPtr forwardOpen(cip::connectionManager::ConnectionParameters connectionParameters);
-		void forwardClose(const IOConnection::WPtr& ioConnection);
+		IOConnection::WPtr forwardOpen(SessionInfo::SPtr si, cip::connectionManager::ConnectionParameters connectionParameters);
+		void forwardClose(SessionInfo::SPtr si, const IOConnection::WPtr& ioConnection);
 
 		void handleConnections(std::chrono::milliseconds timeout);
 		bool hasOpenConnections() const;
