@@ -11,7 +11,7 @@
 #include "cip/connectionManager/ConnectionParameters.h"
 #include "cip/Services.h"
 #include "cip/Types.h"
-#include "sockets/UDPSocket.h"
+#include "sockets/UDPBoundSocket.h"
 
 namespace eipScanner {
 
@@ -44,9 +44,9 @@ namespace eipScanner {
 	private:
 		MessageRouter::SPtr _messageRouter;
 		std::map<cip::CipUint, IOConnection::SPtr> _connectionMap;
-		std::map<SocketKey, std::shared_ptr<sockets::UDPSocket>> _socketMap;
+		std::map<SocketKey, std::shared_ptr<sockets::UDPBoundSocket>> _socketMap;
 
-		sockets::UDPSocket::SPtr  findOrCreateSocket(const std::string& host, int port);
+		sockets::UDPBoundSocket::SPtr  findOrCreateSocket(const std::string& host, int port);
 		std::chrono::steady_clock::time_point _lastHandleTime;
 	};
 }

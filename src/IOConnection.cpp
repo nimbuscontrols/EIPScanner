@@ -105,16 +105,8 @@ namespace eipScanner {
 			buffer << _outputData;
 			commonPacket << factory.createConnectedDataItem(buffer.data());
 
-
-			auto ptr = _socket.lock();
-			if (ptr) {
-				ptr->Send(commonPacket.pack());
-				_o2tTimer = 0;
-			} else {
-				Logger(LogLevel::WARNING) << "Connection SeriaNumber="
-										  << _serialNumber << " has no socket. Close.";
-				return false;
-			}
+			_socket->Send(commonPacket.pack());
+			_o2tTimer = 0;
 		}
 
 		return true;

@@ -59,7 +59,7 @@ namespace eipScanner {
 
 		std::vector<uint8_t> _outputData;
 
-		sockets::UDPSocket::WPtr _socket;
+		sockets::UDPSocket::UPtr _socket;
 
 		ReceiveDataHandle _receiveDataHandle;
 		CloseHandle _closeHandle;

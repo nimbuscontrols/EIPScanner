@@ -21,6 +21,7 @@ namespace eipScanner {
 	using cip::GeneralStatusCodes;
 	using eip::CommonPacket;
 	using sockets::UDPSocket;
+	using sockets::UDPBoundSocket;
 	using sockets::BaseSocket;
 
 	ConnectionManager::ConnectionManager(MessageRouter::SPtr messageRouter)
@@ -92,7 +93,9 @@ namespace eipScanner {
 			ioConnection->_connectionPath = connectionParameters.connectionPath;
 			ioConnection->_originatorVendorId = connectionParameters.originatorVendorId;
 			ioConnection->_originatorSerialNumber = connectionParameters.originatorSerialNumber;
-			ioConnection->_socket = findOrCreateSocket(si->getHost(), 2222);
+			ioConnection->_socket = std::make_unique<UDPSocket>(si->getHost(), 2222);
+
+			findOrCreateSocket(si->getHost(), 2222);
 
 			auto result = _connectionMap
 					.insert(std::make_pair(response.getT2ONetworkConnectionId(), ioConnection));
@@ -174,7 +177,7 @@ namespace eipScanner {
 		_lastHandleTime = now;
 	}
 
-	UDPSocket::SPtr ConnectionManager::findOrCreateSocket(const std::string& host, int port) {
+	UDPBoundSocket::SPtr ConnectionManager::findOrCreateSocket(const std::string& host, int port) {
 		SocketKey socketKey = {
 				.host = host,
 				.port = port
@@ -182,7 +185,7 @@ namespace eipScanner {
 
 		auto socket = _socketMap.find(socketKey);
 		if (socket == _socketMap.end()) {
-			auto newSocket = std::make_shared<UDPSocket>(host, port);
+			auto newSocket = std::make_shared<UDPBoundSocket>(host, port);
 			_socketMap[socketKey] = newSocket;
 			newSocket->setBeginReceiveHandler([](sockets::BaseSocket& sock) {
 				Logger(LogLevel::DEBUG) << "Received something";

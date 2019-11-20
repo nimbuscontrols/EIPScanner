@@ -15,6 +15,7 @@ add_library(EIPScanner SHARED
 
         sockets/BaseSocket.cpp
         sockets/TCPSocket.cpp
+        sockets/UDPBoundSocket.cpp
         sockets/UDPSocket.cpp
 
         utils/Logger.cpp

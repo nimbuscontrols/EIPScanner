@@ -18,6 +18,7 @@ namespace sockets {
 	public:
 		using WPtr = std::weak_ptr<UDPSocket>;
 		using SPtr = std::shared_ptr<UDPSocket>;
+		using UPtr = std::unique_ptr<UDPSocket>;
 
 		UDPSocket(std::string host, int port);
 		virtual ~UDPSocket();
@@ -26,7 +27,7 @@ namespace sockets {
 		std::vector<uint8_t> Receive(size_t size) override ;
 
 
-	private:
+	protected:
 		struct sockaddr_in _addr;
 	};
 }
