@@ -156,11 +156,13 @@ namespace eipScanner {
 
 		BaseSocket::select(sockets, timeout);
 
-		auto currentTime = std::chrono::steady_clock::now();
+		auto now = std::chrono::steady_clock::now();
 		std::vector<cip::CipUdint> connectionsToClose;
+		auto sinceLastHandle =
+				std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastHandleTime);
+		Logger(LogLevel::DEBUG) << "Last call was " << sinceLastHandle.count() << "ms ago";
 		for (auto& entry : _connectionMap) {
-			if (!entry.second->notifyTick(
-					std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - _lastHandleTime))) {
+			if (!entry.second->notifyTick(sinceLastHandle)) {
 				connectionsToClose.push_back(entry.first);
 			}
 		}
@@ -169,7 +171,7 @@ namespace eipScanner {
 			_connectionMap.erase(id);
 		}
 
-		_lastHandleTime = currentTime;
+		_lastHandleTime = now;
 	}
 
 	UDPSocket::SPtr ConnectionManager::findOrCreateSocket(const std::string& host, int port) {

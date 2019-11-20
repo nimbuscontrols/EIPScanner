@@ -45,6 +45,8 @@ namespace sockets {
 
 		std::chrono::milliseconds _recvTimeout;
 		BeginReceiveHandler _beginReceiveHandler;
+
+		static timeval makePortableInterval(const std::chrono::milliseconds &recvTimeout);
 	};
 }
 }

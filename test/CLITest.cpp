@@ -104,7 +104,7 @@ int main() {
 		});
 	}
 
-	int count = 100;
+	int count = 200;
 	while (connectionManager.hasOpenConnections() && count-- > 0) {
 		connectionManager.handleConnections(std::chrono::milliseconds(100));
 	}

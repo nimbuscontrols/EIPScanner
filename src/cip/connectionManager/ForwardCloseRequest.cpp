@@ -14,7 +14,6 @@ namespace connectionManager {
 		, _originatorSerialNumber{0}
 		, _originatorVendorID{0}
 		, _connectionPath(0) {
-
 	}
 
 	connectionManager::ForwardCloseRequest::~ForwardCloseRequest() = default;
