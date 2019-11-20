@@ -39,23 +39,28 @@ namespace sockets {
 	void BaseSocket::setRecvTimeout(const std::chrono::milliseconds &recvTimeout) {
 		_recvTimeout = recvTimeout;
 
+		timeval tv = makePortableInterval(recvTimeout);
+		setsockopt(_sockedFd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+	}
+
+	timeval BaseSocket::makePortableInterval(const std::chrono::milliseconds &recvTimeout) {
 		struct timeval tv = {
 
 #ifdef __APPLE__
 		.tv_sec = static_cast<__darwin_suseconds_t>(recvTimeout.count()/1000),
-				.tv_usec =  static_cast<__darwin_suseconds_t>((recvTimeout.count()%1000)*1000)
+		.tv_usec =  static_cast<__darwin_suseconds_t>((recvTimeout.count()%1000)*1000)
 #elif __linux__
-				.tv_sec = static_cast<__time_t>(recvTimeout.count()/1000),
-				.tv_usec =  static_cast<__time_t>((recvTimeout.count()%1000)*1000)
+		.tv_sec = static_cast<__time_t>(recvTimeout.count()/1000),
+		.tv_usec =  static_cast<__time_t>((recvTimeout.count()%1000)*1000)
 
 #elif _WIN32
 		// not sure what the macro is for windows
-				.tv_sec = static_cast<_time64>(recvTimeout.count()/1000),
-				.tv_usec =  static_cast<_time64>((recvTimeout.count()%1000)*1000)
+		.tv_sec = static_cast<_time64>(recvTimeout.count()/1000),
+		.tv_usec =  static_cast<_time64>((recvTimeout.count()%1000)*1000)
 #endif
 
 		};
-		setsockopt(_sockedFd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+		return tv;
 	}
 
 	void BaseSocket::setBeginReceiveHandler(BaseSocket::BeginReceiveHandler handler) {
@@ -67,36 +72,22 @@ namespace sockets {
 	}
 
 	void BaseSocket::select(std::vector<BaseSocket::SPtr> sockets, std::chrono::milliseconds timeout) {
-		// Receive data
-		struct timeval tv = {
-				
-#ifdef __APPLE__
-                .tv_sec = static_cast<__darwin_suseconds_t>(timeout.count()/1000),
-                .tv_usec =  static_cast<__darwin_suseconds_t>((timeout.count()%1000)*1000)
-#elif __linux__
-        .tv_sec = static_cast<__time_t>(recvTimeout.count()/1000),
-				.tv_usec =  static_cast<__time_t>((recvTimeout.count()%1000)*1000)
-
-#elif _WIN32
-		// not sure what the macro is for windows
-				.tv_sec = static_cast<_time64>(recvTimeout.count()/1000),
-				.tv_usec =  static_cast<_time64>((recvTimeout.count()%1000)*1000)
-#endif
-			
-		};
-
-		fd_set recvSet;
-		FD_ZERO(&recvSet);
-		for (auto& sock : sockets) {
-			FD_SET(sock->getSocketFd(), &recvSet);
-		}
-
-		BaseSocket::SPtr socketWithMaxFd = *std::max_element(sockets.begin(), sockets.end(), [&recvSet](auto sock1, auto sock2) {
+		BaseSocket::SPtr socketWithMaxFd = *std::max_element(sockets.begin(), sockets.end(), [](auto sock1, auto sock2) {
 			return sock1->getSocketFd() < sock2->getSocketFd();
 		});
 
+		auto startTime = std::chrono::steady_clock::now();
+		auto stopTime = startTime + timeout;
 		int ready;
 		do {
+			timeval tv = makePortableInterval(std::chrono::duration_cast<std::chrono::milliseconds>(stopTime-startTime));
+
+			fd_set recvSet;
+			FD_ZERO(&recvSet);
+			for (auto& sock : sockets) {
+				FD_SET(sock->getSocketFd(), &recvSet);
+			}
+
 			ready = ::select(socketWithMaxFd->getSocketFd() + 1, &recvSet, NULL, NULL, &tv);
 			if (ready < 0) {
 				throw std::system_error(errno, std::generic_category());
@@ -108,6 +99,8 @@ namespace sockets {
 					continue;
 				}
 			}
+
+			startTime = std::chrono::steady_clock::now();
 		} while(ready > 0);
 	}
 

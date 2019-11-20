@@ -24,10 +24,10 @@ using eipScanner::utils::LogLevel;
 int main() {
 	Logger::setLogLevel(LogLevel::DEBUG);
 	auto si = std::make_shared<SessionInfo>("172.28.1.3", 0xAF12);
-	auto messageRouter = std::make_shared<MessageRouter>(si);
+	auto messageRouter = std::make_shared<MessageRouter>();
 
 	// Read attribute
-	auto response = messageRouter->sendRequest(ServiceCodes::GET_ATTRIBUTE_SINGLE,
+	auto response = messageRouter->sendRequest(si, ServiceCodes::GET_ATTRIBUTE_SINGLE,
 											   EPath(0x01, 1, 1),
 											   {});
 
@@ -56,7 +56,7 @@ int main() {
 				<< CipUsint(10);
 
 
-	response = messageRouter->sendRequest(ServiceCodes::SET_ATTRIBUTE_SINGLE,
+	response = messageRouter->sendRequest(si, ServiceCodes::SET_ATTRIBUTE_SINGLE,
 										  EPath(0x04, 151, 3),
 										  assembly151.data());
 
@@ -72,16 +72,20 @@ int main() {
 	ConnectionParameters parameters;
 	parameters.connectionPath = {0x20, 0x04,0x24, 151, 0x2C, 150, 0x2C, 100};  // config Assm151, output Assm150, intput Assm100
 	parameters.o2tRealTimeFormat = true;
+	parameters.originatorVendorId = 342;
+	parameters.originatorSerialNumber = 32423;
 	parameters.t2oNetworkConnectionParams |= NetworkConnectionParams::P2P;
+	parameters.t2oNetworkConnectionParams |= NetworkConnectionParams::SCHEDULED_PRIORITY;
 	parameters.t2oNetworkConnectionParams |= 32; //size of Assm100 =32
 	parameters.o2tNetworkConnectionParams |= NetworkConnectionParams::P2P;
+	parameters.o2tNetworkConnectionParams |= NetworkConnectionParams::SCHEDULED_PRIORITY;
 	parameters.o2tNetworkConnectionParams |= 32; //size of Assm150 = 32
 
 	parameters.o2tRPI = 1000000;
 	parameters.t2oRPI = 1000000;
 	parameters.transportTypeTrigger |= NetworkConnectionParams::CLASS1;
 
-	auto io = connectionManager.forwardOpen(parameters);
+	auto io = connectionManager.forwardOpen(si, parameters);
 	if (auto ptr = io.lock()) {
 		ptr->setDataToSend(std::vector<uint8_t>(32));
 
@@ -100,12 +104,12 @@ int main() {
 		});
 	}
 
-	int count = 100;
+	int count = 200;
 	while (connectionManager.hasOpenConnections() && count-- > 0) {
 		connectionManager.handleConnections(std::chrono::milliseconds(100));
 	}
 
-	connectionManager.forwardClose(io);
+	connectionManager.forwardClose(si, io);
 
 	return 0;
 }
