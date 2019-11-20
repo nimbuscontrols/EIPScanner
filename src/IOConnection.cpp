@@ -44,7 +44,6 @@ namespace eipScanner {
 	IOConnection::~IOConnection() = default;
 
 	void IOConnection::setDataToSend(const std::vector<uint8_t> &data) {
-		_sequenceValueCount++;
 		_outputData = data;
 	}
 
@@ -93,14 +92,14 @@ namespace eipScanner {
 			commonPacket << factory.createSequenceAddressItem(_o2tNetworkConnectionId, _o2tSequenceNumber);
 
 			Buffer buffer;
+			if ((_transportTypeTrigger & NetworkConnectionParams::CLASS1) > 0
+				|| (_transportTypeTrigger & NetworkConnectionParams::CLASS3) > 0) {
+				buffer << _sequenceValueCount++;
+			}
+
 			if (_o2tRealTimeFormat) {
 				cip::CipUdint header = 1; //TODO: Always RUN
 				buffer << header;
-			}
-
-			if ((_transportTypeTrigger & NetworkConnectionParams::CLASS1) > 0
-				|| (_transportTypeTrigger & NetworkConnectionParams::CLASS3) > 0) {
-				buffer << _sequenceValueCount;
 			}
 
 			buffer << _outputData;
