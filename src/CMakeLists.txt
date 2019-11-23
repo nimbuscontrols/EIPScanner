@@ -3,6 +3,13 @@ add_library(EIPScanner SHARED
         cip/connectionManager/ForwardCloseRequest.cpp
         cip/connectionManager/ForwardOpenRequest.cpp
         cip/connectionManager/ForwardOpenResponse.cpp
+
+        fileObject/FileObjectEmptyState.cpp
+        fileObject/FileObjectLoadedState.cpp
+        fileObject/FileObjectNonExistentState.cpp
+        fileObject/FileObjectState.cpp
+        fileObject/FileObjectUploadInProgressState.cpp
+
         cip/EPath.cpp
         cip/MessageRouterRequest.cpp
         cip/MessageRouterResponse.cpp
@@ -22,6 +29,7 @@ add_library(EIPScanner SHARED
         utils/Buffer.cpp
 
         ConnectionManager.cpp
+        FileObject.cpp
         IOConnection.cpp
         MessageRouter.cpp
         SessionInfo.cpp)
