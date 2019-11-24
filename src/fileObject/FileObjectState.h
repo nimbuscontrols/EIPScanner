@@ -29,7 +29,7 @@ namespace fileObject {
 	public:
 		using UPtr = std::unique_ptr<FileObjectState>;
 
-		FileObjectState(FileObject &owner, cip::CipUint objectId, MessageRouter::SPtr messageRouter);
+		FileObjectState(FileObjectStateCodes state, FileObject &owner, cip::CipUint objectId, MessageRouter::SPtr messageRouter);
 		virtual ~FileObjectState();
 
 		virtual void initiateUpload(SessionInfo::SPtr si, EndDownloadHandle handle);

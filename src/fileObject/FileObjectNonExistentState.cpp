@@ -8,6 +8,11 @@ namespace eipScanner {
 namespace fileObject {
 	using utils::LogLevel;
 
+	FileObjectNonExistentState::FileObjectNonExistentState(FileObject &owner, cip::CipUint objectId,
+												 MessageRouter::SPtr messageRouter)
+			: FileObjectState(FileObjectStateCodes::NONEXISTENT, owner, objectId, messageRouter) {
+	}
+
 	void FileObjectNonExistentState::initiateUpload(SessionInfo::SPtr si, EndDownloadHandle handle) {
 		logWithStateName(LogLevel::WARNING,
 						 "File cannot be uploaded");

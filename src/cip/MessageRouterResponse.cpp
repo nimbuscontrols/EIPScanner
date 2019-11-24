@@ -57,5 +57,13 @@ namespace cip {
 	const std::vector<uint8_t> &MessageRouterResponse::getData() const {
 		return _data;
 	}
+
+	void MessageRouterResponse::setGeneralStatusCode(GeneralStatusCodes generalStatusCode) {
+		_generalStatusCode = generalStatusCode;
+	}
+
+	void MessageRouterResponse::setData(const std::vector<uint8_t> &data) {
+		_data = data;
+	}
 }
 }

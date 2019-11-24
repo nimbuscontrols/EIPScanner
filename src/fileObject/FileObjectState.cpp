@@ -16,14 +16,18 @@ namespace fileObject {
 	using utils::LogLevel;
 	using utils::Buffer;
 
-	FileObjectState::FileObjectState(FileObject &owner, cip::CipUint objectId, MessageRouter::SPtr messageRouter)
-	: _owner(owner), _objectId{objectId}, _messageRouter{messageRouter},
-	_stateCode{FileObjectStateCodes::UNKNOWN} {
-		logWithStateName(utils::LogLevel::DEBUG, "Start state");
+	FileObjectState::FileObjectState(FileObjectStateCodes state, FileObject &owner,
+				cip::CipUint objectId, MessageRouter::SPtr messageRouter)
+		: _stateCode{state}
+		, _owner(owner)
+		, _objectId{objectId}
+		, _messageRouter{messageRouter} {
+
+		logWithStateName(utils::LogLevel::DEBUG, "Start");
 	}
 
 	FileObjectState::~FileObjectState() {
-		logWithStateName(utils::LogLevel::DEBUG, "Stop state");
+		logWithStateName(utils::LogLevel::TRACE, "Stop");
 	}
 
 	FileObjectStateCodes FileObjectState::getStateCode() const {
@@ -44,6 +48,7 @@ namespace fileObject {
 				std::make_pair(FileObjectStateCodes::TRANSFER_DOWNLOAD_INITIATED, "TRANSFER_DOWNLOAD_INITIATED"),
 				std::make_pair(FileObjectStateCodes::TRANSFER_UPLOAD_IN_PROGRESS, "TRANSFER_UPLOAD_IN_PROGRESS"),
 				std::make_pair(FileObjectStateCodes::TRANSFER_UPLOAD_INITIATED, "TRANSFER_UPLOAD_INITIATED"),
+				std::make_pair(FileObjectStateCodes::UNKNOWN, "UNKNOWN"),
 		};
 
 		return NAMES_MAP.at(_stateCode);
@@ -57,20 +62,24 @@ namespace fileObject {
 		if (response.getGeneralStatusCode() == cip::GeneralStatusCodes::SUCCESS) {
 			Buffer buffer(response.getData());
 			cip::CipUsint stateCode;
-
 			buffer >> stateCode;
+
 			switch (static_cast<FileObjectStateCodes>(stateCode)) {
 				case FileObjectStateCodes::NONEXISTENT:
 					setState<FileObjectNonExistentState>();
+					break;
 				case FileObjectStateCodes::FILE_EMPTY:
 					setState<FileObjectEmptyState>();
+					break;
 				case FileObjectStateCodes::FILE_LOADED:
 					setState<FileObjectLoadedState>();
+					break;
 				case FileObjectStateCodes::TRANSFER_UPLOAD_INITIATED:
 				case FileObjectStateCodes::TRANSFER_UPLOAD_IN_PROGRESS:
 					logWithStateName(LogLevel::WARNING, "File is uploading. "
 										 "We need to re-initialize the uploading");
 					setState<FileObjectLoadedState>();
+					break;
 				default:
 					throw std::runtime_error("Read unknown or unsupported state");
 			}

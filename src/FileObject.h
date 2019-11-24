@@ -31,10 +31,12 @@ namespace eipScanner {
 	class FileObject {
 		friend class fileObject::FileObjectState;
 	public:
+		using UPtr = std::unique_ptr<FileObject>;
+		
 		FileObject(cip::CipUint objectId, SessionInfo::SPtr si, MessageRouter::SPtr messageRouter);
 		~FileObject();
 		FileObjectStateCodes getState();
-		void beginDownload(SessionInfo::SPtr si, fileObject::EndDownloadHandle handle);
+		void beginUpload(SessionInfo::SPtr si, fileObject::EndDownloadHandle handle);
 
 		/**
 		 * handle active download/upload transfers

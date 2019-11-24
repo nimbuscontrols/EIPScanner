@@ -12,7 +12,7 @@ namespace fileObject {
 
 	class FileObjectLoadedState : public FileObjectState {
 	public:
-		using FileObjectState::FileObjectState;
+		FileObjectLoadedState(FileObject &owner, cip::CipUint objectId, MessageRouter::SPtr messageRouter);
 
 		void initiateUpload(SessionInfo::SPtr si, EndDownloadHandle handle) override;
 		bool transfer(SessionInfo::SPtr si) override;

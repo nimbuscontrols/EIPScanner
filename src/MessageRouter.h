@@ -16,9 +16,10 @@ namespace eipScanner {
 	public:
 		using SPtr = std::shared_ptr<MessageRouter>;
 
-		explicit MessageRouter();
-		cip::MessageRouterResponse sendRequest(SessionInfo::SPtr si, cip::CipUsint service,
-				const cip::EPath& path, const std::vector<uint8_t>& data);
+		MessageRouter();
+		virtual ~MessageRouter();
+		virtual cip::MessageRouterResponse sendRequest(SessionInfo::SPtr si, cip::CipUsint service,
+				const cip::EPath& path, const std::vector<uint8_t>& data) const;
 
 	};
 }

@@ -15,7 +15,7 @@ namespace eipScanner {
 namespace cip {
 	class EPath {
 	public:
-		EPath(CipUint classId);
+		explicit EPath(CipUint classId);
 		EPath(CipUint classId, CipUint objectId);
 		EPath(CipUint classId, CipUint objectId, CipUint attributeId);
 		std::vector<uint8_t> packPaddedPath() const;
@@ -26,6 +26,7 @@ namespace cip {
 		CipUsint getSizeInWords() const;
 
 		std::string toString() const;
+		bool operator==(const EPath& other) const;
 
 	private:
 		CipUint _classId;

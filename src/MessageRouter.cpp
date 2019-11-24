@@ -2,8 +2,9 @@
 // Created by Aleksey Timin on 11/16/19.
 //
 
-#include <eip/EncapsPacketFactory.h>
-#include <utils/Buffer.h>
+#include <cassert>
+#include "eip/EncapsPacketFactory.h"
+#include "utils/Buffer.h"
 #include "MessageRouter.h"
 #include "cip/MessageRouterRequest.h"
 #include "cip/MessageRouterResponse.h"
@@ -22,9 +23,13 @@ namespace eipScanner {
 
 	MessageRouter::MessageRouter() = default;
 
+	MessageRouter::~MessageRouter() = default;
+
 	MessageRouterResponse
 	MessageRouter::sendRequest(SessionInfo::SPtr si, CipUsint service, const EPath &path,
-							   const std::vector<uint8_t> &data) {
+							   const std::vector<uint8_t> &data) const {
+		assert(si);
+
 		Logger(LogLevel::INFO) << "Send request: service=0x" << std::hex << static_cast<int>(service)
 			<< " epath=" << path.toString();
 
@@ -41,8 +46,8 @@ namespace eipScanner {
 		auto receivedPacket = si->sendAndReceive(packetToSend);
 
 		Buffer buffer(receivedPacket.getData());
-		cip::CipUdint interfaceHandle;
-		cip::CipUint timeout;
+		cip::CipUdint interfaceHandle = 0;
+		cip::CipUint timeout = 0;
 		std::vector<uint8_t> receivedData(receivedPacket.getData().size() - 6);
 
 		buffer >> interfaceHandle >> timeout >> receivedData;
@@ -54,5 +59,4 @@ namespace eipScanner {
 
 		return response;
 	}
-
 }

@@ -11,6 +11,11 @@ namespace fileObject {
 	using utils::Buffer;
 	using utils::LogLevel;
 
+	FileObjectLoadedState::FileObjectLoadedState(FileObject &owner, cip::CipUint objectId,
+											   MessageRouter::SPtr messageRouter)
+			: FileObjectState(FileObjectStateCodes::FILE_LOADED, owner, objectId, messageRouter) {
+	}
+
 	void FileObjectLoadedState::initiateUpload(SessionInfo::SPtr si, EndDownloadHandle handle) {
 		logWithStateName(LogLevel::INFO, "Initiate upload");
 		Buffer buffer;

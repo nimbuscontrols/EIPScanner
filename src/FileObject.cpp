@@ -15,8 +15,9 @@ namespace eipScanner {
 
 
 
-	FileObject::FileObject(cip::CipUint objectId, SessionInfo::SPtr si, MessageRouter::SPtr messageRouter) {
-
+	FileObject::FileObject(cip::CipUint objectId, SessionInfo::SPtr si, MessageRouter::SPtr messageRouter)
+		: _state(new fileObject::FileObjectState(FileObjectStateCodes::UNKNOWN, *this, objectId, messageRouter)) {
+		_state->SyncState(si);
 	}
 
 	FileObject::~FileObject() = default;
@@ -25,7 +26,7 @@ namespace eipScanner {
 		return _state->getStateCode();
 	}
 
-	void FileObject::beginDownload(SessionInfo::SPtr si, fileObject::EndDownloadHandle handle) {
+	void FileObject::beginUpload(SessionInfo::SPtr si, fileObject::EndDownloadHandle handle) {
 		_state->initiateUpload(si, handle);
 	}
 

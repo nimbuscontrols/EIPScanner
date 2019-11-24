@@ -13,9 +13,11 @@ namespace fileObject {
 																	 MessageRouter::SPtr messageRouter,
 																	 cip::CipUdint fileSize,
 																	 cip::CipUsint transferSize)
-			: FileObjectState{owner, objectId, messageRouter}, _fileSize{fileSize}, _transferSize{transferSize},
-			  _fileContent(), _transferNumber{0} {
-
+			: FileObjectState{FileObjectStateCodes::TRANSFER_UPLOAD_IN_PROGRESS, owner, objectId, messageRouter}
+			, _fileSize{fileSize}
+			, _transferSize{transferSize}
+			, _fileContent(),
+			_transferNumber{0} {
 	}
 
 	void
