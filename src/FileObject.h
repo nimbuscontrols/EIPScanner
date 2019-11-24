@@ -28,6 +28,24 @@ namespace eipScanner {
 		UNKNOWN = 255,
 	};
 
+	/**
+	 * Implements File Object
+	 * @example
+	 *
+	 * 	auto si = std::make_shared<SessionInfo>("172.28.1.3", 0xAF12);
+	 * 	auto messageRouter = std::make_shared<MessageRouter>();
+	 *
+	 * 	FileObject edsFile(0xC8, si, messageRouter);
+	 * 	edsFile.beginUpload(si, [](cip::GeneralStatusCodes status, const std::vector<uint8_t>& fileContent){
+	 * 		if (status == cip::GeneralStatusCodes::SUCCESS) {
+	 * 			// Process file
+	 * 		}
+	 * 	});
+	 *
+	 * 	while (edsFile.handleTransfers(si)) {
+	 * 		continue;
+	 * 	}
+	 */
 	class FileObject {
 		friend class fileObject::FileObjectState;
 	public:
