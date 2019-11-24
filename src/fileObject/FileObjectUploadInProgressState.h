@@ -13,16 +13,18 @@ namespace fileObject {
 	class FileObjectUploadInProgressState : public FileObjectState {
 	public:
 		FileObjectUploadInProgressState(FileObject &owner, cip::CipUint objectId, MessageRouter::SPtr messageRouter,
-										cip::CipUdint fileSize, cip::CipUsint transferSize);
+										cip::CipUdint fileSize, cip::CipUsint transferSize, EndUploadHandler handler);
 
-		void initiateUpload(SessionInfo::SPtr si, EndDownloadHandle handle) override;
+		void initiateUpload(SessionInfo::SPtr si, EndUploadHandler handle) override;
 		bool transfer(SessionInfo::SPtr si) override;
 
 	private:
 		cip::CipUdint _fileSize;
 		cip::CipUsint _transferSize;
-		std::string _fileContent;
+		std::vector<uint8_t>_fileContent;
 		cip::CipUsint _transferNumber;
+
+		EndUploadHandler _handler;
 	};
 
 }

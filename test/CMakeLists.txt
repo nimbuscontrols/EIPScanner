@@ -20,6 +20,7 @@ add_executable(test_eipscanner
         eip/TestEncapsPacketFactory.cpp
 
         fileObject/TestFileObjectLoadedState.cpp
+        fileObject/TestFileObjectUploadInProgressState.cpp
 
         utils/TestBuffer.cpp
 

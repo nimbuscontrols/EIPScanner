@@ -16,7 +16,7 @@ namespace fileObject {
 			: FileObjectState(FileObjectStateCodes::FILE_LOADED, owner, objectId, messageRouter) {
 	}
 
-	void FileObjectLoadedState::initiateUpload(SessionInfo::SPtr si, EndDownloadHandle handle) {
+	void FileObjectLoadedState::initiateUpload(SessionInfo::SPtr si, EndUploadHandler handler) {
 		logWithStateName(LogLevel::INFO, "Initiate upload");
 		Buffer buffer;
 		buffer << MAX_TRANSFER_SIZE;
@@ -31,10 +31,11 @@ namespace fileObject {
 			cip::CipUsint transferSize = 0;
 
 			buffer >> fileSize >> transferSize;
-			setState<FileObjectUploadInProgressState>(fileSize, transferSize);
+			setState<FileObjectUploadInProgressState>(fileSize, transferSize, handler);
 
 		} else {
-			//TODO: error handling
+			logGeneralAndAdditionalStatus(response);
+			handler(response.getGeneralStatusCode(), std::vector<uint8_t>(0));
 		}
 	}
 

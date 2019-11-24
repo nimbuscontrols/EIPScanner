@@ -13,7 +13,7 @@
 namespace eipScanner {
 	namespace fileObject {
 		class FileObjectState;
-		using EndDownloadHandle = std::function<void(cip::GeneralStatusCodes status, const std::string& fileContent)>;
+		using EndUploadHandler = std::function<void(cip::GeneralStatusCodes status, const std::vector<uint8_t>& fileContent)>;
 	}
 
 	enum class FileObjectStateCodes : cip::CipUsint {
@@ -35,8 +35,8 @@ namespace eipScanner {
 		
 		FileObject(cip::CipUint objectId, SessionInfo::SPtr si, MessageRouter::SPtr messageRouter);
 		~FileObject();
-		FileObjectStateCodes getState();
-		void beginUpload(SessionInfo::SPtr si, fileObject::EndDownloadHandle handle);
+		std::unique_ptr<fileObject::FileObjectState>&  getState();
+		void beginUpload(SessionInfo::SPtr si, fileObject::EndUploadHandler handle);
 
 		/**
 		 * handle active download/upload transfers

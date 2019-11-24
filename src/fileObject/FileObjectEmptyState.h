@@ -13,7 +13,7 @@ namespace fileObject {
 	class FileObjectEmptyState : public FileObjectState {
 	public:
 		FileObjectEmptyState(FileObject &owner, cip::CipUint objectId, MessageRouter::SPtr messageRouter);
-		void initiateUpload(SessionInfo::SPtr si, EndDownloadHandle handle) override;
+		void initiateUpload(SessionInfo::SPtr si, EndUploadHandler handle) override;
 
 		bool transfer(SessionInfo::SPtr si) override;
 	};

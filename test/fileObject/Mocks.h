@@ -25,10 +25,11 @@ namespace fileObject {
 	};
 
 
-	void mockGetFileObjectState(MockMessageRouter::SPtr messageRouter, SessionInfo::SPtr si, cip::CipUint objectId)  {
+	static void mockGetFileObjectState(MockMessageRouter::SPtr messageRouter,
+			SessionInfo::SPtr si, cip::CipUint objectId, FileObjectStateCodes stateCode)  {
 		cip::MessageRouterResponse response;
 		Buffer buffer;
-		buffer << static_cast<cip::CipUsint>(FileObjectStateCodes::FILE_LOADED);
+		buffer << static_cast<cip::CipUsint>(stateCode);
 
 		response.setData(buffer.data());
 		response.setGeneralStatusCode(cip::SUCCESS);

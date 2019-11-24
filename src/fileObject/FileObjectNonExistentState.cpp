@@ -13,7 +13,7 @@ namespace fileObject {
 			: FileObjectState(FileObjectStateCodes::NONEXISTENT, owner, objectId, messageRouter) {
 	}
 
-	void FileObjectNonExistentState::initiateUpload(SessionInfo::SPtr si, EndDownloadHandle handle) {
+	void FileObjectNonExistentState::initiateUpload(SessionInfo::SPtr si, EndUploadHandler handle) {
 		logWithStateName(LogLevel::WARNING,
 						 "File cannot be uploaded");
 	}

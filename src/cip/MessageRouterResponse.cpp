@@ -4,10 +4,12 @@
 #include <stdexcept>
 #include "MessageRouterResponse.h"
 #include "utils/Buffer.h"
+#include "utils/Logger.h"
 
 namespace eipScanner {
 namespace cip {
-
+	using utils::Logger;
+	using utils::LogLevel;
 	using utils::Buffer;
 
 	MessageRouterResponse::MessageRouterResponse()
@@ -64,6 +66,18 @@ namespace cip {
 
 	void MessageRouterResponse::setData(const std::vector<uint8_t> &data) {
 		_data = data;
+	}
+
+	void logGeneralAndAdditionalStatus(const MessageRouterResponse &response) {
+		Logger logger(LogLevel::ERROR);
+		logger << "Failed to establish connection with error="
+			   << std::hex << response.getGeneralStatusCode()
+			   << " additional statuses ";
+		for (auto& additionalStatus : response.getAdditionalStatus()) {
+			logger << "[0x"
+				   << additionalStatus
+				   << "]";
+		}
 	}
 }
 }

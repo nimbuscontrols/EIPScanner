@@ -22,11 +22,11 @@ namespace eipScanner {
 
 	FileObject::~FileObject() = default;
 
-	FileObjectStateCodes FileObject::getState() {
-		return _state->getStateCode();
+	fileObject::FileObjectState::UPtr& FileObject::getState() {
+		return _state;
 	}
 
-	void FileObject::beginUpload(SessionInfo::SPtr si, fileObject::EndDownloadHandle handle) {
+	void FileObject::beginUpload(SessionInfo::SPtr si, fileObject::EndUploadHandler handle) {
 		_state->initiateUpload(si, handle);
 	}
 

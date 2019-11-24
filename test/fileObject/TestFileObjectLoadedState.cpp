@@ -22,10 +22,22 @@ public:
 
 	void SetUp() override {
 		_messageRouter = std::make_shared<fileObject::MockMessageRouter>();
-
-		mockGetFileObjectState(_messageRouter, _nullSession, FILE_OBJECT_ID);
+		mockGetFileObjectState(_messageRouter, _nullSession,
+				FILE_OBJECT_ID, FileObjectStateCodes::FILE_LOADED);
 
 		_fileObject = std::make_unique<FileObject>(FILE_OBJECT_ID, _nullSession, _messageRouter);
+	}
+
+	static cip::MessageRouterResponse makeResponse() {
+		cip::MessageRouterResponse response;
+		Buffer buffer;
+		const cip::CipUdint FILE_SIZE = 1000000;
+		const cip::CipUsint TRANSFER_SIZE = 0xff;
+		buffer << FILE_SIZE << TRANSFER_SIZE;
+
+		response.setData(buffer.data());
+		response.setGeneralStatusCode(cip::SUCCESS);
+		return response;
 	}
 
 	fileObject::MockMessageRouter::SPtr _messageRouter;
@@ -34,14 +46,7 @@ public:
 };
 
 TEST_F(TestFileObjectLoadedState, ShouldInitiateUpload) {
-	cip::MessageRouterResponse response;
-	Buffer buffer;
-	const cip::CipUdint FILE_SIZE = 1000000;
-	const cip::CipUsint TRANSFER_SIZE = 0xff;
-	buffer << FILE_SIZE << TRANSFER_SIZE;
-
-	response.setData(buffer.data());
-	response.setGeneralStatusCode(cip::GeneralStatusCodes::SUCCESS);
+	cip::MessageRouterResponse response = makeResponse();
 
 	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, 0x4b,
 											 cip::EPath(FILE_OBJECT_CLASS_ID, FILE_OBJECT_ID),
@@ -49,6 +54,22 @@ TEST_F(TestFileObjectLoadedState, ShouldInitiateUpload) {
 	).WillOnce(Return(response));
 
 	_fileObject->beginUpload(nullptr, [](auto status, auto fileContent){});
+	EXPECT_EQ(FileObjectStateCodes::TRANSFER_UPLOAD_IN_PROGRESS, _fileObject->getState()->getStateCode());
+}
 
-	EXPECT_EQ(FileObjectStateCodes::TRANSFER_UPLOAD_IN_PROGRESS, _fileObject->getState());
+TEST_F(TestFileObjectLoadedState, ShouldCallHandlerIfItFailedToInitiateUpload) {
+	cip::MessageRouterResponse response = makeResponse();
+	response.setGeneralStatusCode(cip::GeneralStatusCodes::INVALID_PARAMETER);
+
+	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, 0x4b,
+											 cip::EPath(FILE_OBJECT_CLASS_ID, FILE_OBJECT_ID),
+											 std::vector<uint8_t>{0xff})
+		).WillOnce(Return(response));
+
+	auto receivedStatus = cip::GeneralStatusCodes::SUCCESS;
+	_fileObject->beginUpload(nullptr, [&receivedStatus](auto status, auto fileContent){
+		receivedStatus = status;
+	});
+
+	EXPECT_EQ(cip::GeneralStatusCodes::INVALID_PARAMETER, receivedStatus);
 }

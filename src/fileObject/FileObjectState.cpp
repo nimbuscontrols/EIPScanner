@@ -35,7 +35,7 @@ namespace fileObject {
 	}
 
 	void FileObjectState::logWithStateName(LogLevel logLevel, const std::string &message) const {
-		Logger(logLevel) << "FileObject=" << std::hex << _objectId << "[" << getStateName() << "] " << message;
+		Logger(logLevel) << "FileObject=" << std::hex << _objectId << " <" << getStateName() << "> " << message;
 	}
 
 	std::string FileObjectState::getStateName() const {
@@ -89,7 +89,7 @@ namespace fileObject {
 		}
 	}
 
-	void FileObjectState::initiateUpload(SessionInfo::SPtr si, EndDownloadHandle handle) {
+	void FileObjectState::initiateUpload(SessionInfo::SPtr si, EndUploadHandler handle) {
 		logWithStateName(LogLevel::ERROR, "Not implemented call");
 	}
 

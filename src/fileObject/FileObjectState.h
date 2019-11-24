@@ -25,6 +25,14 @@ namespace fileObject {
 		UPLOAD_TRANSFER = 0x4F
 	};
 
+	enum class TransferPacketTypeCodes : cip::CipUsint {
+		FIRST = 0,
+		MIDDLE = 1,
+		LAST = 2,
+		ABORT = 3,
+		FIRST_AND_LAST = 4,
+	};
+
 	class FileObjectState {
 	public:
 		using UPtr = std::unique_ptr<FileObjectState>;
@@ -32,7 +40,7 @@ namespace fileObject {
 		FileObjectState(FileObjectStateCodes state, FileObject &owner, cip::CipUint objectId, MessageRouter::SPtr messageRouter);
 		virtual ~FileObjectState();
 
-		virtual void initiateUpload(SessionInfo::SPtr si, EndDownloadHandle handle);
+		virtual void initiateUpload(SessionInfo::SPtr si, EndUploadHandler handle);
 		virtual bool transfer(SessionInfo::SPtr si);
 
 		FileObjectStateCodes getStateCode() const;
