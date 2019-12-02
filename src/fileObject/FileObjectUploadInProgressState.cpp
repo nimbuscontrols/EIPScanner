@@ -31,7 +31,7 @@ namespace fileObject {
 
 	bool FileObjectUploadInProgressState::transfer(SessionInfo::SPtr si) {
 		Buffer buffer;
-		buffer << _transferNumber++;
+		buffer << _transferNumber;
 
 		auto response = _messageRouter->sendRequest(si,
 				static_cast<cip::CipUsint>(FileObjectServiceCodes::UPLOAD_TRANSFER),
@@ -88,6 +88,7 @@ namespace fileObject {
 					throw std::runtime_error("Received unexpected transfer type");
 			};
 
+			_transferNumber++;
 		} else {
 			logGeneralAndAdditionalStatus(response);
 			_handler(response.getGeneralStatusCode(), std::vector<uint8_t>());

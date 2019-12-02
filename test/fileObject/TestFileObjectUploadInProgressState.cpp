@@ -73,13 +73,13 @@ public:
 
 TEST_F(TestFileObjectUploadInProgressState, ShouldUploadTransfer) {
 
-	mockTransfer(1, TransferPacketTypeCodes::FIRST, std::vector<uint8_t>(255));
+	mockTransfer(0, TransferPacketTypeCodes::FIRST, std::vector<uint8_t>(255));
 	EXPECT_TRUE(_fileObject->handleTransfers(_nullSession));
 
-	mockTransfer(2, TransferPacketTypeCodes::MIDDLE, std::vector<uint8_t>(255));
+	mockTransfer(1, TransferPacketTypeCodes::MIDDLE, std::vector<uint8_t>(255));
 	EXPECT_TRUE(_fileObject->handleTransfers(_nullSession));
 
-	mockTransfer(3, TransferPacketTypeCodes::LAST, std::vector<uint8_t>(10));
+	mockTransfer(2, TransferPacketTypeCodes::LAST, std::vector<uint8_t>(10));
 	EXPECT_FALSE(_fileObject->handleTransfers(_nullSession));
 
 	EXPECT_EQ(_receivedStatus, cip::GeneralStatusCodes::SUCCESS);
@@ -98,7 +98,7 @@ TEST_F(TestFileObjectUploadInProgressState, ShouldUploadTransferFirstAndLastPack
 				_receivedFile = data;
 			}));
 
-	mockTransfer(1, TransferPacketTypeCodes::FIRST_AND_LAST, std::vector<uint8_t>(56));
+	mockTransfer(0, TransferPacketTypeCodes::FIRST_AND_LAST, std::vector<uint8_t>(56));
 	EXPECT_FALSE(_fileObject->handleTransfers(_nullSession));
 
 
@@ -108,10 +108,10 @@ TEST_F(TestFileObjectUploadInProgressState, ShouldUploadTransferFirstAndLastPack
 
 TEST_F(TestFileObjectUploadInProgressState, ShouldUploadTransferAndCheckSize) {
 
-	mockTransfer(1, TransferPacketTypeCodes::FIRST, std::vector<uint8_t>(255));
+	mockTransfer(0, TransferPacketTypeCodes::FIRST, std::vector<uint8_t>(255));
 	EXPECT_TRUE(_fileObject->handleTransfers(_nullSession));
 
-	mockTransfer(2, TransferPacketTypeCodes::LAST, std::vector<uint8_t>(12));
+	mockTransfer(1, TransferPacketTypeCodes::LAST, std::vector<uint8_t>(12));
 	EXPECT_FALSE(_fileObject->handleTransfers(_nullSession));
 
 	EXPECT_EQ(_receivedStatus, cip::GeneralStatusCodes::INVALID_PARAMETER);
@@ -119,7 +119,7 @@ TEST_F(TestFileObjectUploadInProgressState, ShouldUploadTransferAndCheckSize) {
 }
 
 TEST_F(TestFileObjectUploadInProgressState, ShouldUploadTransferAndCheckTransferNumber) {
-	cip::CipUsint transferNumber = 0;
+	cip::CipUsint transferNumber = 255;
 	auto transferType = static_cast<cip::CipUsint>(TransferPacketTypeCodes::FIRST);
 
 	Buffer buffer;
@@ -129,10 +129,10 @@ TEST_F(TestFileObjectUploadInProgressState, ShouldUploadTransferAndCheckTransfer
 	cip::MessageRouterResponse response;
 	response.setData(buffer.data());
 
-	transferNumber++;
+
 	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, 0x4f,
 											 cip::EPath(FILE_OBJECT_CLASS_ID, FILE_OBJECT_ID),
-											 std::vector<uint8_t>{transferNumber})
+											 std::vector<uint8_t>{0})
 	).WillOnce(Return(response));
 
 	EXPECT_FALSE(_fileObject->handleTransfers(_nullSession));
