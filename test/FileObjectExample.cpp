@@ -5,6 +5,7 @@
 #include <fstream>
 #include "FileObject.h"
 #include "utils/Logger.h"
+#include "fileObject/FileObjectState.h"
 
 using namespace eipScanner::cip;
 using eipScanner::SessionInfo;
@@ -27,6 +28,7 @@ int main() {
 		}
 	});
 
+	edsFile.getState()->SyncState(si);
 	while (edsFile.handleTransfers(si)) {
 		continue;
 	};
