@@ -11,7 +11,7 @@ Implementation of Ethernet/IP scanner in C++
 ## Requirements
 
 * CMake 3.5 and higher
-* C++17 compiler
+* C++14 compiler
 * Linux or MacOS
 
 ## Installing
