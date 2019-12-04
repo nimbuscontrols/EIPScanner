@@ -7,6 +7,7 @@ Implementation of Ethernet/IP scanner in C++
 * Explicit messaging
 * Implicit messaging
 * File Object (only upload)
+* Parameter Object
 
 ## Requirements
 
