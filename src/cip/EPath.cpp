@@ -1,13 +1,30 @@
 //
 // Created by Aleksey Timin on 11/16/19.
 //
-
+#include <stdexcept>
 #include "utils/Buffer.h"
 #include "EPath.h"
 
 namespace eipScanner {
 namespace cip {
 	using utils::Buffer;
+
+	enum class EPathSegmentTypes : CipUsint  {
+		CLASS_8_BITS = 0x20,
+		CLASS_16_BITS = 0x21,
+		INSTANCE_8_BITS = 0x24,
+		INSTANCE_16_BITS = 0x25,
+		ATTRIBUTE_8_BITS = 0x30,
+		ATTRIBUTE_16_BITS = 0x31,
+	};
+
+	EPath::EPath()
+			: _classId{0}
+			, _objectId{0}
+			, _attributeId{0}
+			, _size{0}{
+
+	}
 
 	EPath::EPath(CipUint classId)
 		: _classId{classId}
@@ -35,15 +52,15 @@ namespace cip {
 	std::vector<uint8_t> EPath::packPaddedPath() const {
 		Buffer buffer(_size*4);
 
-		CipUint classSegment = 0x21;
+		auto classSegment = static_cast<CipUint>(EPathSegmentTypes::CLASS_16_BITS);
 		buffer << classSegment << _classId;
 
 		if (_size > 1) {
-			CipUint objectSegment = 0x25;
-			buffer << objectSegment << _objectId;
+			auto instanceSegment = static_cast<CipUint>(EPathSegmentTypes::INSTANCE_16_BITS);
+			buffer << instanceSegment << _objectId;
 
 			if (_size > 2) {
-				CipUint attributeSegment = 0x31;
+				auto attributeSegment = static_cast<CipUint>(EPathSegmentTypes::ATTRIBUTE_16_BITS);
 				buffer << attributeSegment << _attributeId;
 			}
 		}
@@ -78,6 +95,67 @@ namespace cip {
 
 		msg += "]";
 		return msg;
+	}
+
+	void EPath::expandPaddedPath(const std::vector<uint8_t> &data) {
+		Buffer buffer(data);
+
+		_classId = 0;
+		_objectId = 0;
+		_attributeId = 0;
+		_size = 0;
+
+		for (int i = 0; i < data.size() && !buffer.empty(); ++i) {
+			EPathSegmentTypes segmentType;
+			CipUsint ignore = 0;
+			CipUsint byte;
+			CipUint word;
+			buffer >> reinterpret_cast<CipUsint&>(segmentType);
+			switch (segmentType) {
+				case EPathSegmentTypes::CLASS_8_BITS:
+					buffer >> byte;
+					_classId = byte;
+					break;
+				case EPathSegmentTypes::CLASS_16_BITS:
+					buffer >> ignore >> word;
+					_classId = word;
+					break;
+				case EPathSegmentTypes::INSTANCE_8_BITS:
+					buffer >> byte;
+					_objectId = byte;
+					break;
+				case EPathSegmentTypes::INSTANCE_16_BITS:
+					buffer >> ignore >> word;
+					_objectId = word;
+					break;
+				case EPathSegmentTypes::ATTRIBUTE_8_BITS:
+					buffer >> byte;
+					_attributeId = byte;
+					break;
+				case EPathSegmentTypes::ATTRIBUTE_16_BITS:
+					buffer >> ignore >> word;
+					_attributeId = word;
+					break;
+				default:
+					throw std::runtime_error("Unknown EPATH segment =" + std::to_string(static_cast<int>(segmentType)));
+			}
+		}
+
+		if (!buffer.isValid()) {
+			throw std::runtime_error("Wrong EPATH format");
+		}
+
+		if (_classId > 0) {
+			_size++;
+
+			if (_objectId > 0) {
+				_size++;
+
+				if (_attributeId > 0) {
+					_size++;
+				}
+			}
+		}
 	}
 
 	bool EPath::operator==(const EPath &other) const {
