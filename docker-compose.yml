@@ -13,7 +13,7 @@ services:
       - opener_adapter
 
   opener_adapter:
-    build: Dockers/opener
+    build: docker/opener
     working_dir: /OpENer/bin/posix/src/ports/POSIX
     command: ./OpENer eth0
     ports:
@@ -24,7 +24,7 @@ services:
 
   gdbserver:
     build:
-      context: Dockers/gdbserver
+      context: docker/gdbserver
     security_opt: # options needed for gdb debugging
       - seccomp:unconfined
       - apparmor:unconfined
