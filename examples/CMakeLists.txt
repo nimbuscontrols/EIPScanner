@@ -5,3 +5,6 @@ target_link_libraries(explicit_implicit_messaging EIPScanner)
 
 add_executable(file_object_example FileObjectExample.cpp)
 target_link_libraries(file_object_example EIPScanner)
+
+add_executable(parameter_object_example ParameterObjectExample.cpp)
+target_link_libraries(parameter_object_example EIPScanner)
