@@ -52,7 +52,7 @@ int main() {
 	CipUint descriptor;
 	buffer >> descriptor;
 
-	Logger(LogLevel::INFO) << "Read the class descriptor = " << std::hex << (int)descriptor;
+	Logger(LogLevel::INFO) << "Read the class descriptor=0x" << std::hex << (int)descriptor;
 
 	bool allAttributes = descriptor & 0x2;
 	std::vector<ParameterObject> parameters;

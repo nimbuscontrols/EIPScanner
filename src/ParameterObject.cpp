@@ -77,6 +77,9 @@ namespace eipScanner {
 			CipWord descriptor;
 			buffer >> descriptor >> reinterpret_cast<CipUsint&>(_type);
 
+			Logger(LogLevel::DEBUG) << "Paramter object ID=" << _instanceId
+				<< " has descriptor=0x" << std::hex << descriptor;
+
 			if (fullAttributes) {
 				ignore.resize(1);
 				CipShortString  name;
