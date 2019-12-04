@@ -33,4 +33,5 @@ add_library(EIPScanner SHARED
         FileObject.cpp
         IOConnection.cpp
         MessageRouter.cpp
+        ParameterObject.cpp
         SessionInfo.cpp)
