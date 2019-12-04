@@ -14,6 +14,7 @@ find_package(GTest REQUIRED)
 find_package(GMock REQUIRED)
 
 add_executable(test_eipscanner
+        cip/TestCipString.cpp
         cip/TestMessageRouterResponse.cpp
 
         eip/TestCommonPacket.cpp
