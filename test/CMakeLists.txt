@@ -21,6 +21,7 @@ add_executable(test_eipscanner
 
         utils/TestBuffer.cpp
 
+        TestParameterObject.cpp
         test.cpp
         )
 message(STATUS ${GTEST_BOTH_LIBRARIES})

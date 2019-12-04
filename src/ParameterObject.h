@@ -12,7 +12,8 @@ namespace eipScanner {
 
 class ParameterObject {
 public:
-	ParameterObject(cip::CipUint instanceId, bool fullAttributes,const SessionInfo::WPtr& si);
+	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfo::WPtr& si);
+	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfo::WPtr& si, const MessageRouter::SPtr&);
 	~ParameterObject();
 
 	static const cip::CipUint CLASS_ID = 0x0f;
@@ -29,9 +30,6 @@ public:
 	cip::CipUint getInstanceId() const;
 	const std::string &getName() const;
 	cip::CipDataTypes getType() const;
-
-protected:
-	virtual MessageRouter::SPtr createMessageRouter();
 
 private:
 	cip::CipUint _instanceId;

@@ -30,11 +30,17 @@ namespace eipScanner {
 		SCALING_OFFSET = 16
 	};
 
-	ParameterObject::ParameterObject(eipScanner::cip::CipUint id, bool fullAttributes, const eipScanner::SessionInfo::WPtr &si)
+	ParameterObject::ParameterObject(cip::CipUint id, bool fullAttributes,
+									 const SessionInfo::WPtr &si)
+		: ParameterObject(id, fullAttributes, si, std::make_shared<MessageRouter>()) {
+	}
+
+	ParameterObject::ParameterObject(cip::CipUint id, bool fullAttributes,
+			const SessionInfo::WPtr &si,
+			const MessageRouter::SPtr& messageRouter)
 		: _instanceId{id}
 		, _name{""} {
 
-		auto messageRouter = createMessageRouter();
 
 		Logger(LogLevel::DEBUG) << "Read data from parameter ID=" << id;
 
@@ -59,7 +65,7 @@ namespace eipScanner {
 				cip::ServiceCodes::GET_ATTRIBUTE_ALL, cip::EPath(CLASS_ID, _instanceId), {});
 
 		if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
-			Buffer buffer;
+			Buffer buffer(response.getData());
 			buffer >> _value;
 
 			CipUsint linkPathSize;
@@ -79,6 +85,10 @@ namespace eipScanner {
 				_name = name.toStdString();
 			}
 
+			if (!buffer.isValid()) {
+				std::runtime_error("Not enough data in the response");
+			}
+
 			Logger(utils::DEBUG) << "Read Parameter Object"
 				<< " ID=" << id
 				<< " ValueSize=" << _value.size()
@@ -91,10 +101,6 @@ namespace eipScanner {
 	}
 
 	ParameterObject::~ParameterObject() = default;
-
-	MessageRouter::SPtr ParameterObject::createMessageRouter() {
-		return std::make_shared<MessageRouter>();
-	}
 
 	const std::string &ParameterObject::getName() const {
 		return _name;
