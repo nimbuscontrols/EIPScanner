@@ -16,5 +16,5 @@ WORKDIR /
 ADD / /code
 RUN mkdir build
 WORKDIR build
-RUN cmake -DTEST_ENABLED=ON /code
+RUN cmake -DTEST_ENABLED=ON  -DEXAMPLE_ENABLED=ON /code
 RUN cmake --build .

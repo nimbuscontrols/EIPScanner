@@ -1,13 +1,5 @@
-include_directories("${CMAKE_SOURCE_DIR}/src")
-
-add_executable(cli_test CLITest.cpp)
-target_link_libraries(cli_test EIPScanner)
-
-add_executable(file_object_example FileObjectExample.cpp)
-target_link_libraries(file_object_example EIPScanner)
-
 enable_testing()
-
+include_directories("${CMAKE_SOURCE_DIR}/src")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 find_package(GTest REQUIRED)
