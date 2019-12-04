@@ -22,13 +22,11 @@ int main() {
 	FileObject edsFile(0xC8, si, messageRouter);
 	edsFile.beginUpload(si, [](GeneralStatusCodes status, const std::vector<uint8_t> &fileContent) {
 		if (status == GeneralStatusCodes::SUCCESS) {
-			std::ofstream outFile("Device.eds", std::ios::out | std::ios::trunc);
-			std::string content(fileContent.begin(), fileContent.end());
-			outFile << content;
+			std::ofstream outFile("Device.eds", std::ios::out | std::ios::trunc | std::ios::binary);
+			outFile.write(reinterpret_cast<const char *>(fileContent.data()), fileContent.size());
 		}
 	});
 
-	edsFile.getState()->SyncState(si);
 	while (edsFile.handleTransfers(si)) {
 		continue;
 	};
