@@ -105,15 +105,7 @@ namespace eipScanner {
 					<< " already exists.";
 			}
 		} else {
-			Logger logger(LogLevel::ERROR);
-			logger << "Failed to establish connection with error="
-				   << std::hex << messageRouterResponse.getGeneralStatusCode()
-				   << " additional statuses ";
-			for (auto& additionalStatus : messageRouterResponse.getAdditionalStatus()) {
-				logger << "[0x"
-						<< additionalStatus
-						<< "]";
-			}
+			logGeneralAndAdditionalStatus(messageRouterResponse);
 		}
 
 		return ioConnection;

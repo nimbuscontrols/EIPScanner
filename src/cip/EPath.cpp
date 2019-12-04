@@ -79,5 +79,12 @@ namespace cip {
 		msg += "]";
 		return msg;
 	}
+
+	bool EPath::operator==(const EPath &other) const {
+		return _size == other._size
+			&&_classId == other._classId
+			&& _objectId == other._objectId
+			&& _attributeId == other._attributeId;
+	}
 }
 }

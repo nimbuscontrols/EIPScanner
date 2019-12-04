@@ -25,12 +25,17 @@ namespace cip {
 		const std::vector<uint16_t> &getAdditionalStatus() const;
 		const std::vector<uint8_t> &getData() const;
 
+		void setGeneralStatusCode(GeneralStatusCodes generalStatusCode);
+
+		void setData(const std::vector<uint8_t> &data);
 	private:
 		ServiceCodes _serviceCode;
 		GeneralStatusCodes _generalStatusCode;
 		std::vector<uint16_t> _additionalStatus;
 		std::vector<uint8_t> _data;
 	};
+
+	void logGeneralAndAdditionalStatus(const MessageRouterResponse& response);
 }
 }
 
