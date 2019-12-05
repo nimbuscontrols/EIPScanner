@@ -10,14 +10,35 @@
 
 namespace eipScanner {
 
+/**
+ * Implements interface to Parameter Object.
+ * It reads all data of from the instance in the constuctor
+ *  @example
+ *
+ * 	auto si = std::make_shared<SessionInfo>("172.28.1.3", 0xAF12);
+ * 	ParameterObject param(1, true, si);
+ * 	param.getActualValue<CipUint>(); # => 1
+ * 	param.updateValue(si);
+ * 	param.getActualValue<CipUint>(); # => 2
+ */
 class ParameterObject {
 public:
 	static const cip::CipUint CLASS_ID = 0x0f;
 
+	/**
+	 * Creates an instance and read all its data
+	 * @param instanceId
+	 * @param fullAttributes if true, then read all the attributes
+	 * @param si
+	 */
 	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfo::SPtr& si);
 	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfo::SPtr& si, const MessageRouter::SPtr&);
 	~ParameterObject();
 
+	/**
+	 * Updates value from the instance
+	 * @param si
+	 */
 	void updateValue(const SessionInfo::SPtr& si);
 
 	template <typename T>

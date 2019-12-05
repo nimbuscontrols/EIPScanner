@@ -62,4 +62,16 @@ int main() {
 		parameters.emplace_back(i+1, allAttributes, si);
 	}
 
+	if (!parameters.empty()) {
+		parameters[0].getType(); // Read type
+		parameters[0].getActualValue<CipUint>(); // 2040
+		parameters[0].getEngValue<CipUint>(); // 20.4
+		parameters[0].getName();	// Freq
+		parameters[0].getUnits(); 	// Hz
+		// .. etc
+
+		parameters[0].updateValue(si);
+		parameters[0].getActualValue<CipUint>(); // updated value
+	}
+
 }
