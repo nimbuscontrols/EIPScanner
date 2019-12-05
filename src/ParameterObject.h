@@ -12,11 +12,13 @@ namespace eipScanner {
 
 class ParameterObject {
 public:
-	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfo::WPtr& si);
-	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfo::WPtr& si, const MessageRouter::SPtr&);
+	static const cip::CipUint CLASS_ID = 0x0f;
+
+	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfo::SPtr& si);
+	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfo::SPtr& si, const MessageRouter::SPtr&);
 	~ParameterObject();
 
-	static const cip::CipUint CLASS_ID = 0x0f;
+	void updateValue(const SessionInfo::SPtr& si);
 
 	template <typename T>
 	T getActualValue() const {
@@ -88,6 +90,8 @@ private:
 	cip::CipUint _scalingDivisor;
 	cip::CipUint _scalingBase;
 	cip::CipUint _scalingOffset;
+
+	MessageRouter::SPtr _messageRouter;
 };
 
 }

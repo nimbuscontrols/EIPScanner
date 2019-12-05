@@ -101,3 +101,20 @@ TEST_F(TestParameterObject, ShouldReadAllFullDataInConstructor) {
 
 	EXPECT_FLOAT_EQ(3.5, parameterObject.getEngValue<cip::CipUdint>());
 }
+
+TEST_F(TestParameterObject, ShouldUpdateValue) {
+	mockReadingParamData();
+	ParameterObject parameterObject(OBJECT_ID, true, _nullSession, _messageRouter);
+
+	EXPECT_EQ(0x1, parameterObject.getActualValue<cip::CipUdint>());
+
+	cip::MessageRouterResponse response;
+	response.setData({4, 0, 0, 0});
+
+	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession,
+											 cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+											 cip::EPath(ParameterObject::CLASS_ID, OBJECT_ID, 1), std::vector<uint8_t>())).WillOnce(Return(response));
+
+	parameterObject.updateValue(_nullSession);
+	EXPECT_EQ(0x4, parameterObject.getActualValue<cip::CipUdint>());
+}

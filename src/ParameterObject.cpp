@@ -35,22 +35,23 @@ namespace eipScanner {
 	};
 
 	ParameterObject::ParameterObject(cip::CipUint id, bool fullAttributes,
-									 const SessionInfo::WPtr &si)
+									 const SessionInfo::SPtr &si)
 		: ParameterObject(id, fullAttributes, si, std::make_shared<MessageRouter>()) {
 	}
 
 	ParameterObject::ParameterObject(cip::CipUint id, bool fullAttributes,
-			const SessionInfo::WPtr &si,
+			const SessionInfo::SPtr &si,
 			const MessageRouter::SPtr& messageRouter)
 		: _instanceId{id}
 		, _name{""}
 		, _hasFullAttributes{fullAttributes}
-		, _isScalable{false} {
+		, _isScalable{false}
+		, _messageRouter{messageRouter} {
 
 
 		Logger(LogLevel::DEBUG) << "Read data from parameter ID=" << id;
 
-		auto response = messageRouter->sendRequest(si.lock(),
+		auto response = _messageRouter->sendRequest(si,
 				ServiceCodes::GET_ATTRIBUTE_SINGLE,
 				EPath(CLASS_ID, _instanceId,
 						ParameterObjectAttributeIds::DATA_SIZE),{});
@@ -70,7 +71,7 @@ namespace eipScanner {
 			throw std::runtime_error("Failed to read data size of the parameter");
 		}
 
-		response = messageRouter->sendRequest(si.lock(),
+		response = messageRouter->sendRequest(si,
 				cip::ServiceCodes::GET_ATTRIBUTE_ALL, cip::EPath(CLASS_ID, _instanceId), {});
 
 		if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
@@ -123,6 +124,22 @@ namespace eipScanner {
 		}
 	}
 
+	void ParameterObject::updateValue(const SessionInfo::SPtr& si) {
+		auto response = _messageRouter->sendRequest(si,
+								ServiceCodes::GET_ATTRIBUTE_SINGLE,
+								EPath(CLASS_ID, _instanceId,
+								ParameterObjectAttributeIds::VALUE),{});
+
+
+		if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
+			Buffer buffer(response.getData());
+			buffer >> _value;
+		} else {
+			cip::logGeneralAndAdditionalStatus(response);
+			throw std::runtime_error("Failed to read value");
+		}
+	}
+
 	ParameterObject::~ParameterObject() = default;
 
 	const std::string &ParameterObject::getName() const {
@@ -168,6 +185,5 @@ namespace eipScanner {
 	CipUint ParameterObject::getScalingOffset() const {
 		return _scalingOffset;
 	}
-
 
 };
