@@ -29,10 +29,19 @@ public:
 			0x01, 0x0, 0x0, 0x0,  //value
 			0x6,                  //path size
 			0x20, 0x05, 0x24, 0x02, 0x30, 0x01,  // path
-			0x0, 0x0,             // descriptor
+			0x4, 0x0,             // descriptor (scalable)
 			(uint8_t)cip::CipDataTypes::UDINT, // type
 			0x4,                  // data size
 			5, 'P', 'A', 'R', 'A', 'M', //name
+			3, 'M', 'P', 'a',
+			4, 'H', 'E', 'L', 'P',
+			0x0, 0x0, 0x0, 0x0,    //min value
+			0x5, 0x0, 0x0, 0x0,    //max value
+			0x3, 0x0, 0x0, 0x0,    //default value
+			0x2, 0x0,              // scaling mult
+			0x4, 0x0,              // scaling div
+			0x1, 0x0,              // scaling base
+			0x6, 0x0,              // scaling offset
 	};
 
 	void SetUp() override {
@@ -62,7 +71,9 @@ TEST_F(TestParameterObject, ShouldReadAllStubDataInConstructor) {
 	mockReadingParamData();
 	ParameterObject parameterObject(OBJECT_ID, false, _nullSession, _messageRouter);
 
-	EXPECT_EQ(0x1, parameterObject.getValue<cip::CipUdint>());
+	EXPECT_FALSE(parameterObject.hasFullAttributes());
+	EXPECT_FALSE(parameterObject.isScalable());
+	EXPECT_EQ(0x1, parameterObject.getActualValue<cip::CipUdint>());
 	EXPECT_EQ(cip::CipDataTypes::UDINT, parameterObject.getType());
 	EXPECT_EQ("", parameterObject.getName());
 }
@@ -71,7 +82,22 @@ TEST_F(TestParameterObject, ShouldReadAllFullDataInConstructor) {
 	mockReadingParamData();
 	ParameterObject parameterObject(OBJECT_ID, true, _nullSession, _messageRouter);
 
-	EXPECT_EQ(0x1, parameterObject.getValue<cip::CipUdint>());
+	EXPECT_TRUE(parameterObject.hasFullAttributes());
+	EXPECT_EQ(0x1, parameterObject.getActualValue<cip::CipUdint>());
 	EXPECT_EQ(cip::CipDataTypes::UDINT, parameterObject.getType());
 	EXPECT_EQ("PARAM", parameterObject.getName());
+	EXPECT_EQ("MPa", parameterObject.getUnits());
+	EXPECT_EQ("HELP", parameterObject.getHelp());
+	EXPECT_EQ(0, parameterObject.getMinValue<cip::CipUdint>());
+	EXPECT_EQ(5, parameterObject.getMaxValue<cip::CipUdint>());
+	EXPECT_EQ(3, parameterObject.getDefaultValue<cip::CipUdint>());
+
+	// Scaling
+	EXPECT_TRUE(parameterObject.isScalable());
+	EXPECT_EQ(2, parameterObject.getScalingMultiplier());
+	EXPECT_EQ(4, parameterObject.getScalingDivisor());
+	EXPECT_EQ(1, parameterObject.getScalingBase());
+	EXPECT_EQ(6, parameterObject.getScalingOffset());
+
+	EXPECT_FLOAT_EQ(3.5, parameterObject.getEngValue<cip::CipUdint>());
 }

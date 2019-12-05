@@ -12,7 +12,7 @@ namespace eipScanner {
 	using utils::LogLevel;
 	using namespace ::eipScanner::cip;
 
-	enum class ParameterObjectAttributeIds : cip::CipUsint {
+	enum ParameterObjectAttributeIds : cip::CipUsint {
 		VALUE = 1,
 		LINK_PATH_SIZE = 2,
 		DESCRIPTOR = 4,
@@ -30,6 +30,10 @@ namespace eipScanner {
 		SCALING_OFFSET = 16
 	};
 
+	enum DescriptorAttributeBits : cip::CipUint {
+		SUPPORTS_SCALING = 1 << 2,
+	};
+
 	ParameterObject::ParameterObject(cip::CipUint id, bool fullAttributes,
 									 const SessionInfo::WPtr &si)
 		: ParameterObject(id, fullAttributes, si, std::make_shared<MessageRouter>()) {
@@ -39,7 +43,9 @@ namespace eipScanner {
 			const SessionInfo::WPtr &si,
 			const MessageRouter::SPtr& messageRouter)
 		: _instanceId{id}
-		, _name{""} {
+		, _name{""}
+		, _hasFullAttributes{fullAttributes}
+		, _isScalable{false} {
 
 
 		Logger(LogLevel::DEBUG) << "Read data from parameter ID=" << id;
@@ -47,7 +53,7 @@ namespace eipScanner {
 		auto response = messageRouter->sendRequest(si.lock(),
 				ServiceCodes::GET_ATTRIBUTE_SINGLE,
 				EPath(CLASS_ID, _instanceId,
-						static_cast<CipUint>(ParameterObjectAttributeIds::DATA_SIZE)),{});
+						ParameterObjectAttributeIds::DATA_SIZE),{});
 
 
 		if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
@@ -56,6 +62,9 @@ namespace eipScanner {
 			buffer >> dataSize;
 
 			_value.resize(dataSize);
+			_minValue.resize(dataSize);
+			_maxValue.resize(dataSize);
+			_defaultValue.resize(dataSize);
 		} else {
 			logGeneralAndAdditionalStatus(response);
 			throw std::runtime_error("Failed to read data size of the parameter");
@@ -77,15 +86,26 @@ namespace eipScanner {
 			CipWord descriptor;
 			buffer >> descriptor >> reinterpret_cast<CipUsint&>(_type);
 
-			Logger(LogLevel::DEBUG) << "Paramter object ID=" << _instanceId
-				<< " has descriptor=0x" << std::hex << descriptor;
+			Logger(LogLevel::DEBUG) << "Parameter object ID=" << _instanceId
+									<< " has descriptor=0x" << std::hex << descriptor
+									<< " scalable=" << _isScalable;
 
-			if (fullAttributes) {
+			if (_hasFullAttributes) {
 				ignore.resize(1);
-				CipShortString  name;
-				buffer >> ignore >> name;
+				CipShortString  name, units, help;
+
+				buffer >> ignore >> name >> units >> help
+					>> _minValue >> _maxValue >> _defaultValue;
 
 				_name = name.toStdString();
+				_units = units.toStdString();
+				_help = help.toStdString();
+
+				_isScalable = descriptor & DescriptorAttributeBits::SUPPORTS_SCALING;
+				if (_isScalable) {
+					buffer >> _scalingMultiplier >> _scalingDivisor
+						>> _scalingBase >> _scalingOffset;
+				}
 			}
 
 			if (!buffer.isValid()) {
@@ -95,7 +115,7 @@ namespace eipScanner {
 			Logger(utils::DEBUG) << "Read Parameter Object"
 				<< " ID=" << id
 				<< " ValueSize=" << _value.size()
-				<< " ValueType=" << static_cast<int>(_type)
+				<< " ValueType=0x" << std::hex << static_cast<int>(_type)
 				<< " Name=" << _name;
 		} else {
 			cip::logGeneralAndAdditionalStatus(response);
@@ -115,6 +135,38 @@ namespace eipScanner {
 
 	cip::CipUint ParameterObject::getInstanceId() const {
 		return _instanceId;
+	}
+
+	bool ParameterObject::hasFullAttributes() const {
+		return _hasFullAttributes;
+	}
+
+	bool ParameterObject::isScalable() const {
+		return _isScalable;
+	}
+
+	const std::string &ParameterObject::getUnits() const {
+		return _units;
+	}
+
+	const std::string &ParameterObject::getHelp() const {
+		return _help;
+	}
+
+	CipUint ParameterObject::getScalingMultiplier() const {
+		return _scalingMultiplier;
+	}
+
+	CipUint ParameterObject::getScalingDivisor() const {
+		return _scalingDivisor;
+	}
+
+	CipUint ParameterObject::getScalingBase() const {
+		return _scalingBase;
+	}
+
+	CipUint ParameterObject::getScalingOffset() const {
+		return _scalingOffset;
 	}
 
 
