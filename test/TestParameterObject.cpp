@@ -42,6 +42,9 @@ public:
 			0x4, 0x0,              // scaling div
 			0x1, 0x0,              // scaling base
 			0x6, 0x0,              // scaling offset
+			0x00, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x00,
+			0x1
 	};
 
 	void SetUp() override {
@@ -98,8 +101,9 @@ TEST_F(TestParameterObject, ShouldReadAllFullDataInConstructor) {
 	EXPECT_EQ(4, parameterObject.getScalingDivisor());
 	EXPECT_EQ(1, parameterObject.getScalingBase());
 	EXPECT_EQ(6, parameterObject.getScalingOffset());
+	EXPECT_EQ(1, parameterObject.getPrecision());
 
-	EXPECT_FLOAT_EQ(3.5, parameterObject.getEngValue<cip::CipUdint>());
+	EXPECT_FLOAT_EQ(0.35, parameterObject.getEngValue<cip::CipUdint>());
 }
 
 TEST_F(TestParameterObject, ShouldUpdateValue) {

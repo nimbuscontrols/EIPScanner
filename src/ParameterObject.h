@@ -5,6 +5,7 @@
 #ifndef EIPSCANNER_PARAMETEROBJECT_H
 #define EIPSCANNER_PARAMETEROBJECT_H
 
+#include <cmath>
 #include "MessageRouter.h"
 #include "utils/Buffer.h"
 
@@ -50,7 +51,8 @@ public:
 	cip::CipLreal getEngValue() const {
 		if (_isScalable) {
 			auto actualValue = static_cast<cip::CipLreal>(encodeValue<T>(_value));
-			return ((actualValue + _scalingOffset) * _scalingMultiplier * _scalingBase) / _scalingDivisor;
+			return ((actualValue + _scalingOffset) * _scalingMultiplier * _scalingBase)
+				/ (_scalingDivisor*std::pow(10, _precision));
 		} else {
 			return encodeValue<T>(_value);
 		}
@@ -73,17 +75,18 @@ public:
 
 	bool hasFullAttributes() const;
 	bool isScalable() const;
+	cip::CipUint getInstanceId() const;
+	cip::CipDataTypes getType() const;
 
+	const std::string &getName() const;
 	const std::string &getUnits() const;
 	const std::string &getHelp() const;
 	cip::CipUint getScalingMultiplier() const;
 	cip::CipUint getScalingDivisor() const;
 	cip::CipUint getScalingBase() const;
-	cip::CipUint getScalingOffset() const;
-	cip::CipUint getInstanceId() const;
-	cip::CipDataTypes getType() const;
+	cip::CipInt getScalingOffset() const;
 
-	const std::string &getName() const;
+	cip::CipUsint getPrecision() const;
 
 private:
 
@@ -110,7 +113,8 @@ private:
 	cip::CipUint _scalingMultiplier;
 	cip::CipUint _scalingDivisor;
 	cip::CipUint _scalingBase;
-	cip::CipUint _scalingOffset;
+	cip::CipInt _scalingOffset;
+	cip::CipUsint _precision;
 
 	MessageRouter::SPtr _messageRouter;
 };

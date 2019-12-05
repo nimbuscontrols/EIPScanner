@@ -104,8 +104,13 @@ namespace eipScanner {
 
 				_isScalable = descriptor & DescriptorAttributeBits::SUPPORTS_SCALING;
 				if (_isScalable) {
+					ignore.resize(8);
 					buffer >> _scalingMultiplier >> _scalingDivisor
-						>> _scalingBase >> _scalingOffset;
+						>> _scalingBase >> _scalingOffset
+						>> ignore
+						>> _precision;
+
+
 				}
 			}
 
@@ -182,8 +187,12 @@ namespace eipScanner {
 		return _scalingBase;
 	}
 
-	CipUint ParameterObject::getScalingOffset() const {
+	CipInt ParameterObject::getScalingOffset() const {
 		return _scalingOffset;
+	}
+
+	CipUsint ParameterObject::getPrecision() const {
+		return _precision;
 	}
 
 };
