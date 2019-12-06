@@ -52,7 +52,7 @@ public:
 		_nullSession = nullptr;
 	}
 
-	void mockReadingParamData() {
+	void mockReadingParamData(bool isScalable) {
 		cip::MessageRouterResponse response;
 		response.setData({4});
 
@@ -65,13 +65,41 @@ public:
 		EXPECT_CALL(*_messageRouter, sendRequest(_nullSession,
 												 cip::ServiceCodes::GET_ATTRIBUTE_ALL,
 												 cip::EPath(ParameterObject::CLASS_ID, OBJECT_ID), std::vector<uint8_t>())).WillOnce(Return(response));
+
+		if (isScalable) {
+			response.setData({0x2, 0x0});
+			EXPECT_CALL(*_messageRouter, sendRequest(_nullSession,
+													 cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+													 cip::EPath(ParameterObject::CLASS_ID, OBJECT_ID, 13),
+													 std::vector<uint8_t>())).WillOnce(Return(response));
+
+
+			response.setData({0x4, 0x0});
+			EXPECT_CALL(*_messageRouter, sendRequest(_nullSession,
+													 cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+													 cip::EPath(ParameterObject::CLASS_ID, OBJECT_ID, 14),
+													 std::vector<uint8_t>())).WillOnce(Return(response));
+
+			response.setData({0x1, 0x0});
+			EXPECT_CALL(*_messageRouter, sendRequest(_nullSession,
+													 cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+													 cip::EPath(ParameterObject::CLASS_ID, OBJECT_ID, 15),
+													 std::vector<uint8_t>())).WillOnce(Return(response));
+
+			response.setData({0x6, 0x0});
+			EXPECT_CALL(*_messageRouter, sendRequest(_nullSession,
+													 cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+													 cip::EPath(ParameterObject::CLASS_ID, OBJECT_ID, 16),
+													 std::vector<uint8_t>())).WillOnce(Return(response));
+		}
 	}
+
 	TMockMessageRouter::SPtr _messageRouter;
 	SessionInfo::SPtr  _nullSession;
 };
 
 TEST_F(TestParameterObject, ShouldReadAllStubDataInConstructor) {
-	mockReadingParamData();
+	mockReadingParamData(false);
 	ParameterObject parameterObject(OBJECT_ID, false, _nullSession, _messageRouter);
 
 	EXPECT_FALSE(parameterObject.hasFullAttributes());
@@ -82,7 +110,7 @@ TEST_F(TestParameterObject, ShouldReadAllStubDataInConstructor) {
 }
 
 TEST_F(TestParameterObject, ShouldReadAllFullDataInConstructor) {
-	mockReadingParamData();
+	mockReadingParamData(true);
 	ParameterObject parameterObject(OBJECT_ID, true, _nullSession, _messageRouter);
 
 	EXPECT_TRUE(parameterObject.hasFullAttributes());
@@ -107,7 +135,7 @@ TEST_F(TestParameterObject, ShouldReadAllFullDataInConstructor) {
 }
 
 TEST_F(TestParameterObject, ShouldUpdateValue) {
-	mockReadingParamData();
+	mockReadingParamData(true);
 	ParameterObject parameterObject(OBJECT_ID, true, _nullSession, _messageRouter);
 
 	EXPECT_EQ(0x1, parameterObject.getActualValue<cip::CipUdint>());

@@ -104,13 +104,30 @@ namespace eipScanner {
 
 				_isScalable = descriptor & DescriptorAttributeBits::SUPPORTS_SCALING;
 				if (_isScalable) {
-					ignore.resize(8);
-					buffer >> _scalingMultiplier >> _scalingDivisor
-						>> _scalingBase >> _scalingOffset
-						>> ignore
+					ignore.resize(16); // Ignore scaling attributes we read it separately due to a bug
+					buffer >> ignore
 						>> _precision;
 
+					std::vector<uint8_t> data;
+					for (int attrId = ParameterObjectAttributeIds::SCALING_MULTIPLIER;
+						 attrId <= ParameterObjectAttributeIds::SCALING_OFFSET;
+						 ++attrId) {
+						auto response = _messageRouter->sendRequest(si,
+															   ServiceCodes::GET_ATTRIBUTE_SINGLE,
+															   EPath(CLASS_ID, _instanceId, attrId),
+															   {});
 
+						if (response.getGeneralStatusCode() != GeneralStatusCodes::SUCCESS) {
+							cip::logGeneralAndAdditionalStatus(response);
+							throw std::runtime_error("Failed to read value of attribute=" + std::to_string(attrId));
+						}
+
+						data.insert(data.end(), response.getData().begin(), response.getData().end());
+					}
+
+					buffer = Buffer(data);
+					buffer >> _scalingMultiplier >> _scalingDivisor
+						>> _scalingBase >> _scalingOffset;
 				}
 			}
 
@@ -134,7 +151,6 @@ namespace eipScanner {
 								ServiceCodes::GET_ATTRIBUTE_SINGLE,
 								EPath(CLASS_ID, _instanceId,
 								ParameterObjectAttributeIds::VALUE),{});
-
 
 		if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
 			Buffer buffer(response.getData());
