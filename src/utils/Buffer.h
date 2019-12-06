@@ -8,6 +8,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <vector>
+#include "cip/CipString.h"
 
 namespace eipScanner {
 namespace utils {
@@ -47,11 +48,27 @@ namespace utils {
 		Buffer& operator << (const std::vector<uint16_t>& val);
 		Buffer& operator >> (std::vector<uint16_t>& val);
 
+		template <typename T>
+		utils::Buffer& operator<<(const cip::CipBaseString<T>& cipSting) {
+			return *this << cipSting.getLength() << cipSting.getData();
+		}
+
+		template <typename T>
+		utils::Buffer& operator>>(cip::CipBaseString<T>& cipSting) {
+			T length = 0;
+			*this >> length;
+			std::vector<uint8_t> data(length);
+			*this >> data;
+
+			cipSting = cip::CipBaseString<T>(data);
+			return *this;
+		}
 
 		std::vector<uint8_t> data() const { return _buffer; }
 		size_t size() const { return _buffer.size(); }
 		size_t pos() const { return _position; }
 		bool isValid() const { return _position <= _buffer.size(); }
+		bool empty() const  { return  _position >= _buffer.size(); }
 	private:
 		std::vector<uint8_t> _buffer;
 		size_t _position;

@@ -15,10 +15,12 @@ namespace eipScanner {
 namespace cip {
 	class EPath {
 	public:
+		EPath();
 		explicit EPath(CipUint classId);
 		EPath(CipUint classId, CipUint objectId);
 		EPath(CipUint classId, CipUint objectId, CipUint attributeId);
 		std::vector<uint8_t> packPaddedPath() const;
+		void expandPaddedPath(const std::vector<uint8_t>& data);
 
 		CipUint getClassId() const;
 		CipUint getObjectId() const;

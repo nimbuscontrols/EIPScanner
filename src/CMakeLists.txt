@@ -13,6 +13,7 @@ add_library(EIPScanner SHARED
         cip/EPath.cpp
         cip/MessageRouterRequest.cpp
         cip/MessageRouterResponse.cpp
+        cip/CipString.cpp
 
         eip/CommonPacket.cpp
         eip/CommonPacketItem.cpp
@@ -32,4 +33,5 @@ add_library(EIPScanner SHARED
         FileObject.cpp
         IOConnection.cpp
         MessageRouter.cpp
+        ParameterObject.cpp
         SessionInfo.cpp)

@@ -5,7 +5,7 @@ services:
     build: .
     volumes:
       - .:/code
-    command: test/cli_test
+    command: examples/explicit_implicit_messaging
     networks:
       testing_net:
         ipv4_address: 172.28.1.1

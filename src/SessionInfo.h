@@ -16,6 +16,8 @@ namespace eipScanner {
 	class SessionInfo {
 	public:
 		using SPtr = std::shared_ptr<SessionInfo>;
+		using WPtr = std::weak_ptr<SessionInfo>;
+
 		SessionInfo(const std::string &host, int port, const std::chrono::milliseconds& recvTimeout);
 		SessionInfo(const std::string &host, int port);
 		~SessionInfo();
