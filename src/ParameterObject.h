@@ -27,13 +27,23 @@ public:
 	static const cip::CipUint CLASS_ID = 0x0f;
 
 	/**
-	 * Creates an instance and read all its data
+	 * Creates an instance and reads all its data via EIP
 	 * @param instanceId
 	 * @param fullAttributes if true, then read all the attributes
 	 * @param si
 	 */
 	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfo::SPtr& si);
+
 	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfo::SPtr& si, const MessageRouter::SPtr&);
+
+	/**
+	 * Create an empty instance without any EIP requests
+	 * @param instanceId
+	 * @param fullAttributes
+	 * @param typeSize
+	 */
+	ParameterObject(cip::CipUint instanceId, bool fullAttributes, size_t typeSize);
+
 	~ParameterObject();
 
 	/**
@@ -49,14 +59,10 @@ public:
 
 	template <typename T>
 	cip::CipLreal getEngValue() const {
-		if (_isScalable) {
-			auto actualValue = static_cast<cip::CipLreal>(encodeValue<T>(_value));
-			return ((actualValue + _scalingOffset) * _scalingMultiplier * _scalingBase)
-				/ (_scalingDivisor*std::pow(10, _precision));
-		} else {
-			return encodeValue<T>(_value);
-		}
+		auto actualValue = static_cast<cip::CipLreal>(encodeValue<T>(_value));
+		return actualToEngValue(actualValue);
 	}
+
 
 	template <typename T>
 	T getMinValue() const {
@@ -64,8 +70,33 @@ public:
 	}
 
 	template <typename T>
+	cip::CipLreal getEngMinValue() const {
+		auto actualValue = static_cast<cip::CipLreal>(encodeValue<T>(_minValue));
+		return actualToEngValue(actualValue);
+	}
+
+	template <typename T>
+	void setEngMinValue(cip::CipLreal value) {
+		T actualValue = static_cast<T>(engToActualValue(value));
+		_minValue = decodeValue<T>(actualValue);
+	}
+
+
+	template <typename T>
 	T getMaxValue() const {
 		return encodeValue<T>(_maxValue);
+	}
+
+	template <typename T>
+	cip::CipLreal getEngMaxValue() const {
+		auto actualValue = static_cast<cip::CipLreal>(encodeValue<T>(_maxValue));
+		return actualToEngValue(actualValue);
+	}
+
+	template <typename T>
+	void setEngMaxValue(cip::CipLreal value) {
+		T actualValue = static_cast<T>(engToActualValue(value));
+		_maxValue = decodeValue<T>(actualValue);
 	}
 
 	template <typename T>
@@ -73,11 +104,24 @@ public:
 		return encodeValue<T>(_defaultValue);
 	}
 
+	template <typename T>
+	cip::CipLreal getEngDefaultValue() const {
+		auto actualValue = static_cast<cip::CipLreal>(encodeValue<T>(_defaultValue));
+		return actualToEngValue(actualValue);
+	}
+
+	template <typename T>
+	void setEngDefaultValue(cip::CipLreal value) {
+		T actualValue = static_cast<T>(engToActualValue(value));
+		_defaultValue = decodeValue<T>(actualValue);
+	}
+
+
 	bool hasFullAttributes() const;
 	bool isScalable() const;
 	cip::CipUint getInstanceId() const;
-	cip::CipDataTypes getType() const;
 
+	cip::CipDataTypes getType() const;
 	const std::string &getName() const;
 	const std::string &getUnits() const;
 	const std::string &getHelp() const;
@@ -85,8 +129,18 @@ public:
 	cip::CipUint getScalingDivisor() const;
 	cip::CipUint getScalingBase() const;
 	cip::CipInt getScalingOffset() const;
-
 	cip::CipUsint getPrecision() const;
+
+	void setScalable(bool isScalable);
+	void setType(cip::CipDataTypes type);
+	void setName(const std::string &name);
+	void setUnits(const std::string &units);
+	void setHelp(const std::string &help);
+	void setScalingMultiplier(cip::CipUint scalingMultiplier);
+	void setScalingDivisor(cip::CipUint scalingDivisor);
+	void setScalingBase(cip::CipUint scalingBase);
+	void setScalingOffset(cip::CipInt scalingOffset);
+	void setPrecision(cip::CipUsint precision);
 
 private:
 
@@ -98,8 +152,18 @@ private:
 		return v;
 	}
 
+	template <typename T>
+	std::vector<uint8_t> decodeValue(T v) const{
+		utils::Buffer buffer(sizeof(T));
+		buffer << v;
+		return buffer.data();
+	}
+
+	cip::CipLreal actualToEngValue(cip::CipLreal actualValue) const;
+	cip::CipLreal engToActualValue(cip::CipLreal engValue) const;
+
 	bool _hasFullAttributes;
-	bool _isScalable;
+	bool _isScalable{};
 	cip::CipUint _instanceId;
 
 	std::vector<uint8_t> _value;
@@ -110,11 +174,11 @@ private:
 	std::vector<uint8_t> _minValue;
 	std::vector<uint8_t> _maxValue;
 	std::vector<uint8_t> _defaultValue;
-	cip::CipUint _scalingMultiplier;
-	cip::CipUint _scalingDivisor;
-	cip::CipUint _scalingBase;
-	cip::CipInt _scalingOffset;
-	cip::CipUsint _precision;
+	cip::CipUint _scalingMultiplier{};
+	cip::CipUint _scalingDivisor{};
+	cip::CipUint _scalingBase{};
+	cip::CipInt _scalingOffset{};
+	cip::CipUsint _precision{};
 
 	MessageRouter::SPtr _messageRouter;
 };

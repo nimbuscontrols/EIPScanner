@@ -131,7 +131,10 @@ TEST_F(TestParameterObject, ShouldReadAllFullDataInConstructor) {
 	EXPECT_EQ(6, parameterObject.getScalingOffset());
 	EXPECT_EQ(1, parameterObject.getPrecision());
 
-	EXPECT_FLOAT_EQ(0.35, parameterObject.getEngValue<cip::CipUdint>());
+	EXPECT_DOUBLE_EQ(0.35, parameterObject.getEngValue<cip::CipUdint>());
+	EXPECT_DOUBLE_EQ(0.3, parameterObject.getEngMinValue<cip::CipUdint>());
+	EXPECT_DOUBLE_EQ(0.55, parameterObject.getEngMaxValue<cip::CipUdint>());
+	EXPECT_DOUBLE_EQ(0.45, parameterObject.getEngDefaultValue<cip::CipUdint>());
 }
 
 TEST_F(TestParameterObject, ShouldUpdateValue) {
@@ -149,4 +152,29 @@ TEST_F(TestParameterObject, ShouldUpdateValue) {
 
 	parameterObject.updateValue(_nullSession);
 	EXPECT_EQ(0x4, parameterObject.getActualValue<cip::CipUdint>());
+}
+
+TEST_F(TestParameterObject, ShouldProvideSettersAndConstructorWithoutNetworkCommunication) {
+	ParameterObject parameterObject(OBJECT_ID, true, sizeof(cip::CipUdint));
+
+	parameterObject.setScalable(true);
+	parameterObject.setScalingMultiplier(2);
+	parameterObject.setScalingDivisor(4);
+	parameterObject.setScalingBase(1);
+	parameterObject.setScalingOffset(6);
+	parameterObject.setPrecision(1);
+
+	EXPECT_DOUBLE_EQ(0.3, parameterObject.getEngValue<cip::CipUdint>());
+
+	parameterObject.setEngMinValue<cip::CipUdint>(0.3);
+	EXPECT_DOUBLE_EQ(0.3, parameterObject.getEngMinValue<cip::CipUdint>());
+	EXPECT_EQ(0, parameterObject.getMinValue<cip::CipUdint>());
+
+	parameterObject.setEngMaxValue<cip::CipUdint>(0.55);
+	EXPECT_DOUBLE_EQ(0.55, parameterObject.getEngMaxValue<cip::CipUdint>());
+	EXPECT_DOUBLE_EQ(5, parameterObject.getMaxValue<cip::CipUdint>());
+
+	parameterObject.setEngDefaultValue<cip::CipUdint>(0.45);
+	EXPECT_DOUBLE_EQ(0.45, parameterObject.getEngDefaultValue<cip::CipUdint>());
+	EXPECT_DOUBLE_EQ(3, parameterObject.getDefaultValue<cip::CipUdint>());
 }

@@ -39,6 +39,20 @@ namespace eipScanner {
 		: ParameterObject(id, fullAttributes, si, std::make_shared<MessageRouter>()) {
 	}
 
+	ParameterObject::ParameterObject(cip::CipUint instanceId, bool fullAttributes, size_t typeSize)
+		: _instanceId(instanceId)
+		, _hasFullAttributes(fullAttributes)
+		, _value(typeSize)
+		, _maxValue(typeSize)
+		, _minValue(typeSize)
+		, _defaultValue(typeSize)
+		, _isScalable(false)
+		, _scalingMultiplier(1)
+		, _scalingDivisor(1)
+		, _scalingBase(1)
+		, _scalingOffset(0) {
+	}
+
 	ParameterObject::ParameterObject(cip::CipUint id, bool fullAttributes,
 			const SessionInfo::SPtr &si,
 			const MessageRouter::SPtr& messageRouter)
@@ -211,4 +225,61 @@ namespace eipScanner {
 		return _precision;
 	}
 
+	void ParameterObject::setScalable(bool isScalable) {
+		_isScalable = isScalable;
+	}
+
+	void ParameterObject::setType(CipDataTypes type) {
+		_type = type;
+	}
+
+	void ParameterObject::setName(const std::string &name) {
+		_name = name;
+	}
+
+	void ParameterObject::setUnits(const std::string &units) {
+		_units = units;
+	}
+
+	void ParameterObject::setHelp(const std::string &help) {
+		_help = help;
+	}
+
+	void ParameterObject::setScalingMultiplier(CipUint scalingMultiplier) {
+		_scalingMultiplier = scalingMultiplier;
+	}
+
+	void ParameterObject::setScalingDivisor(CipUint scalingDivisor) {
+		_scalingDivisor = scalingDivisor;
+	}
+
+	void ParameterObject::setScalingBase(CipUint scalingBase) {
+		_scalingBase = scalingBase;
+	}
+
+	void ParameterObject::setScalingOffset(CipInt scalingOffset) {
+		_scalingOffset = scalingOffset;
+	}
+
+	void ParameterObject::setPrecision(CipUsint precision) {
+		_precision = precision;
+	}
+
+	cip::CipLreal ParameterObject::actualToEngValue(cip::CipLreal actualValue) const {
+		if (_isScalable) {
+			return ((actualValue + _scalingOffset) * _scalingMultiplier * _scalingBase)
+				   / (_scalingDivisor * std::pow(10, _precision));
+		} else {
+			return actualValue;
+		}
+	}
+
+	cip::CipLreal ParameterObject::engToActualValue(cip::CipLreal engValue) const {
+		if (_isScalable) {
+			return (engValue * _scalingDivisor * std::pow(10, _precision))
+				   / (_scalingMultiplier * _scalingBase) - _scalingOffset;
+		} else {
+			return engValue;
+		}
+	}
 };
