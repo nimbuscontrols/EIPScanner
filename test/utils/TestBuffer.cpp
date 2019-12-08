@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 #include "utils/Buffer.h"
 
+using namespace eipScanner;
 using eipScanner::utils::Buffer;
 
 TEST(TestBuffer, PushUint8) {
@@ -154,11 +155,31 @@ TEST(TestBuffer, PullVectorUint8) {
 
 TEST(TestBuffer, PullVectorUint16) {
 	std::vector<uint16_t> expectedData = {0x100, 0x0302};
-	std::vector<uint8_t> init_data = {0, 1, 2, 3};
+	std::vector<uint8_t> initData = {0, 1, 2, 3};
 
-	Buffer buf(init_data);
+	Buffer buf(initData);
 	std::vector<uint16_t> v(2);
 	buf >> v;
 
 	EXPECT_EQ(expectedData, v);
+}
+
+TEST(TestBuffer, ShouldDecodeRevision) {
+	cip::CipRevision revision(1,2);
+	std::vector<uint8_t> expectedData = {1,2};
+	Buffer buf;
+	buf << revision;
+
+	EXPECT_EQ(expectedData, buf.data());
+}
+
+
+TEST(TestBuffer, ShouldEncodeRevision) {
+	cip::CipRevision revision;
+	std::vector<uint8_t> data = {1,2};
+	Buffer buf(data);
+	buf >> revision;
+
+	EXPECT_EQ(revision.getMajorRevision(), 1);
+	EXPECT_EQ(revision.getMinorRevision(), 2);
 }

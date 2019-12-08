@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <vector>
 #include "cip/CipString.h"
+#include "cip/CipRevision.h"
 
 namespace eipScanner {
 namespace utils {
@@ -63,6 +64,9 @@ namespace utils {
 			cipSting = cip::CipBaseString<T>(data);
 			return *this;
 		}
+
+		Buffer& operator << (cip::CipRevision v);
+		Buffer& operator >> (cip::CipRevision & val);
 
 		std::vector<uint8_t> data() const { return _buffer; }
 		size_t size() const { return _buffer.size(); }

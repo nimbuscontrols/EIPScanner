@@ -131,5 +131,16 @@ namespace utils {
 
 		return *this;
 	}
+
+	Buffer &Buffer::operator<<(cip::CipRevision val) {
+		return *this << val.getMajorRevision() << val.getMinorRevision();
+	}
+
+	Buffer &Buffer::operator>>(cip::CipRevision &val) {
+		cip::CipUsint majorRevision, minorRevision;
+		*this >> majorRevision >> minorRevision;
+		val = cip::CipRevision(majorRevision, minorRevision);
+		return *this;
+	}
 }
 }
