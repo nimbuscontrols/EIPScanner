@@ -26,6 +26,10 @@ add_executable(test_eipscanner
         )
 message(STATUS ${GTEST_BOTH_LIBRARIES})
 message(STATUS ${GMOCK_BOTH_LIBRARIES})
+
+include_directories(${GTEST_INCLUDE_DIRS})
+include_directories(${GMOCK_INCLUDE_DIRS})
+
 target_link_libraries(test_eipscanner
         ${GTEST_BOTH_LIBRARIES}
         ${GMOCK_BOTH_LIBRARIES}

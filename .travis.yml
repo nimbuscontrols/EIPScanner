@@ -1,0 +1,22 @@
+language: cpp
+sudo: required
+dist: bionic
+compiler:
+  - clang
+  - gcc
+os:
+  - linux
+
+install:
+  - cd ~
+  - git clone https://github.com/google/googletest.git gtest
+  - cd gtest
+  - git checkout release-1.8.1
+  - cmake .
+  - make install DESTDIR=~/.local -j
+
+script:
+  - cd ~/build/flipback/EIPScanner/
+  - cmake -DTEST_ENABLED=ON  -DEXAMPLE_ENABLED=ON -DGTEST_ROOT=/home/travis/.local/usr/local/ -DGMOCK_ROOT=/home/travis/.local/usr/local/ .
+  - cmake --build .
+  - test/test_eipscanner
