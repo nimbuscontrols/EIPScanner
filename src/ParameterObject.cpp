@@ -67,7 +67,7 @@ namespace eipScanner {
 
 		auto response = _messageRouter->sendRequest(si,
 				ServiceCodes::GET_ATTRIBUTE_SINGLE,
-				EPath(CLASS_ID, _instanceId,
+				EPath(CLASS_ID, instanceId,
 						ParameterObjectAttributeIds::DATA_SIZE),{});
 
 
@@ -86,7 +86,7 @@ namespace eipScanner {
 		}
 
 		response = messageRouter->sendRequest(si,
-				cip::ServiceCodes::GET_ATTRIBUTE_ALL, cip::EPath(CLASS_ID, _instanceId), {});
+				cip::ServiceCodes::GET_ATTRIBUTE_ALL, cip::EPath(CLASS_ID, instanceId), {});
 
 		if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
 			Buffer buffer(response.getData());
@@ -101,7 +101,7 @@ namespace eipScanner {
 			CipWord descriptor;
 			buffer >> descriptor >> reinterpret_cast<CipUsint&>(_type);
 
-			Logger(LogLevel::DEBUG) << "Parameter object ID=" << _instanceId
+			Logger(LogLevel::DEBUG) << "Parameter object ID=" << instanceId
 									<< " has descriptor=0x" << std::hex << descriptor
 									<< " scalable=" << _isScalable;
 
@@ -128,7 +128,7 @@ namespace eipScanner {
 						 ++attrId) {
 						auto response = _messageRouter->sendRequest(si,
 															   ServiceCodes::GET_ATTRIBUTE_SINGLE,
-															   EPath(CLASS_ID, _instanceId, attrId),
+															   EPath(CLASS_ID, instanceId, attrId),
 															   {});
 
 						if (response.getGeneralStatusCode() != GeneralStatusCodes::SUCCESS) {
@@ -163,7 +163,7 @@ namespace eipScanner {
 	void ParameterObject::updateValue(const SessionInfo::SPtr& si) {
 		auto response = _messageRouter->sendRequest(si,
 								ServiceCodes::GET_ATTRIBUTE_SINGLE,
-								EPath(CLASS_ID, _instanceId,
+								EPath(CLASS_ID, getInstanceId(),
 								ParameterObjectAttributeIds::VALUE),{});
 
 		if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {

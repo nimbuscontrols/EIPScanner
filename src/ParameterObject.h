@@ -164,7 +164,6 @@ private:
 
 	bool _hasFullAttributes;
 	bool _isScalable{};
-	cip::CipUint _instanceId;
 
 	std::vector<uint8_t> _value;
 	cip::CipDataTypes _type;
