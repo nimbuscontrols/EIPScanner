@@ -1,14 +1,9 @@
 include_directories(${CMAKE_SOURCE_DIR}/src)
-add_library(EIPScanner SHARED
+
+set(SOURCE_FILES
         cip/connectionManager/ForwardCloseRequest.cpp
         cip/connectionManager/ForwardOpenRequest.cpp
         cip/connectionManager/ForwardOpenResponse.cpp
-
-        fileObject/FileObjectEmptyState.cpp
-        fileObject/FileObjectLoadedState.cpp
-        fileObject/FileObjectNonExistentState.cpp
-        fileObject/FileObjectState.cpp
-        fileObject/FileObjectUploadInProgressState.cpp
 
         cip/EPath.cpp
         cip/MessageRouterRequest.cpp
@@ -20,6 +15,12 @@ add_library(EIPScanner SHARED
         eip/CommonPacketItemFactory.cpp
         eip/EncapsPacket.cpp
         eip/EncapsPacketFactory.cpp
+
+        fileObject/FileObjectEmptyState.cpp
+        fileObject/FileObjectLoadedState.cpp
+        fileObject/FileObjectNonExistentState.cpp
+        fileObject/FileObjectState.cpp
+        fileObject/FileObjectUploadInProgressState.cpp
 
         sockets/BaseSocket.cpp
         sockets/TCPSocket.cpp
@@ -35,3 +36,23 @@ add_library(EIPScanner SHARED
         MessageRouter.cpp
         ParameterObject.cpp
         SessionInfo.cpp)
+
+add_library(EIPScanner SHARED ${SOURCE_FILES})
+add_library(EIPScannerS STATIC ${SOURCE_FILES})
+
+set_target_properties(
+        EIPScanner
+        PROPERTIES
+        VERSION ${EIPSCANNER_FULL_VERSION}
+        SOVERSION ${EIPSCANNER_MAJOR_VERSION})
+
+install(TARGETS EIPScanner EIPScannerS
+        LIBRARY
+            DESTINATION lib
+        ARCHIVE
+            DESTINATION lib)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/
+        DESTINATION include
+        FILES_MATCHING PATTERN "*.h*")
+
