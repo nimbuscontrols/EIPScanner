@@ -1,6 +1,6 @@
 # EIPScanner
 
-Implementation of Ethernet/IP scanner in C++
+Free implementation of Ethernet/IP scanner in C++
 
 ## Features
 
@@ -17,7 +17,7 @@ Implementation of Ethernet/IP scanner in C++
 
 ## Installing
 
-```shell script
+```shell
 $ mkdir build && cd build
 $ cmake ..
 $ cmake --build . --target install
@@ -25,4 +25,10 @@ $ cmake --build . --target install
 
 ## Examples
 
-To see how to work with the library, look into `test` directory 
+To see how to work with the library, look into `examples` directory 
+
+
+## Authors
+
+Aleksey Timin
+Adam Roth
