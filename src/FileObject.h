@@ -9,6 +9,7 @@
 #include "cip/Types.h"
 #include "cip/GeneralStatusCodes.h"
 #include "MessageRouter.h"
+#include "BaseObject.h"
 
 namespace eipScanner {
 	namespace fileObject {
@@ -46,12 +47,12 @@ namespace eipScanner {
 	 * 		continue;
 	 * 	}
 	 */
-	class FileObject {
+	class FileObject : public BaseObject {
 		friend class fileObject::FileObjectState;
 	public:
 		using UPtr = std::unique_ptr<FileObject>;
 		
-		FileObject(cip::CipUint objectId, SessionInfo::SPtr si, MessageRouter::SPtr messageRouter);
+		FileObject(cip::CipUint instanceId, SessionInfo::SPtr si, MessageRouter::SPtr messageRouter);
 		~FileObject();
 		std::unique_ptr<fileObject::FileObjectState>&  getState();
 		void beginUpload(SessionInfo::SPtr si, fileObject::EndUploadHandler handle);

@@ -40,7 +40,7 @@ namespace eipScanner {
 	}
 
 	ParameterObject::ParameterObject(cip::CipUint instanceId, bool fullAttributes, size_t typeSize)
-		: _instanceId(instanceId)
+		:  BaseObject(CLASS_ID, instanceId)
 		, _hasFullAttributes(fullAttributes)
 		, _value(typeSize)
 		, _maxValue(typeSize)
@@ -53,17 +53,17 @@ namespace eipScanner {
 		, _scalingOffset(0) {
 	}
 
-	ParameterObject::ParameterObject(cip::CipUint id, bool fullAttributes,
+	ParameterObject::ParameterObject(cip::CipUint instanceId, bool fullAttributes,
 			const SessionInfo::SPtr &si,
 			const MessageRouter::SPtr& messageRouter)
-		: _instanceId{id}
+		:  BaseObject(CLASS_ID, instanceId)
 		, _name{""}
 		, _hasFullAttributes{fullAttributes}
 		, _isScalable{false}
 		, _messageRouter{messageRouter} {
 
 
-		Logger(LogLevel::DEBUG) << "Read data from parameter ID=" << id;
+		Logger(LogLevel::DEBUG) << "Read data from parameter ID=" << instanceId;
 
 		auto response = _messageRouter->sendRequest(si,
 				ServiceCodes::GET_ATTRIBUTE_SINGLE,
@@ -150,7 +150,7 @@ namespace eipScanner {
 			}
 
 			Logger(utils::DEBUG) << "Read Parameter Object"
-				<< " ID=" << id
+				<< " ID=" << instanceId
 				<< " ValueSize=" << _value.size()
 				<< " ValueType=0x" << std::hex << static_cast<int>(_type)
 				<< " Name=" << _name;
@@ -183,10 +183,6 @@ namespace eipScanner {
 
 	cip::CipDataTypes ParameterObject::getType() const {
 		return _type;
-	}
-
-	cip::CipUint ParameterObject::getInstanceId() const {
-		return _instanceId;
 	}
 
 	bool ParameterObject::hasFullAttributes() const {

@@ -8,6 +8,7 @@
 #include <cmath>
 #include "MessageRouter.h"
 #include "utils/Buffer.h"
+#include "BaseObject.h"
 
 namespace eipScanner {
 
@@ -22,7 +23,7 @@ namespace eipScanner {
  * 	param.updateValue(si);
  * 	param.getActualValue<CipUint>(); # => 2
  */
-class ParameterObject {
+class ParameterObject : public BaseObject {
 public:
 	static const cip::CipUint CLASS_ID = 0x0f;
 
@@ -119,7 +120,6 @@ public:
 
 	bool hasFullAttributes() const;
 	bool isScalable() const;
-	cip::CipUint getInstanceId() const;
 
 	cip::CipDataTypes getType() const;
 	const std::string &getName() const;

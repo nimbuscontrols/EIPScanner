@@ -22,6 +22,7 @@ add_executable(test_eipscanner
 
         utils/TestBuffer.cpp
 
+        TestIdentityObject.cpp
         TestParameterObject.cpp
         test.cpp
         )
