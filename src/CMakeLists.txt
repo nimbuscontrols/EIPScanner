@@ -5,6 +5,7 @@ set(SOURCE_FILES
         cip/connectionManager/ForwardOpenRequest.cpp
         cip/connectionManager/ForwardOpenResponse.cpp
 
+        cip/CipRevision.cpp
         cip/EPath.cpp
         cip/MessageRouterRequest.cpp
         cip/MessageRouterResponse.cpp
@@ -30,8 +31,10 @@ set(SOURCE_FILES
         utils/Logger.cpp
         utils/Buffer.cpp
 
+        BaseObject.cpp
         ConnectionManager.cpp
         FileObject.cpp
+        IdentityObject.cpp
         IOConnection.cpp
         MessageRouter.cpp
         ParameterObject.cpp

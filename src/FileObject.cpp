@@ -15,8 +15,9 @@ namespace eipScanner {
 
 
 
-	FileObject::FileObject(cip::CipUint objectId, SessionInfo::SPtr si, MessageRouter::SPtr messageRouter)
-		: _state(new fileObject::FileObjectState(FileObjectStateCodes::UNKNOWN, *this, objectId, messageRouter)) {
+	FileObject::FileObject(cip::CipUint instanceId, SessionInfo::SPtr si, MessageRouter::SPtr messageRouter)
+		: BaseObject(fileObject::FILE_OBJECT_CLASS_ID, instanceId)
+		, _state(new fileObject::FileObjectState(FileObjectStateCodes::UNKNOWN, *this, instanceId, messageRouter)) {
 		_state->SyncState(si);
 	}
 

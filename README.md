@@ -11,8 +11,9 @@ Free implementation of Ethernet/IP scanner in C++
 
 * Explicit messaging
 * Implicit messaging
-* File Object (only upload)
-* Parameter Object
+* File Object (upload only)
+* Parameter Object (read only)
+* Identity Object
 
 ## Requirements
 
@@ -28,7 +29,7 @@ $ cmake ..
 $ cmake --build . --target install
 ```
 
-## Examples
+## Usage
 
 To see how to work with the library, look into `examples` directory 
 
@@ -36,4 +37,5 @@ To see how to work with the library, look into `examples` directory
 ## Authors
 
 Aleksey Timin
+
 Adam Roth

@@ -3,23 +3,10 @@
 //
 
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
+#include "Mocks.h"
 #include "ParameterObject.h"
 
-
 using namespace eipScanner;
-
-class TMockMessageRouter : public MessageRouter {
-public:
-	using SPtr = std::shared_ptr<TMockMessageRouter>;
-
-	MOCK_CONST_METHOD4(sendRequest, cip::MessageRouterResponse(
-			SessionInfo::SPtr si,
-			cip::CipUsint service,
-			const cip::EPath &path,
-			const std::vector<uint8_t> &data));
-};
-
 using ::testing::Return;
 
 class TestParameterObject : public ::testing::Test {

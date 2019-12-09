@@ -6,6 +6,7 @@ find_package(GTest REQUIRED)
 find_package(GMock REQUIRED)
 
 add_executable(test_eipscanner
+        cip/TestCipRevision.cpp
         cip/TestCipString.cpp
         cip/TestEPath.cpp
         cip/TestMessageRouterResponse.cpp
@@ -21,6 +22,7 @@ add_executable(test_eipscanner
 
         utils/TestBuffer.cpp
 
+        TestIdentityObject.cpp
         TestParameterObject.cpp
         test.cpp
         )
