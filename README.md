@@ -1,7 +1,7 @@
 # EIPScanner
 
-[![Build Status](https://travis-ci.com/flipback/EIPScanner.svg?branch=master)](https://travis-ci.com/flipback/EIPScanner)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/flipback/EIPScanner)
+[![Build Status](https://travis-ci.com/nimbuscontrols/EIPScanner.svg?branch=master)](https://travis-ci.com/nimbuscontrols/EIPScanner)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/nimbuscontrols/EIPScanner)
 
 
 Free implementation of Ethernet/IP scanner in C++
