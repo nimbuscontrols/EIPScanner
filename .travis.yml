@@ -16,7 +16,7 @@ install:
   - make install DESTDIR=~/.local -j
 
 script:
-  - cd ~/build/flipback/EIPScanner/
+  - cd ~/build/nimbuscontrols/EIPScanner/
   - cmake -DTEST_ENABLED=ON  -DEXAMPLE_ENABLED=ON -DGTEST_ROOT=/home/travis/.local/usr/local/ -DGMOCK_ROOT=/home/travis/.local/usr/local/ .
   - cmake --build .
   - test/test_eipscanner
