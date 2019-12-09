@@ -9,12 +9,17 @@
 namespace eipScanner {
 namespace utils {
 	LogLevel Logger::_globalLogLevel = LogLevel::INFO;
+	LogAppender::UPtr Logger::_appender = std::make_unique<ConsoleAppender>();
 
 	Logger::Logger(LogLevel logLevel): _logLevel{logLevel} {
 
 	}
 
 	Logger::~Logger() {
+		if (_globalLogLevel == LogLevel::OFF) {
+			return;
+		}
+
 		std::map<LogLevel, std::string> logNames = {
 			std::make_pair(LogLevel::TRACE, "[TRACE] "),
 			std::make_pair(LogLevel::DEBUG, "[DEBUG] "),
@@ -24,7 +29,7 @@ namespace utils {
 		};
 
 		if (_logLevel <= _globalLogLevel) {
-			std::cout << logNames[_logLevel] << _stream.str() << std::endl;
+			_appender->print(logNames[_logLevel] + (_stream).str());
 		}
 	}
 
@@ -32,5 +37,12 @@ namespace utils {
 		_globalLogLevel = level;
 	}
 
+	void Logger::setAppender(LogAppender::UPtr appender) {
+		_appender = std::move(appender);
+	}
+
+	void ConsoleAppender::print(const std::string &msg) {
+		std::cout << msg << std::endl;
+	}
 }
 }

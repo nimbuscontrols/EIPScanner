@@ -149,7 +149,7 @@ namespace eipScanner {
 				std::runtime_error("Not enough data in the response");
 			}
 
-			Logger(utils::DEBUG) << "Read Parameter Object"
+			Logger(LogLevel::DEBUG) << "Read Parameter Object"
 				<< " ID=" << instanceId
 				<< " ValueSize=" << _value.size()
 				<< " ValueType=0x" << std::hex << static_cast<int>(_type)

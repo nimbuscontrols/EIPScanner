@@ -6,21 +6,39 @@
 #define EIPSCANNER_UTILS_LOGGER_H
 
 #include <sstream>
+#include <memory>
 
 namespace eipScanner {
 namespace utils {
 
-	enum LogLevel {
-		ERROR = 0,
+	enum class LogLevel {
+		OFF = 0,
+		ERROR,
 		WARNING,
 		INFO,
 		DEBUG,
 		TRACE
 	};
 
+	class LogAppender {
+	public:
+		using UPtr = std::unique_ptr<LogAppender>;
+		virtual ~LogAppender() = default;
+
+		virtual void print(const std::string& msg) = 0;
+	};
+
+	class ConsoleAppender : public LogAppender {
+	public:
+		using UPtr = std::unique_ptr<LogAppender>;
+		void print(const std::string& msg) override;
+	};
+
+
 	class Logger {
 	public:
 		static void setLogLevel(LogLevel level);
+		static void setAppender(LogAppender::UPtr appender);
 
 		Logger(LogLevel level);
 
@@ -34,6 +52,7 @@ namespace utils {
 
 	private:
 		static LogLevel _globalLogLevel;
+		static LogAppender::UPtr _appender;
 
 		LogLevel _logLevel;
 		std::ostringstream _stream;
