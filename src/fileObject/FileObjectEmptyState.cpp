@@ -12,11 +12,11 @@ namespace fileObject {
 			: FileObjectState(FileObjectStateCodes::FILE_EMPTY, owner, objectId, messageRouter) {
 	}
 
-	void FileObjectEmptyState::initiateUpload(SessionInfo::SPtr si, EndUploadHandler handle) {
+	void FileObjectEmptyState::initiateUpload(SessionInfoIf::SPtr si, EndUploadHandler handle) {
 		logWithStateName(LogLevel::WARNING, "File cannot be uploaded");
 	}
 
-	bool FileObjectEmptyState::transfer(SessionInfo::SPtr si) {
+	bool FileObjectEmptyState::transfer(SessionInfoIf::SPtr si) {
 		logWithStateName(LogLevel::WARNING, "Nothing to transfer");
 		return false;
 	}

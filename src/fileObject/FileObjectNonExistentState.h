@@ -14,8 +14,8 @@ namespace fileObject {
 	public:
 		FileObjectNonExistentState(FileObject &owner, cip::CipUint objectId, MessageRouter::SPtr messageRouter);
 
-		void initiateUpload(SessionInfo::SPtr si, EndUploadHandler handle) override;
-		bool transfer(SessionInfo::SPtr si) override;
+		void initiateUpload(SessionInfoIf::SPtr si, EndUploadHandler handle) override;
+		bool transfer(SessionInfoIf::SPtr si) override;
 	};
 
 }

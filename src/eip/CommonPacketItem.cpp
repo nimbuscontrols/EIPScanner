@@ -46,5 +46,15 @@ namespace eip {
 	const std::vector<uint8_t> &CommonPacketItem::getData() const {
 		return _data;
 	}
+
+	bool CommonPacketItem::operator==(const CommonPacketItem &rhs) const {
+		return _typeId == rhs._typeId &&
+			   _length == rhs._length &&
+			   _data == rhs._data;
+	}
+
+	bool CommonPacketItem::operator!=(const CommonPacketItem &rhs) const {
+		return !(rhs == *this);
+	}
 }
 }

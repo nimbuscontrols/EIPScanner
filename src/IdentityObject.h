@@ -17,8 +17,8 @@ namespace eipScanner {
 	public:
 		static const cip::CipUint CLASS_ID = 0x01;
 		IdentityObject(cip::CipUint instanceId);
-		IdentityObject(cip::CipUint instanceId, const SessionInfo::SPtr& si);
-		IdentityObject(cip::CipUint instanceId, const SessionInfo::SPtr& si, const MessageRouter::SPtr& messageRouter);
+		IdentityObject(cip::CipUint instanceId, const SessionInfoIf::SPtr& si);
+		IdentityObject(cip::CipUint instanceId, const SessionInfoIf::SPtr& si, const MessageRouter::SPtr& messageRouter);
 
 		cip::CipUint getVendorId() const;
 		cip::CipUint getDeviceType() const;

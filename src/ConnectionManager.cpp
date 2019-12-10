@@ -33,7 +33,7 @@ namespace eipScanner {
 	ConnectionManager::~ConnectionManager() = default;
 
 	IOConnection::WPtr
-	ConnectionManager::forwardOpen(SessionInfo::SPtr si, ConnectionParameters connectionParameters) {
+	ConnectionManager::forwardOpen(SessionInfoIf::SPtr si, ConnectionParameters connectionParameters) {
 		static int serialNumberCount = 0;
 		connectionParameters.connectionSerialNumber = ++serialNumberCount;
 
@@ -111,7 +111,7 @@ namespace eipScanner {
 		return ioConnection;
 	}
 
-	void ConnectionManager::forwardClose(SessionInfo::SPtr si, const IOConnection::WPtr& ioConnection) {
+	void ConnectionManager::forwardClose(SessionInfoIf::SPtr si, const IOConnection::WPtr& ioConnection) {
 		if (auto ptr = ioConnection.lock()) {
 			ForwardCloseRequest request;
 
@@ -189,14 +189,14 @@ namespace eipScanner {
 				commonPacket.expand(recvData);
 
 				// TODO: Check TypeIDs and sequnce of the packages
-				Buffer buffer(commonPacket[0].getData());
+				Buffer buffer(commonPacket.getItems().at(0).getData());
 				cip::CipUdint connectionId;
 				buffer >> connectionId;
 				Logger(LogLevel::DEBUG) << "Received data from connection T2O_ID=" << connectionId;
 
 				auto io = _connectionMap.find(connectionId);
 				if (io != _connectionMap.end()) {
-					io->second->notifyReceiveData(commonPacket[1].getData());
+					io->second->notifyReceiveData(commonPacket.getItems().at(1).getData());
 				} else {
 					Logger(LogLevel::ERROR) << "Received data from unknow connection T2O_ID=" << connectionId;
 				}

@@ -19,10 +19,12 @@ public:
 			const std::vector<uint8_t> &data));
 };
 
-class TMockSessionInfo : public eipScanner::SessionInfo {
+class TMockSessionInfo : public eipScanner::SessionInfoIf {
 public:
 	using SPtr = std::shared_ptr<TMockSessionInfo>;
 	MOCK_CONST_METHOD1(sendAndReceive, eipScanner::eip::EncapsPacket(const eipScanner::eip::EncapsPacket& packet));
+	MOCK_CONST_METHOD0(getSessionHandle, eipScanner::cip::CipUdint());
+	MOCK_CONST_METHOD0(getHost, std::string());
 };
 
 #endif //EIPSCANNER_MOCKS_H

@@ -54,8 +54,8 @@ namespace eip {
 		}
 	}
 
-	CommonPacketItem &CommonPacket::operator[](size_t index) {
-		return _items[index];
+	const CommonPacketItem::Vec &CommonPacket::getItems() {
+		return _items;
 	}
 }
 }

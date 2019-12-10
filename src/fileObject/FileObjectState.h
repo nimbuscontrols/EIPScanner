@@ -41,11 +41,11 @@ namespace fileObject {
 		FileObjectState(FileObjectStateCodes state, FileObject &owner, cip::CipUint objectId, MessageRouter::SPtr messageRouter);
 		virtual ~FileObjectState();
 
-		virtual void initiateUpload(SessionInfo::SPtr si, EndUploadHandler handle);
-		virtual bool transfer(SessionInfo::SPtr si);
+		virtual void initiateUpload(SessionInfoIf::SPtr si, EndUploadHandler handle);
+		virtual bool transfer(SessionInfoIf::SPtr si);
 
 		FileObjectStateCodes getStateCode() const;
-		void SyncState(SessionInfo::SPtr si);
+		void SyncState(SessionInfoIf::SPtr si);
 
 	protected:
 		void logWithStateName(utils::LogLevel logLevel, const std::string &message) const;

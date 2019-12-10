@@ -16,9 +16,11 @@ namespace eip {
 		NULL_ADDR = 0x0000,
 		LIST_IDENTITY = 0x000C,
 		CONNECTION_ADDRESS_ITEM= 0x00A1,
-		SEQUENCED_ADDRESS_ITEM= 0x8002,
 		CONNECTED_TRANSPORT_PACKET = 0x00B1,
-		UNCONNECTED_MESSAGE = 0x00B2
+		UNCONNECTED_MESSAGE = 0x00B2,
+		O2T_SOCKADDR_INFO = 0x8000,
+		T2O_SOCKADDR_INFO = 0x8001,
+		SEQUENCED_ADDRESS_ITEM= 0x8002,
 	};
 
 	class CommonPacketItem {
@@ -34,6 +36,10 @@ namespace eip {
 		CommonPacketItemIds getTypeId() const;
 		cip::CipUint getLength() const;
 		const std::vector<uint8_t> &getData() const;
+
+		bool operator==(const CommonPacketItem &rhs) const;
+
+		bool operator!=(const CommonPacketItem &rhs) const;
 
 	private:
 		CommonPacketItemIds _typeId;

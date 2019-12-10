@@ -9,23 +9,21 @@
 #include <vector>
 #include <memory>
 
-#include "eip/EncapsPacket.h"
+#include "SessionInfoIf.h"
 #include "sockets/TCPSocket.h"
 
 namespace eipScanner {
-	class SessionInfo {
+	class SessionInfo : public SessionInfoIf {
 	public:
 		using SPtr = std::shared_ptr<SessionInfo>;
-		using WPtr = std::weak_ptr<SessionInfo>;
 
 		SessionInfo(const std::string &host, int port, const std::chrono::milliseconds& recvTimeout);
 		SessionInfo(const std::string &host, int port);
 		~SessionInfo();
 
-		virtual eip::EncapsPacket sendAndReceive(const eip::EncapsPacket& packet) const;
-
-		cip::CipUdint getSessionHandle() const;
-		std::string getHost() const;
+		eip::EncapsPacket sendAndReceive(const eip::EncapsPacket& packet) const override;
+		cip::CipUdint getSessionHandle() const override;
+		std::string getHost() const override;
 
 	private:
 		sockets::TCPSocket _socket;

@@ -23,6 +23,7 @@ add_executable(test_eipscanner
         utils/TestBuffer.cpp
 
         TestIdentityObject.cpp
+        TestMessageRouter.cpp
         TestParameterObject.cpp
         test.cpp
         )

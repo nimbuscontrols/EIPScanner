@@ -16,7 +16,8 @@ namespace cip {
 		: _serviceCode{ServiceCodes::GET_ATTRIBUTE_ALL}
 		, _generalStatusCode{GeneralStatusCodes::SUCCESS}
 		, _additionalStatus(0)
-		, _data(0) {
+		, _data(0)
+		, _additionalPacketItems(0) {
 	}
 
 	MessageRouterResponse::~MessageRouterResponse() = default;
@@ -66,6 +67,15 @@ namespace cip {
 
 	void MessageRouterResponse::setData(const std::vector<uint8_t> &data) {
 		_data = data;
+	}
+
+	const std::vector<eip::CommonPacketItem> &MessageRouterResponse::getAdditionalPacketItems() const {
+		return _additionalPacketItems;
+	}
+
+	void
+	MessageRouterResponse::setAdditionalPacketItems(const std::vector<eip::CommonPacketItem> &_additionalPacketItems) {
+		MessageRouterResponse::_additionalPacketItems = _additionalPacketItems;
 	}
 
 	void logGeneralAndAdditionalStatus(const MessageRouterResponse &response) {

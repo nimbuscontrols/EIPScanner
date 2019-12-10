@@ -24,12 +24,12 @@ namespace fileObject {
 	}
 
 	void
-	FileObjectUploadInProgressState::initiateUpload(SessionInfo::SPtr si, EndUploadHandler handle) {
+	FileObjectUploadInProgressState::initiateUpload(SessionInfoIf::SPtr si, EndUploadHandler handle) {
 		logWithStateName(LogLevel::INFO, "Initiate upload of file again");
 		//TODO: Implement
 	}
 
-	bool FileObjectUploadInProgressState::transfer(SessionInfo::SPtr si) {
+	bool FileObjectUploadInProgressState::transfer(SessionInfoIf::SPtr si) {
 		Buffer buffer;
 		buffer << _transferNumber;
 

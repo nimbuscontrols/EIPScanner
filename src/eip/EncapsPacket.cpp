@@ -106,5 +106,19 @@ namespace eip {
 		buf >> len;
 		return len;
 	}
+
+	bool EncapsPacket::operator==(const EncapsPacket &rhs) const {
+		return _command == rhs._command &&
+			   _length == rhs._length &&
+			   _sessionHandle == rhs._sessionHandle &&
+			   _statusCode == rhs._statusCode &&
+			   _context == rhs._context &&
+			   _options == rhs._options &&
+			   _data == rhs._data;
+	}
+
+	bool EncapsPacket::operator!=(const EncapsPacket &rhs) const {
+		return !(rhs == *this);
+	}
 }
 }
