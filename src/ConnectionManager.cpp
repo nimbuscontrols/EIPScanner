@@ -39,7 +39,8 @@ namespace eipScanner {
 
 		if ((connectionParameters.o2tNetworkConnectionParams
 			& NetworkConnectionParams::MULTICAST) > 0) {
-			static cip::CipUdint idCount = 0;
+			static cip::CipUint idCount = 0;
+			connectionParameters.o2tNetworkConnectionId = connectionParameters.originatorSerialNumber << 16;
 			connectionParameters.o2tNetworkConnectionId = ++idCount;
 		}
 
@@ -65,6 +66,7 @@ namespace eipScanner {
 		if (connectionParameters.t2oRealTimeFormat) {
 			connectionParameters.t2oNetworkConnectionParams += 4;
 		}
+
 
 		ForwardOpenRequest request(connectionParameters);
 		auto messageRouterResponse = _messageRouter->sendRequest(si,
@@ -93,9 +95,9 @@ namespace eipScanner {
 			ioConnection->_connectionPath = connectionParameters.connectionPath;
 			ioConnection->_originatorVendorId = connectionParameters.originatorVendorId;
 			ioConnection->_originatorSerialNumber = connectionParameters.originatorSerialNumber;
-			ioConnection->_socket = std::make_unique<UDPSocket>(si->getHost(), 2222);
+			ioConnection->_socket = std::make_unique<UDPSocket>(si->getRemoteEndPoint());
 
-			findOrCreateSocket(si->getHost(), 2222);
+			findOrCreateSocket(si->getRemoteEndPoint());
 
 			auto result = _connectionMap
 					.insert(std::make_pair(response.getT2ONetworkConnectionId(), ioConnection));
@@ -169,16 +171,11 @@ namespace eipScanner {
 		_lastHandleTime = now;
 	}
 
-	UDPBoundSocket::SPtr ConnectionManager::findOrCreateSocket(const std::string& host, int port) {
-		SocketKey socketKey = {
-				.host = host,
-				.port = port
-			};
-
-		auto socket = _socketMap.find(socketKey);
+	UDPBoundSocket::SPtr ConnectionManager::findOrCreateSocket(const sockets::EndPoint& endPoint) {
+		auto socket = _socketMap.find(endPoint);
 		if (socket == _socketMap.end()) {
-			auto newSocket = std::make_shared<UDPBoundSocket>(host, port);
-			_socketMap[socketKey] = newSocket;
+			auto newSocket = std::make_shared<UDPBoundSocket>(endPoint);
+			_socketMap[endPoint] = newSocket;
 			newSocket->setBeginReceiveHandler([](sockets::BaseSocket& sock) {
 				Logger(LogLevel::DEBUG) << "Received something";
 			});

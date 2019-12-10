@@ -19,6 +19,7 @@ namespace sockets {
 		using WPtr = std::weak_ptr<UDPBoundSocket>;
 		using SPtr = std::shared_ptr<UDPBoundSocket>;
 
+		explicit UDPBoundSocket(EndPoint endPoint);
 		UDPBoundSocket(std::string host, int port);
 		virtual ~UDPBoundSocket();
 	};

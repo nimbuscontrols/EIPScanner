@@ -3,7 +3,6 @@
 //
 
 #include <system_error>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -19,7 +18,11 @@ namespace sockets {
 	using eipScanner::utils::LogLevel;
 
 	TCPSocket::TCPSocket(std::string host, int port)
-			: BaseSocket{host, port} {
+		: TCPSocket(EndPoint(host, port)){
+	}
+
+	TCPSocket::TCPSocket(EndPoint endPoint)
+			: BaseSocket(std::move(endPoint)) {
 
 		_sockedFd = socket(AF_INET, SOCK_STREAM, 0);
 		if (_sockedFd < 0) {
@@ -28,17 +31,8 @@ namespace sockets {
 
 		Logger(LogLevel::DEBUG) << "Opened socket fd=" << _sockedFd;
 
-		Logger(LogLevel::DEBUG) << "Parsing IP from " << _host;
-		struct sockaddr_in addr{};
-		if (inet_aton(_host.c_str(), &addr.sin_addr) < 0) {
-			close(_sockedFd);
-			throw std::system_error(errno, std::generic_category());
-		}
-
-		addr.sin_family = AF_INET;
-		addr.sin_port = htons(_port);
-
-		Logger(LogLevel::DEBUG) << "Connecting to " << _host << ":" << _port;
+		Logger(LogLevel::DEBUG) << "Connecting to " << _remoteEndPoint.toString();
+		auto addr = _remoteEndPoint.getAddr();
 		if (connect(_sockedFd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
 			close(_sockedFd);
 			throw std::system_error(errno, std::generic_category());
@@ -77,7 +71,7 @@ namespace sockets {
 		}
 
 		if (size != count) {
-			Logger(LogLevel::WARNING) << "Received from " << _host << ":" << _port
+			Logger(LogLevel::WARNING) << "Received from " <<  _remoteEndPoint.toString()
 									  << " " << count << " of " << size;
 		}
 

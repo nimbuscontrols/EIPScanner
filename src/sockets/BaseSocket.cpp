@@ -11,25 +11,22 @@
 
 namespace eipScanner {
 namespace sockets {
-	BaseSocket::BaseSocket(std::string host, int port)
-			: _host{std::move(host)}
-			, _port{port}
+
+	BaseSocket::BaseSocket(EndPoint endPoint)
+			: _remoteEndPoint(std::move(endPoint))
 			, _recvTimeout(0)
 			, _beginReceiveHandler() {
+	}
+
+
+	BaseSocket::BaseSocket(std::string host, int port)
+			: BaseSocket(EndPoint(std::move(host), port)) {
 	}
 
 	BaseSocket::~BaseSocket() = default;
 
 	int BaseSocket::getSocketFd() const {
 		return _sockedFd;
-	}
-
-	const std::string &BaseSocket::getHost() const {
-		return _host;
-	}
-
-	int BaseSocket::getPort() const {
-		return _port;
 	}
 
 	const std::chrono::milliseconds &BaseSocket::getRecvTimeout() const {
@@ -102,6 +99,10 @@ namespace sockets {
 
 			startTime = std::chrono::steady_clock::now();
 		} while(ready > 0);
+	}
+
+	const EndPoint &BaseSocket::getRemoteEndPoint() const {
+		return _remoteEndPoint;
 	}
 
 }

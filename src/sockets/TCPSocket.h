@@ -13,6 +13,7 @@ namespace eipScanner {
 namespace sockets {
 	class TCPSocket : public BaseSocket {
 	public:
+		explicit TCPSocket(EndPoint endPoint);
 		TCPSocket(std::string host, int port);
 		virtual ~TCPSocket();
 

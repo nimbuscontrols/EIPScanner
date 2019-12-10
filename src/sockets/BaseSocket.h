@@ -12,6 +12,8 @@
 #include <functional>
 #include <memory>
 
+#include "EndPoint.h"
+
 namespace eipScanner {
 namespace sockets {
 	class BaseSocket {
@@ -19,6 +21,7 @@ namespace sockets {
 		using BeginReceiveHandler = std::function<void(BaseSocket&)>;
 		using SPtr = std::shared_ptr<BaseSocket>;
 
+		explicit BaseSocket(EndPoint endPoint);
 		BaseSocket(std::string host, int port);
 		virtual ~BaseSocket();
 
@@ -31,8 +34,8 @@ namespace sockets {
 		void setRecvTimeout(const std::chrono::milliseconds &recvTimeout);
 
 		int getSocketFd() const;
-		const std::string &getHost() const;
-		int getPort() const;
+
+		const EndPoint &getRemoteEndPoint() const;
 
 		static void select(std::vector<BaseSocket::SPtr> sockets, std::chrono::milliseconds timeout);
 
@@ -40,8 +43,7 @@ namespace sockets {
 		void BeginReceive();
 
 		int _sockedFd;
-		std::string _host;
-		int _port;
+		EndPoint _remoteEndPoint;
 
 		std::chrono::milliseconds _recvTimeout;
 		BeginReceiveHandler _beginReceiveHandler;

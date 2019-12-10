@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include "Mocks.h"
+#include "./Mocks.h"
 #include "FileObject.h"
 #include "fileObject/FileObjectLoadedState.h"
 #include "utils/Buffer.h"
@@ -21,8 +21,8 @@ public:
 	const cip::CipUint FILE_OBJECT_ID = 1;
 
 	void SetUp() override {
-		_messageRouter = std::make_shared<fileObject::MockMessageRouter>();
-		mockGetFileObjectState(_messageRouter, _nullSession,
+		_messageRouter = std::make_shared<TMockMessageRouter>();
+		fileObject::mockGetFileObjectState(_messageRouter, _nullSession,
 				FILE_OBJECT_ID, FileObjectStateCodes::FILE_LOADED);
 
 		_fileObject = std::make_unique<FileObject>(FILE_OBJECT_ID, _nullSession, _messageRouter);
@@ -40,9 +40,9 @@ public:
 		return response;
 	}
 
-	fileObject::MockMessageRouter::SPtr _messageRouter;
+	TMockMessageRouter::SPtr _messageRouter;
 	FileObject::UPtr _fileObject;
-	SessionInfo::SPtr _nullSession;
+	SessionInfoIf::SPtr _nullSession;
 };
 
 TEST_F(TestFileObjectLoadedState, ShouldInitiateUpload) {

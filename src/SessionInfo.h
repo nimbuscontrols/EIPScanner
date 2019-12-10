@@ -23,7 +23,7 @@ namespace eipScanner {
 
 		eip::EncapsPacket sendAndReceive(const eip::EncapsPacket& packet) const override;
 		cip::CipUdint getSessionHandle() const override;
-		std::string getHost() const override;
+		sockets::EndPoint getRemoteEndPoint() const override;
 
 	private:
 		sockets::TCPSocket _socket;

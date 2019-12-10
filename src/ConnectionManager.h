@@ -15,16 +15,6 @@
 
 namespace eipScanner {
 
-	struct SocketKey {
-		std::string host;
-		int port;
-
-		inline bool operator< (const SocketKey& rhs) const {
-			return host < rhs.host
-				&& port < rhs.port;
-		}
-	};
-
 	enum class ConnectionManagerServiceCodes : cip::CipUsint {
 		FORWARD_OPEN = 0x54,
 		FORWARD_CLOSE = 0x4E
@@ -47,9 +37,9 @@ namespace eipScanner {
 	private:
 		MessageRouter::SPtr _messageRouter;
 		std::map<cip::CipUint, IOConnection::SPtr> _connectionMap;
-		std::map<SocketKey, std::shared_ptr<sockets::UDPBoundSocket>> _socketMap;
+		std::map<sockets::EndPoint, std::shared_ptr<sockets::UDPBoundSocket>> _socketMap;
 
-		sockets::UDPBoundSocket::SPtr  findOrCreateSocket(const std::string& host, int port);
+		sockets::UDPBoundSocket::SPtr  findOrCreateSocket(const sockets::EndPoint& endPoint);
 		std::chrono::steady_clock::time_point _lastHandleTime;
 	};
 }

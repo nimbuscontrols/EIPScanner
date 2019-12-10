@@ -23,8 +23,8 @@ public:
 	const int FILE_SIZE = 255*2+10;
 
 	void SetUp() override {
-		_messageRouter = std::make_shared<fileObject::MockMessageRouter>();
-		mockGetFileObjectState(_messageRouter, _nullSession,
+		_messageRouter = std::make_shared<TMockMessageRouter>();
+		fileObject::mockGetFileObjectState(_messageRouter, _nullSession,
 				FILE_OBJECT_ID, FileObjectStateCodes::TRANSFER_UPLOAD_IN_PROGRESS);
 
 		_fileObject = std::make_unique<FileObject>(FILE_OBJECT_ID, _nullSession, _messageRouter);
@@ -63,9 +63,9 @@ public:
 		).WillOnce(Return(response));
 	}
 
-	fileObject::MockMessageRouter::SPtr _messageRouter;
+	TMockMessageRouter::SPtr _messageRouter;
 	FileObject::UPtr _fileObject;
-	SessionInfo::SPtr _nullSession;
+	SessionInfoIf::SPtr _nullSession;
 
 	cip::GeneralStatusCodes _receivedStatus;
 	std::vector<uint8_t> _receivedFile;

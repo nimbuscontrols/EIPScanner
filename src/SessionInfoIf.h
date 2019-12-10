@@ -6,6 +6,8 @@
 #define EIPSCANNER_SESSIONINFOIF_H
 
 #include "eip/EncapsPacket.h"
+#include "sockets/EndPoint.h"
+
 namespace eipScanner {
 
 	class SessionInfoIf {
@@ -16,7 +18,7 @@ namespace eipScanner {
 
 		virtual cip::CipUdint getSessionHandle() const = 0;
 
-		virtual std::string getHost() const = 0;
+		virtual sockets::EndPoint getRemoteEndPoint() const = 0;
 	};
 }
 #endif //EIPSCANNER_SESSIONINFOIF_H
