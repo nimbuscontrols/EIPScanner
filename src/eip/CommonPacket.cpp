@@ -38,7 +38,7 @@ namespace eip {
 		Buffer buffer(data);
 		cip::CipUint count;
 		buffer >> count;
-		for (int i = 0; i < count; ++i) {
+		for (int i = 0; i < count && !buffer.empty(); ++i) {
 			cip::CipUint typeId;
 			cip::CipUint length;
 			buffer >> typeId >> length;

@@ -67,11 +67,14 @@ namespace eipScanner {
 			connectionParameters.t2oNetworkConnectionParams += 4;
 		}
 
+		Buffer buffer;
+		buffer << sockets::EndPoint("0.0.0.0", 2222);
+		eip::CommonPacketItem addrItem(eip::CommonPacketItemIds::T2O_SOCKADDR_INFO, buffer.data());
 
 		ForwardOpenRequest request(connectionParameters);
 		auto messageRouterResponse = _messageRouter->sendRequest(si,
 				static_cast<cip::CipUsint>(ConnectionManagerServiceCodes::FORWARD_OPEN),
-				EPath(6, 1), request.pack());
+				EPath(6, 1), request.pack(), {addrItem});
 
 		IOConnection::SPtr ioConnection;
 		if (messageRouterResponse.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
@@ -95,7 +98,26 @@ namespace eipScanner {
 			ioConnection->_connectionPath = connectionParameters.connectionPath;
 			ioConnection->_originatorVendorId = connectionParameters.originatorVendorId;
 			ioConnection->_originatorSerialNumber = connectionParameters.originatorSerialNumber;
-			ioConnection->_socket = std::make_unique<UDPSocket>(si->getRemoteEndPoint().getHost(), 2222);
+
+			const eip::CommonPacketItem::Vec &additionalItems = messageRouterResponse.getAdditionalPacketItems();
+			auto o2tSockAddrInfo = std::find_if(additionalItems.begin(), additionalItems.end(),
+					[](auto item) { return item.getTypeId() == eip::CommonPacketItemIds::O2T_SOCKADDR_INFO; });
+
+			if (o2tSockAddrInfo != additionalItems.end()) {
+				Buffer sockAddrBuffer(o2tSockAddrInfo->getData());
+				sockets::EndPoint endPoint("",0);
+				sockAddrBuffer >> endPoint;
+
+				if (endPoint.getHost() == "0.0.0.0") {
+					ioConnection->_socket = std::make_unique<UDPSocket>(
+							si->getRemoteEndPoint().getHost(), endPoint.getPort());
+				} else {
+					ioConnection->_socket = std::make_unique<UDPSocket>(endPoint);
+				}
+				
+			} else {
+				ioConnection->_socket = std::make_unique<UDPSocket>(si->getRemoteEndPoint().getHost(), 2222);	
+			}
 
 			findOrCreateSocket(sockets::EndPoint(si->getRemoteEndPoint().getHost(), 2222));
 

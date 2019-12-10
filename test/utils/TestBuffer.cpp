@@ -173,7 +173,6 @@ TEST(TestBuffer, ShouldDecodeRevision) {
 	EXPECT_EQ(expectedData, buf.data());
 }
 
-
 TEST(TestBuffer, ShouldEncodeRevision) {
 	cip::CipRevision revision;
 	std::vector<uint8_t> data = {1,2};
@@ -182,4 +181,36 @@ TEST(TestBuffer, ShouldEncodeRevision) {
 
 	EXPECT_EQ(revision.getMajorRevision(), 1);
 	EXPECT_EQ(revision.getMinorRevision(), 2);
+}
+
+TEST(TestBuffer, ShouldDecodeEndPPoint) {
+	sockets::EndPoint endPoint("127.0.0.1", 2222);
+	std::vector<uint8_t> expectedData = {
+			0x00, 0x02,
+			0x08, 0xae,
+			0x07f, 0x0, 0x0, 0x1,
+			0, 0, 0, 0, 0, 0, 0, 0
+	};
+	Buffer buf;
+	buf << endPoint;
+
+	EXPECT_EQ(expectedData, buf.data());
+}
+
+TEST(TestBuffer, ShouldEncodeEndPPoint) {
+	sockets::EndPoint endPoint("", 0);
+	std::vector<uint8_t> data =  {
+			0x00, 0x02,
+			0x08, 0xae,
+			0x07f, 0x0, 0x0, 0x1,
+			0, 0, 0, 0, 0, 0, 0, 0
+	};
+	Buffer buf(data);
+	buf >> endPoint;
+
+	EXPECT_EQ("127.0.0.1", endPoint.getHost());
+	EXPECT_EQ(2222, endPoint.getPort());
+	EXPECT_EQ(2, endPoint.getAddr().sin_family);
+	EXPECT_EQ(0x0100007f, endPoint.getAddr().sin_addr.s_addr);
+	EXPECT_EQ(0xae08, endPoint.getAddr().sin_port);
 }
