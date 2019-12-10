@@ -2,7 +2,9 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 #include <algorithm>
-#include <assert.h>
+#include <cassert>
+#include <cstdlib>
+#include <random>
 
 #include "ConnectionManager.h"
 #include "eip/CommonPacket.h"
@@ -28,6 +30,10 @@ namespace eipScanner {
 		: _messageRouter(std::move(messageRouter))
 		, _connectionMap()
 		, _lastHandleTime(std::chrono::steady_clock::now()){
+
+		std::random_device rd;
+		std::uniform_int_distribution<cip::CipUint> dist(0, std::numeric_limits<cip::CipUint>::max());
+		_incarnationId = dist(rd);
 	}
 
 	ConnectionManager::~ConnectionManager() = default;
@@ -39,14 +45,13 @@ namespace eipScanner {
 
 		if ((connectionParameters.o2tNetworkConnectionParams
 			& NetworkConnectionParams::MULTICAST) > 0) {
-			static cip::CipUint idCount = 0;
-			connectionParameters.o2tNetworkConnectionId = connectionParameters.originatorSerialNumber << 16;
+			static cip::CipUint idCount = _incarnationId << 16;
 			connectionParameters.o2tNetworkConnectionId = ++idCount;
 		}
 
 		if ((connectionParameters.t2oNetworkConnectionParams
 			 & NetworkConnectionParams::P2P) > 0) {
-			static cip::CipUdint idCount = 0;
+			static cip::CipUdint idCount = _incarnationId << 16;
 			connectionParameters.t2oNetworkConnectionId = ++idCount;
 		}
 

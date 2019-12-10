@@ -41,6 +41,7 @@ namespace eipScanner {
 
 		sockets::UDPBoundSocket::SPtr  findOrCreateSocket(const sockets::EndPoint& endPoint);
 		std::chrono::steady_clock::time_point _lastHandleTime;
+		cip::CipUint _incarnationId;
 	};
 }
 
