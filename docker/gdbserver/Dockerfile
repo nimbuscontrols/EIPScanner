@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/spreenauten/lm-dev/lm-preprocessor/preprocessor-deps:latest
+FROM gcc:8
 
 RUN apt-get update && apt-get install -y \
     openssh-server gdb gdbserver rsync
