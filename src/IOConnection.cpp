@@ -94,7 +94,7 @@ namespace eipScanner {
 			Buffer buffer;
 			if ((_transportTypeTrigger & NetworkConnectionParams::CLASS1) > 0
 				|| (_transportTypeTrigger & NetworkConnectionParams::CLASS3) > 0) {
-				buffer << _sequenceValueCount++;
+				buffer << ++_sequenceValueCount;
 			}
 
 			if (_o2tRealTimeFormat) {
