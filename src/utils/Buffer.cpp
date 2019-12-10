@@ -146,7 +146,7 @@ namespace utils {
 	Buffer &Buffer::operator<<(sockets::EndPoint v) {
 		std::vector<uint8_t> zeros(8);
 		sockaddr_in addr = v.getAddr();
-		return *this << htons(addr.sin_family)
+		return *this << htons(static_cast<cip::CipInt>(addr.sin_family))
 					 << addr.sin_port
 					 << addr.sin_addr.s_addr
 					 << zeros;
@@ -155,7 +155,7 @@ namespace utils {
 	Buffer &Buffer::operator>>(sockets::EndPoint &val) {
 		std::vector<uint8_t> zeros(8);
 		sockaddr_in addr{0};
-		*this >> addr.sin_family
+		*this >> reinterpret_cast<cip::CipInt&>(addr.sin_family)
 			 >> addr.sin_port
 			 >> addr.sin_addr.s_addr
 			 >> zeros;
