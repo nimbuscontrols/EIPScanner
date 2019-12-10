@@ -11,7 +11,6 @@ assignees: ''
 A clear and concise description of what the bug is.
 
 **To Reproduce**
-
 Place, the code snippet that causes the issue
 
 Example:
@@ -32,7 +31,7 @@ If applicable, add screenshots to help explain your problem.
 If applicable, add wireshark dump 
 
 **Logs**
-Provide the librirary's logs
+Provide the logs of the library.
 
 
 **Environment (please complete the following information):**
