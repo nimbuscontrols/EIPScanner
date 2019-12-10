@@ -24,8 +24,8 @@ TEST(CommonPacket, ShouldExpandFromData) {
 	CommonPacket cp;
 	cp.expand(data);
 
-	EXPECT_EQ(cp[0].getTypeId(), CommonPacketItemIds::NULL_ADDR);
-	EXPECT_EQ(cp[1].getTypeId(), CommonPacketItemIds::UNCONNECTED_MESSAGE);
+	EXPECT_EQ(cp.getItems()[0].getTypeId(), CommonPacketItemIds::NULL_ADDR);
+	EXPECT_EQ(cp.getItems()[1].getTypeId(), CommonPacketItemIds::UNCONNECTED_MESSAGE);
 }
 
 TEST(CommonPacket, ShouldThrowErrorIfDataIsInvalid) {

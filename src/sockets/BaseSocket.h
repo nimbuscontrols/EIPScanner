@@ -23,7 +23,7 @@ namespace sockets {
 		virtual ~BaseSocket();
 
 		virtual void Send(const std::vector<uint8_t>& data) const = 0;
-		virtual std::vector<uint8_t> Receive(size_t size) = 0;
+		virtual std::vector<uint8_t> Receive(size_t size) const = 0;
 		void setBeginReceiveHandler(BeginReceiveHandler handler);
 
 

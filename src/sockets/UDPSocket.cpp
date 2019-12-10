@@ -53,7 +53,7 @@ namespace sockets {
 		}
 	}
 
-	std::vector<uint8_t> UDPSocket::Receive(size_t size) {
+	std::vector<uint8_t> UDPSocket::Receive(size_t size) const {
 		std::vector<uint8_t> recvBuffer(size);
 
 		auto len = recvfrom(_sockedFd, recvBuffer.data(), recvBuffer.size(), 0, NULL, NULL);

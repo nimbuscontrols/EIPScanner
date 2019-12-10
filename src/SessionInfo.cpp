@@ -44,7 +44,7 @@ namespace eipScanner {
 		Logger(LogLevel::INFO) << "Unregistered session " << _sessionHandle;
 	}
 
-	EncapsPacket SessionInfo::sendAndReceive(const EncapsPacket& packet) {
+	EncapsPacket SessionInfo::sendAndReceive(const EncapsPacket& packet) const {
 		_socket.Send(packet.pack());
 		auto header = _socket.Receive(EncapsPacket::HEADER_SIZE);
 		auto length = EncapsPacket::GetLengthFromHeader(header);

@@ -22,7 +22,7 @@ namespace eipScanner {
 		SessionInfo(const std::string &host, int port);
 		~SessionInfo();
 
-		virtual eip::EncapsPacket sendAndReceive(const eip::EncapsPacket& packet);
+		virtual eip::EncapsPacket sendAndReceive(const eip::EncapsPacket& packet) const;
 
 		cip::CipUdint getSessionHandle() const;
 		std::string getHost() const;

@@ -17,7 +17,7 @@ namespace sockets {
 		virtual ~TCPSocket();
 
 		void Send(const std::vector<uint8_t>& data) const override;
-		std::vector<uint8_t> Receive(size_t size) override;
+		std::vector<uint8_t> Receive(size_t size) const override;
 
 	private:
 	};

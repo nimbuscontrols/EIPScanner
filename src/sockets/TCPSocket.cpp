@@ -60,7 +60,7 @@ namespace sockets {
 		}
 	}
 
-	std::vector<uint8_t> TCPSocket::Receive(size_t size) {
+	std::vector<uint8_t> TCPSocket::Receive(size_t size) const {
 		std::vector<uint8_t> recvBuffer(size);
 
 		int count = 0;
