@@ -16,8 +16,8 @@ namespace sockets {
 			: _remoteEndPoint(std::move(endPoint))
 			, _recvTimeout(0)
 			, _beginReceiveHandler() {
-	}
 
+	}
 
 	BaseSocket::BaseSocket(std::string host, int port)
 			: BaseSocket(EndPoint(std::move(host), port)) {

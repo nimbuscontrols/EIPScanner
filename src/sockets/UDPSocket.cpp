@@ -42,7 +42,7 @@ namespace sockets {
 	}
 
 	void UDPSocket::Send(const std::vector <uint8_t> &data) const {
-		Logger(LogLevel::TRACE) << "Send " << data.size() << " bytes from TCP socket #" << _sockedFd << ".";
+		Logger(LogLevel::TRACE) << "Send " << data.size() << " bytes from UDP socket #" << _sockedFd << ".";
 
 		auto addr = _remoteEndPoint.getAddr();
 		int count = sendto(_sockedFd, data.data(), data.size(), 0,

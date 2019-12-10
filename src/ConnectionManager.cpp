@@ -124,6 +124,9 @@ namespace eipScanner {
 				ioConnection->_socket = std::make_unique<UDPSocket>(si->getRemoteEndPoint().getHost(), 2222);	
 			}
 
+			Logger(LogLevel::INFO) << "Open UDP socket to send data to "
+					<< ioConnection->_socket->getRemoteEndPoint().toString();
+
 			findOrCreateSocket(sockets::EndPoint(si->getRemoteEndPoint().getHost(), 2222));
 
 			auto result = _connectionMap
