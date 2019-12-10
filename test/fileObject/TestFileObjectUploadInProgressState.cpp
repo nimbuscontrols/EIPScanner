@@ -72,7 +72,6 @@ public:
 };
 
 TEST_F(TestFileObjectUploadInProgressState, ShouldUploadTransfer) {
-
 	mockTransfer(0, TransferPacketTypeCodes::FIRST, std::vector<uint8_t>(255));
 	EXPECT_TRUE(_fileObject->handleTransfers(_nullSession));
 

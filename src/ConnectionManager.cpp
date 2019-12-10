@@ -95,9 +95,9 @@ namespace eipScanner {
 			ioConnection->_connectionPath = connectionParameters.connectionPath;
 			ioConnection->_originatorVendorId = connectionParameters.originatorVendorId;
 			ioConnection->_originatorSerialNumber = connectionParameters.originatorSerialNumber;
-			ioConnection->_socket = std::make_unique<UDPSocket>(si->getRemoteEndPoint());
+			ioConnection->_socket = std::make_unique<UDPSocket>(si->getRemoteEndPoint().getHost(), 2222);
 
-			findOrCreateSocket(si->getRemoteEndPoint());
+			findOrCreateSocket(sockets::EndPoint(si->getRemoteEndPoint().getHost(), 2222));
 
 			auto result = _connectionMap
 					.insert(std::make_pair(response.getT2ONetworkConnectionId(), ioConnection));
