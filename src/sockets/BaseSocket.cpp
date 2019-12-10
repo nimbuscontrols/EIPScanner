@@ -57,6 +57,9 @@ namespace sockets {
 #endif
 
 		};
+
+		tv.tv_sec = std::max<decltype(tv.tv_sec)>(tv.tv_sec, 0);
+        tv.tv_usec = std::max<decltype(tv.tv_usec)>(tv.tv_usec, 0);
 		return tv;
 	}
 
