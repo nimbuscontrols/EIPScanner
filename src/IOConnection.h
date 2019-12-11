@@ -39,6 +39,12 @@ namespace eipScanner {
 		cip::CipUdint _o2tAPI;
 		cip::CipUdint _t2oAPI;
 
+		size_t _o2tDataSize;
+		size_t _t2oDataSize;
+
+		bool _o2tFixedSize;
+		bool _t2oFixedSize;
+
 		cip::CipUdint _o2tTimer;
 		cip::CipUdint _t2o_timer;
 

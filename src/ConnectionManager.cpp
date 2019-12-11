@@ -55,6 +55,9 @@ namespace eipScanner {
 			connectionParameters.t2oNetworkConnectionId = ++idCount;
 		}
 
+		auto o2tSize = connectionParameters.o2tNetworkConnectionParams & 0x1ff;
+		auto t2oSize = connectionParameters.t2oNetworkConnectionParams & 0x1ff;
+
 		connectionParameters.connectionPathSize =  (connectionParameters.connectionPath .size() / 2)
 				+ (connectionParameters.connectionPath .size() % 2);
 
@@ -103,6 +106,13 @@ namespace eipScanner {
 			ioConnection->_connectionPath = connectionParameters.connectionPath;
 			ioConnection->_originatorVendorId = connectionParameters.originatorVendorId;
 			ioConnection->_originatorSerialNumber = connectionParameters.originatorSerialNumber;
+
+			ioConnection->_o2tDataSize = o2tSize;
+			ioConnection->_t2oDataSize = t2oSize;
+			ioConnection->_o2tFixedSize = (connectionParameters.o2tNetworkConnectionParams
+						& NetworkConnectionParams::VARIABLE) == 0;
+			ioConnection->_t2oFixedSize = (connectionParameters.t2oNetworkConnectionParams
+						& NetworkConnectionParams::VARIABLE) == 0;
 
 			const eip::CommonPacketItem::Vec &additionalItems = messageRouterResponse.getAdditionalPacketItems();
 			auto o2tSockAddrInfo = std::find_if(additionalItems.begin(), additionalItems.end(),
@@ -215,7 +225,7 @@ namespace eipScanner {
 				CommonPacket commonPacket;
 				commonPacket.expand(recvData);
 
-				// TODO: Check TypeIDs and sequnce of the packages
+				// TODO: Check TypeIDs and sequence of the packages
 				Buffer buffer(commonPacket.getItems().at(0).getData());
 				cip::CipUdint connectionId;
 				buffer >> connectionId;
