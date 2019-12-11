@@ -12,7 +12,7 @@ namespace ra {
 	using utils::Buffer;
 	
 	enum DPIFaultObjectAttributeIds : CipUsint {
-		FULL_INFORMATION = 1
+		FULL_INFORMATION = 0
 	};
 
 	DPIFaultObject::DPIFaultObject(CipUint instanceId, const SessionInfoIf::SPtr &si)
