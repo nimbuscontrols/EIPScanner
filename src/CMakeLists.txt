@@ -32,6 +32,8 @@ set(SOURCE_FILES
         utils/Logger.cpp
         utils/Buffer.cpp
 
+        vendor/ra/DPIFaultObject.cpp
+
         BaseObject.cpp
         ConnectionManager.cpp
         FileObject.cpp

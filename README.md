@@ -33,7 +33,6 @@ $ cmake --build . --target install
 
 To see how to work with the library, look into `examples` directory 
 
-
 ## Authors
 
 Aleksey Timin

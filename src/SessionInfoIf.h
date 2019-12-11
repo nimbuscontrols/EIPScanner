@@ -5,6 +5,7 @@
 #ifndef EIPSCANNER_SESSIONINFOIF_H
 #define EIPSCANNER_SESSIONINFOIF_H
 
+#include <memory>
 #include "eip/EncapsPacket.h"
 #include "sockets/EndPoint.h"
 
