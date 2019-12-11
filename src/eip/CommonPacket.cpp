@@ -38,7 +38,7 @@ namespace eip {
 		Buffer buffer(data);
 		cip::CipUint count;
 		buffer >> count;
-		for (int i = 0; i < count; ++i) {
+		for (int i = 0; i < count && !buffer.empty(); ++i) {
 			cip::CipUint typeId;
 			cip::CipUint length;
 			buffer >> typeId >> length;
@@ -54,8 +54,8 @@ namespace eip {
 		}
 	}
 
-	CommonPacketItem &CommonPacket::operator[](size_t index) {
-		return _items[index];
+	const CommonPacketItem::Vec &CommonPacket::getItems() {
+		return _items;
 	}
 }
 }

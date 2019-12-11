@@ -9,6 +9,7 @@
 #include "cip/EPath.h"
 #include "cip/Services.h"
 #include "cip/MessageRouterResponse.h"
+#include "eip/CommonPacketItem.h"
 #include "SessionInfo.h"
 
 namespace eipScanner {
@@ -18,8 +19,15 @@ namespace eipScanner {
 
 		MessageRouter();
 		virtual ~MessageRouter();
-		virtual cip::MessageRouterResponse sendRequest(SessionInfo::SPtr si, cip::CipUsint service,
+		virtual cip::MessageRouterResponse sendRequest(SessionInfoIf::SPtr si, cip::CipUsint service,
+				const cip::EPath& path, const std::vector<uint8_t>& data,
+				const std::vector<eip::CommonPacketItem>& additionalPacketItems) const;
+
+		virtual cip::MessageRouterResponse sendRequest(SessionInfoIf::SPtr si, cip::CipUsint service,
 				const cip::EPath& path, const std::vector<uint8_t>& data) const;
+
+		virtual cip::MessageRouterResponse sendRequest(SessionInfoIf::SPtr si, cip::CipUsint service,
+													   const cip::EPath& path) const;
 
 	};
 }

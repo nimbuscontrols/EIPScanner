@@ -16,7 +16,7 @@ namespace fileObject {
 			: FileObjectState(FileObjectStateCodes::FILE_LOADED, owner, objectId, messageRouter) {
 	}
 
-	void FileObjectLoadedState::initiateUpload(SessionInfo::SPtr si, EndUploadHandler handler) {
+	void FileObjectLoadedState::initiateUpload(SessionInfoIf::SPtr si, EndUploadHandler handler) {
 		logWithStateName(LogLevel::INFO, "Initiate upload");
 		Buffer buffer;
 		buffer << MAX_TRANSFER_SIZE;
@@ -39,7 +39,7 @@ namespace fileObject {
 		}
 	}
 
-	bool FileObjectLoadedState::transfer(SessionInfo::SPtr si) {
+	bool FileObjectLoadedState::transfer(SessionInfoIf::SPtr si) {
 		return false;
 	}
 }

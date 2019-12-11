@@ -27,7 +27,7 @@ namespace eipScanner {
 
 		if (packet.getStatusCode() != EncapsStatusCodes::SUCCESS) {
 			throw std::runtime_error("Failed to register session in " +
-									 _socket.getHost() + ":" + std::to_string(_socket.getPort()));
+									 _socket.getRemoteEndPoint().toString());
 		}
 
 		_sessionHandle = packet.getSessionHandle();
@@ -44,7 +44,7 @@ namespace eipScanner {
 		Logger(LogLevel::INFO) << "Unregistered session " << _sessionHandle;
 	}
 
-	EncapsPacket SessionInfo::sendAndReceive(const EncapsPacket& packet) {
+	EncapsPacket SessionInfo::sendAndReceive(const EncapsPacket& packet) const {
 		_socket.Send(packet.pack());
 		auto header = _socket.Receive(EncapsPacket::HEADER_SIZE);
 		auto length = EncapsPacket::GetLengthFromHeader(header);
@@ -72,8 +72,8 @@ namespace eipScanner {
 		return _sessionHandle;
 	}
 
-	std::string SessionInfo::getHost() const {
-		return _socket.getHost();
+	sockets::EndPoint SessionInfo::getRemoteEndPoint() const {
+		return _socket.getRemoteEndPoint();
 	}
 
 }

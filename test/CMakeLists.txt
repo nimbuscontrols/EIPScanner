@@ -20,9 +20,12 @@ add_executable(test_eipscanner
         fileObject/TestFileObjectLoadedState.cpp
         fileObject/TestFileObjectUploadInProgressState.cpp
 
+        sockets/TestEndPoint.cpp
+
         utils/TestBuffer.cpp
 
         TestIdentityObject.cpp
+        TestMessageRouter.cpp
         TestParameterObject.cpp
         test.cpp
         )

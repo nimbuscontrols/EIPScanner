@@ -82,7 +82,7 @@ public:
 	}
 
 	TMockMessageRouter::SPtr _messageRouter;
-	SessionInfo::SPtr  _nullSession;
+	SessionInfoIf::SPtr  _nullSession;
 };
 
 TEST_F(TestParameterObject, ShouldReadAllStubDataInConstructor) {

@@ -54,7 +54,7 @@ namespace fileObject {
 		return NAMES_MAP.at(_stateCode);
 	}
 
-	void FileObjectState::SyncState(SessionInfo::SPtr si) {
+	void FileObjectState::SyncState(SessionInfoIf::SPtr si) {
 		auto response = _messageRouter->sendRequest(si, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
 												   cip::EPath(FILE_OBJECT_CLASS_ID, _objectId,
 															  static_cast<cip::CipUint>(FileObjectAttributesCodes::STATE)), {});
@@ -89,11 +89,11 @@ namespace fileObject {
 		}
 	}
 
-	void FileObjectState::initiateUpload(SessionInfo::SPtr si, EndUploadHandler handle) {
+	void FileObjectState::initiateUpload(SessionInfoIf::SPtr si, EndUploadHandler handle) {
 		logWithStateName(LogLevel::ERROR, "Not implemented call");
 	}
 
-	bool FileObjectState::transfer(SessionInfo::SPtr si) {
+	bool FileObjectState::transfer(SessionInfoIf::SPtr si) {
 		logWithStateName(LogLevel::ERROR, "Not implemented call");
 		return false;
 	}

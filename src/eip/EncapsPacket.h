@@ -61,6 +61,13 @@ namespace eip {
 		const std::vector<uint8_t> &getData() const;
 		void setData(const std::vector<uint8_t> &data);
 
+
+	private:
+	public:
+		bool operator==(const EncapsPacket &rhs) const;
+
+		bool operator!=(const EncapsPacket &rhs) const;
+
 	private:
 		EncapsCommands _command;
 		cip::CipUint _length;

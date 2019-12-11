@@ -19,7 +19,7 @@ namespace eip {
 
 		std::vector<uint8_t> pack() const;
 		void expand(const std::vector<uint8_t>& data);
-		CommonPacketItem& operator [](size_t index);
+		const CommonPacketItem::Vec& getItems();
 	private:
 		CommonPacketItem::Vec _items;
 	};

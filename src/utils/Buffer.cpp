@@ -142,5 +142,27 @@ namespace utils {
 		val = cip::CipRevision(majorRevision, minorRevision);
 		return *this;
 	}
+
+	Buffer &Buffer::operator<<(sockets::EndPoint v) {
+		std::vector<uint8_t> zeros(8);
+		sockaddr_in addr = v.getAddr();
+		return *this << htons(static_cast<cip::CipInt>(addr.sin_family))
+					 << addr.sin_port
+					 << addr.sin_addr.s_addr
+					 << zeros;
+	}
+
+	Buffer &Buffer::operator>>(sockets::EndPoint &val) {
+		std::vector<uint8_t> zeros(8);
+		sockaddr_in addr{0};
+		*this >> reinterpret_cast<cip::CipInt&>(addr.sin_family)
+			 >> addr.sin_port
+			 >> addr.sin_addr.s_addr
+			 >> zeros;
+
+		addr.sin_family =  htons(addr.sin_family);
+		val = sockets::EndPoint(addr);
+		return *this;
+	}
 }
 }

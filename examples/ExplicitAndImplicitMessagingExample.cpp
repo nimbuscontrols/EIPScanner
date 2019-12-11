@@ -81,6 +81,7 @@ int main() {
 	parameters.o2tNetworkConnectionParams |= NetworkConnectionParams::SCHEDULED_PRIORITY;
 	parameters.o2tNetworkConnectionParams |= 32; //size of Assm150 = 32
 
+	parameters.originatorSerialNumber = 0x12345;
 	parameters.o2tRPI = 1000000;
 	parameters.t2oRPI = 1000000;
 	parameters.transportTypeTrigger |= NetworkConnectionParams::CLASS1;

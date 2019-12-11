@@ -35,7 +35,7 @@ namespace eipScanner {
 	};
 
 	ParameterObject::ParameterObject(cip::CipUint id, bool fullAttributes,
-									 const SessionInfo::SPtr &si)
+									 const SessionInfoIf::SPtr &si)
 		: ParameterObject(id, fullAttributes, si, std::make_shared<MessageRouter>()) {
 	}
 
@@ -54,7 +54,7 @@ namespace eipScanner {
 	}
 
 	ParameterObject::ParameterObject(cip::CipUint instanceId, bool fullAttributes,
-			const SessionInfo::SPtr &si,
+			const SessionInfoIf::SPtr &si,
 			const MessageRouter::SPtr& messageRouter)
 		:  BaseObject(CLASS_ID, instanceId)
 		, _name{""}
@@ -160,7 +160,7 @@ namespace eipScanner {
 		}
 	}
 
-	void ParameterObject::updateValue(const SessionInfo::SPtr& si) {
+	void ParameterObject::updateValue(const SessionInfoIf::SPtr& si) {
 		auto response = _messageRouter->sendRequest(si,
 								ServiceCodes::GET_ATTRIBUTE_SINGLE,
 								EPath(CLASS_ID, getInstanceId(),

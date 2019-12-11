@@ -22,6 +22,10 @@ namespace eipScanner {
 			, _t2oNetworkConnectionId{0}
 			, _o2tAPI{0}
 			, _t2oAPI{0}
+			, _o2tDataSize{0}
+			, _t2oDataSize{0}
+			, _o2tFixedSize(true)
+			, _t2oFixedSize(true)
 			, _o2tTimer{0}
 			, _t2o_timer{0}
 			, _connectionTimeoutMultiplier{0}
@@ -56,7 +60,6 @@ namespace eipScanner {
 	}
 
 	void IOConnection::notifyReceiveData(const std::vector<uint8_t> &data) {
-		_connectionTimeoutCount = 0;
 		Buffer buffer(data);
 		cip::CipUdint runtimeHeader = 0;
 		cip::CipUint sequenceValueCount = 0;
@@ -70,9 +73,16 @@ namespace eipScanner {
 			buffer >> sequenceValueCount;
 		}
 
-
-		_receiveDataHandle(runtimeHeader, sequenceValueCount,
-				std::vector<uint8_t>(data.begin() + buffer.pos(), data.end()));
+		std::vector<uint8_t> ioData(data.begin() + buffer.pos(), data.end());
+		if (_t2oFixedSize && ioData.size() != _t2oDataSize) {
+			Logger(LogLevel::WARNING) << "Connection T2O_ID=" << _t2oNetworkConnectionId
+				<< " has fixed size " << _t2oDataSize << " bytes but " << ioData.size()
+				<< " bytes were received. Ignore this data.";
+		} else {
+			_connectionTimeoutCount = 0;
+			_receiveDataHandle(runtimeHeader, sequenceValueCount,
+							   ioData);
+		}
 	}
 
 	bool IOConnection::notifyTick(std::chrono::milliseconds period) {
@@ -94,7 +104,7 @@ namespace eipScanner {
 			Buffer buffer;
 			if ((_transportTypeTrigger & NetworkConnectionParams::CLASS1) > 0
 				|| (_transportTypeTrigger & NetworkConnectionParams::CLASS3) > 0) {
-				buffer << _sequenceValueCount++;
+				buffer << ++_sequenceValueCount;
 			}
 
 			if (_o2tRealTimeFormat) {
@@ -102,11 +112,17 @@ namespace eipScanner {
 				buffer << header;
 			}
 
-			buffer << _outputData;
-			commonPacket << factory.createConnectedDataItem(buffer.data());
-
-			_socket->Send(commonPacket.pack());
 			_o2tTimer = 0;
+			if (_o2tFixedSize && _outputData.size() != _o2tDataSize)  {
+				Logger(LogLevel::WARNING) << "Connection O2T_ID=" << _o2tNetworkConnectionId
+										  << " has fixed size " << _o2tDataSize << " bytes but " << _outputData.size()
+										  << " bytes are to send. Don't send this data.";
+			} else {
+				buffer << _outputData;
+				commonPacket << factory.createConnectedDataItem(buffer.data());
+
+				_socket->Send(commonPacket.pack());
+			}
 		}
 
 		return true;

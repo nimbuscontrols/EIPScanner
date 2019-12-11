@@ -24,6 +24,7 @@ set(SOURCE_FILES
         fileObject/FileObjectUploadInProgressState.cpp
 
         sockets/BaseSocket.cpp
+        sockets/EndPoint.cpp
         sockets/TCPSocket.cpp
         sockets/UDPBoundSocket.cpp
         sockets/UDPSocket.cpp

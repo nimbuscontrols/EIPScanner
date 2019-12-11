@@ -20,11 +20,11 @@ namespace eipScanner {
 		, _productName("") {
 	}
 
-	IdentityObject::IdentityObject(cip::CipUint instanceId, const SessionInfo::SPtr &si)
+	IdentityObject::IdentityObject(cip::CipUint instanceId, const SessionInfoIf::SPtr &si)
 		: IdentityObject(instanceId, si, std::make_shared<MessageRouter>()){
 	}
 
-	IdentityObject::IdentityObject(cip::CipUint instanceId, const SessionInfo::SPtr &si, const MessageRouter::SPtr &messageRouter)
+	IdentityObject::IdentityObject(cip::CipUint instanceId, const SessionInfoIf::SPtr &si, const MessageRouter::SPtr &messageRouter)
 		: BaseObject(CLASS_ID, instanceId) {
 
 		auto response = messageRouter->sendRequest(

@@ -15,8 +15,8 @@ namespace fileObject {
 		FileObjectUploadInProgressState(FileObject &owner, cip::CipUint objectId, MessageRouter::SPtr messageRouter,
 										cip::CipUdint fileSize, cip::CipUsint transferSize, EndUploadHandler handler);
 
-		void initiateUpload(SessionInfo::SPtr si, EndUploadHandler handle) override;
-		bool transfer(SessionInfo::SPtr si) override;
+		void initiateUpload(SessionInfoIf::SPtr si, EndUploadHandler handle) override;
+		bool transfer(SessionInfoIf::SPtr si) override;
 
 	private:
 		cip::CipUdint _fileSize;

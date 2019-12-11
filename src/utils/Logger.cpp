@@ -9,7 +9,7 @@
 namespace eipScanner {
 namespace utils {
 	LogLevel Logger::_globalLogLevel = LogLevel::INFO;
-	LogAppender::UPtr Logger::_appender = std::make_unique<ConsoleAppender>();
+	LogAppenderIf::UPtr Logger::_appender = std::make_unique<ConsoleAppender>();
 
 	Logger::Logger(LogLevel logLevel): _logLevel{logLevel} {
 
@@ -37,7 +37,7 @@ namespace utils {
 		_globalLogLevel = level;
 	}
 
-	void Logger::setAppender(LogAppender::UPtr appender) {
+	void Logger::setAppender(LogAppenderIf::UPtr appender) {
 		_appender = std::move(appender);
 	}
 

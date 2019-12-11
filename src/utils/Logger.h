@@ -20,17 +20,17 @@ namespace utils {
 		TRACE
 	};
 
-	class LogAppender {
+	class LogAppenderIf {
 	public:
-		using UPtr = std::unique_ptr<LogAppender>;
-		virtual ~LogAppender() = default;
+		using UPtr = std::unique_ptr<LogAppenderIf>;
+		virtual ~LogAppenderIf() = default;
 
 		virtual void print(const std::string& msg) = 0;
 	};
 
-	class ConsoleAppender : public LogAppender {
+	class ConsoleAppender : public LogAppenderIf {
 	public:
-		using UPtr = std::unique_ptr<LogAppender>;
+		using UPtr = std::unique_ptr<LogAppenderIf>;
 		void print(const std::string& msg) override;
 	};
 
@@ -38,7 +38,7 @@ namespace utils {
 	class Logger {
 	public:
 		static void setLogLevel(LogLevel level);
-		static void setAppender(LogAppender::UPtr appender);
+		static void setAppender(LogAppenderIf::UPtr appender);
 
 		Logger(LogLevel level);
 
@@ -52,7 +52,7 @@ namespace utils {
 
 	private:
 		static LogLevel _globalLogLevel;
-		static LogAppender::UPtr _appender;
+		static LogAppenderIf::UPtr _appender;
 
 		LogLevel _logLevel;
 		std::ostringstream _stream;

@@ -52,16 +52,16 @@ namespace eipScanner {
 	public:
 		using UPtr = std::unique_ptr<FileObject>;
 		
-		FileObject(cip::CipUint instanceId, SessionInfo::SPtr si, MessageRouter::SPtr messageRouter);
+		FileObject(cip::CipUint instanceId, SessionInfoIf::SPtr si, MessageRouter::SPtr messageRouter);
 		~FileObject();
 		std::unique_ptr<fileObject::FileObjectState>&  getState();
-		void beginUpload(SessionInfo::SPtr si, fileObject::EndUploadHandler handle);
+		void beginUpload(SessionInfoIf::SPtr si, fileObject::EndUploadHandler handle);
 
 		/**
 		 * handle active download/upload transfers
 		 * @return true if downloading/uploading is in progress
 		 */
-		bool handleTransfers(SessionInfo::SPtr si);
+		bool handleTransfers(SessionInfoIf::SPtr si);
 
 
 	private:

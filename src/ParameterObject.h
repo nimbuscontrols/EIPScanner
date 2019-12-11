@@ -33,9 +33,9 @@ public:
 	 * @param fullAttributes if true, then read all the attributes
 	 * @param si
 	 */
-	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfo::SPtr& si);
+	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfoIf::SPtr& si);
 
-	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfo::SPtr& si, const MessageRouter::SPtr&);
+	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfoIf::SPtr& si, const MessageRouter::SPtr&);
 
 	/**
 	 * Create an empty instance without any EIP requests
@@ -51,7 +51,7 @@ public:
 	 * Updates value from the instance
 	 * @param si
 	 */
-	void updateValue(const SessionInfo::SPtr& si);
+	void updateValue(const SessionInfoIf::SPtr& si);
 
 	template <typename T>
 	T getActualValue() const {

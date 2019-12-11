@@ -15,7 +15,7 @@ namespace eipScanner {
 
 
 
-	FileObject::FileObject(cip::CipUint instanceId, SessionInfo::SPtr si, MessageRouter::SPtr messageRouter)
+	FileObject::FileObject(cip::CipUint instanceId, SessionInfoIf::SPtr si, MessageRouter::SPtr messageRouter)
 		: BaseObject(fileObject::FILE_OBJECT_CLASS_ID, instanceId)
 		, _state(new fileObject::FileObjectState(FileObjectStateCodes::UNKNOWN, *this, instanceId, messageRouter)) {
 		_state->SyncState(si);
@@ -27,11 +27,11 @@ namespace eipScanner {
 		return _state;
 	}
 
-	void FileObject::beginUpload(SessionInfo::SPtr si, fileObject::EndUploadHandler handle) {
+	void FileObject::beginUpload(SessionInfoIf::SPtr si, fileObject::EndUploadHandler handle) {
 		_state->initiateUpload(si, handle);
 	}
 
-	bool FileObject::handleTransfers(SessionInfo::SPtr si) {
+	bool FileObject::handleTransfers(SessionInfoIf::SPtr si) {
 		return _state->transfer(si);
 	}
 }

@@ -20,15 +20,12 @@ namespace sockets {
 		using SPtr = std::shared_ptr<UDPSocket>;
 		using UPtr = std::unique_ptr<UDPSocket>;
 
+		explicit UDPSocket(EndPoint endPoint);
 		UDPSocket(std::string host, int port);
 		virtual ~UDPSocket();
 
 		void Send(const std::vector<uint8_t>& data) const override;
-		std::vector<uint8_t> Receive(size_t size) override ;
-
-
-	protected:
-		struct sockaddr_in _addr;
+		std::vector<uint8_t> Receive(size_t size) const override ;
 	};
 }
 }

@@ -16,8 +16,16 @@ namespace sockets {
 	using eipScanner::utils::Logger;
 	using eipScanner::utils::LogLevel;
 
+
+
+
 	UDPSocket::UDPSocket(std::string host, int port)
-			: BaseSocket{host, port} {
+		: UDPSocket(EndPoint(host, port)){
+
+	}
+
+	UDPSocket::UDPSocket(EndPoint endPoint)
+			: BaseSocket(EndPoint(std::move(endPoint))) {
 
 		_sockedFd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 		if (_sockedFd < 0) {
@@ -25,16 +33,6 @@ namespace sockets {
 		}
 
 		Logger(LogLevel::DEBUG) << "Opened socket fd=" << _sockedFd;
-
-		Logger(LogLevel::DEBUG) << "Parsing IP from " << _host;
-
-		if (inet_aton(_host.c_str(), &_addr.sin_addr) < 0) {
-			close(_sockedFd);
-			throw std::system_error(errno, std::generic_category());
-		}
-
-		_addr.sin_family = AF_INET;
-		_addr.sin_port = htons(_port);
 	}
 
 	UDPSocket::~UDPSocket() {
@@ -44,16 +42,17 @@ namespace sockets {
 	}
 
 	void UDPSocket::Send(const std::vector <uint8_t> &data) const {
-		Logger(LogLevel::TRACE) << "Send " << data.size() << " bytes from TCP socket #" << _sockedFd << ".";
+		Logger(LogLevel::TRACE) << "Send " << data.size() << " bytes from UDP socket #" << _sockedFd << ".";
 
+		auto addr = _remoteEndPoint.getAddr();
 		int count = sendto(_sockedFd, data.data(), data.size(), 0,
-				(struct sockaddr *)&_addr, sizeof(_addr));
+				(struct sockaddr *)&addr, sizeof(addr));
 		if (count < data.size()) {
 			throw std::system_error(errno, std::generic_category());
 		}
 	}
 
-	std::vector<uint8_t> UDPSocket::Receive(size_t size) {
+	std::vector<uint8_t> UDPSocket::Receive(size_t size) const {
 		std::vector<uint8_t> recvBuffer(size);
 
 		auto len = recvfrom(_sockedFd, recvBuffer.data(), recvBuffer.size(), 0, NULL, NULL);
