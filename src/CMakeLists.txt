@@ -32,6 +32,7 @@ set(SOURCE_FILES
         utils/Logger.cpp
         utils/Buffer.cpp
 
+        vendor/ra/DPIFaultManager.cpp
         vendor/ra/DPIFaultObject.cpp
 
         BaseObject.cpp

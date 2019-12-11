@@ -25,6 +25,7 @@ add_executable(test_eipscanner
 
         utils/TestBuffer.cpp
 
+        vendor/ra/TestDPIFaultManager.cpp
         vendor/ra/TestDPIFaultObject.cpp
 
         TestIdentityObject.cpp
