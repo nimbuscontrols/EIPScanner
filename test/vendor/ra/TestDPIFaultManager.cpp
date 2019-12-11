@@ -15,7 +15,7 @@ public:
 			0x01,0x0,		// fault code
 			0x02,			// DSI port
 			0x03,			// DSI device
-			5, 0x0, 'E', 'R', 'R', 'O', 'R',			// fault text
+			'E', 'R', 'R', 'O', 'R', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',  // fault text
 			0x01, 0x02, 0x03, 0x4, 0x5, 0x6, 0x7,0x8,	// timer value
 			1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 // flags
 	};
@@ -123,10 +123,10 @@ TEST_F(TestDPIFaultManager, ShouldGenerateEventForEachNewFaultAndWhenCleanTheQue
 	response.setData(FULL_INFORMATION_DATA);
 
 	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
-											 cip::EPath(0x97, 1, 1))).WillOnce(::testing::Return(response));
+											 cip::EPath(0x97, 1, 0))).WillOnce(::testing::Return(response));
 
 	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
-											 cip::EPath(0x97, 2, 1))).WillOnce(::testing::Return(response));
+											 cip::EPath(0x97, 2, 0))).WillOnce(::testing::Return(response));
 
 	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::SET_ATTRIBUTE_SINGLE,
 											 cip::EPath(0x97, 0, 3),

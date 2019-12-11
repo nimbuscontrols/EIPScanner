@@ -17,7 +17,7 @@ public:
 		0x01,0x0,		// fault code
 		0x02,			// DSI port
 		0x03,			// DSI device
-		5, 0x0, 'E', 'R', 'R', 'O', 'R',			// fault text
+		'E', 'R', 'R', 'O', 'R', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',  // fault text
 		0x01, 0x02, 0x03, 0x4, 0x5, 0x6, 0x7,0x8,	// timer value
 		1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 // flags
 	};
@@ -38,7 +38,7 @@ TEST_F(TestDPIFaultObject, ShouldReadAllDataInConstructor) {
 	EXPECT_CALL(*_messageRouter, sendRequest(
 			_nullSession,
 			cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
-			cip::EPath(0x97, OBJECT_ID, 1)
+			cip::EPath(0x97, OBJECT_ID, 0)
 	)).WillOnce(::testing::Return(response));
 
 	DPIFaultObject faultObject(OBJECT_ID, _nullSession, _messageRouter);
@@ -47,7 +47,7 @@ TEST_F(TestDPIFaultObject, ShouldReadAllDataInConstructor) {
 	EXPECT_EQ(1, fullInformation.faultCode);
 	EXPECT_EQ(2, fullInformation.dsiPort);
 	EXPECT_EQ(3, fullInformation.dsiDeviceObject);
-	EXPECT_EQ("ERROR", fullInformation.faultText.toStdString());
+	EXPECT_EQ("ERROR           ", fullInformation.faultText.toStdString());
 	EXPECT_EQ(0x0807060504030201, fullInformation.timerValue);
 	EXPECT_TRUE(fullInformation.isValidData);
 	EXPECT_TRUE(fullInformation.isRealTime);
@@ -61,7 +61,7 @@ TEST_F(TestDPIFaultObject, ShouldThrowExecptionIfFailedToGetData) {
 	EXPECT_CALL(*_messageRouter, sendRequest(
 			_nullSession,
 			cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
-			cip::EPath(0x97, OBJECT_ID, 1)
+			cip::EPath(0x97, OBJECT_ID, 0)
 	)).WillOnce(::testing::Return(response));
 
 	EXPECT_THROW(DPIFaultObject(OBJECT_ID, _nullSession, _messageRouter), std::runtime_error);

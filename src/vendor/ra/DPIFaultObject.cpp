@@ -34,12 +34,14 @@ namespace ra {
 
 		if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
 			Buffer buffer(response.getData());
-
+			std::vector<uint8_t> faultText(16);
 			buffer >> _fullInformation.faultCode
 				>> _fullInformation.dsiPort
 				>> _fullInformation.dsiDeviceObject
-				>> _fullInformation.faultText
+				>> faultText
 				>> _fullInformation.timerValue;
+
+			_fullInformation.faultText = CipString(faultText);
 
 			std::vector<cip::CipBool> flags(16);
 			buffer >> flags;
