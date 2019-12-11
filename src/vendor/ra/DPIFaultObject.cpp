@@ -15,6 +15,11 @@ namespace ra {
 		FULL_INFORMATION = 0
 	};
 
+	enum FaultTimeStampFlags : CipUint {
+		VALID_DATA = 1,
+		REAL_TIME = 1 << 1
+	};
+
 	DPIFaultObject::DPIFaultObject(CipUint instanceId, const SessionInfoIf::SPtr &si)
 			: DPIFaultObject(instanceId, si, std::make_shared<MessageRouter>()) {
 
@@ -43,10 +48,10 @@ namespace ra {
 
 			_fullInformation.faultText = CipString(faultText);
 
-			std::vector<cip::CipBool> flags(16);
+			cip::CipUint flags;
 			buffer >> flags;
-			_fullInformation.isValidData = flags[0];
-			_fullInformation.isRealTime = flags[1];
+			_fullInformation.isValidData = flags & VALID_DATA;
+			_fullInformation.isRealTime = flags & REAL_TIME;
 		} else {
 			logGeneralAndAdditionalStatus(response);
 			throw std::runtime_error("Failed to read FULL_INFORMATION attribute");

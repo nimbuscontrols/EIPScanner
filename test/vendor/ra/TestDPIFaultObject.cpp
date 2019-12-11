@@ -19,7 +19,7 @@ public:
 		0x03,			// DSI device
 		'E', 'R', 'R', 'O', 'R', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',  // fault text
 		0x01, 0x02, 0x03, 0x4, 0x5, 0x6, 0x7,0x8,	// timer value
-		1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 // flags
+		0x3, 0x0
 	};
 
 	void SetUp() override {
