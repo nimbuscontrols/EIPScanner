@@ -70,12 +70,21 @@ namespace ra {
 			if (faultNumber > 0) {
 				Logger(LogLevel::INFO) << "There are " << faultNumber << " faults in the queue";
 
+				bool hasNewFault = false;
 				for (int i = 1; i <= faultNumber; ++i) {
-					_newFaultHandler(DPIFaultObject(i, si, messageRouter));
+					DPIFaultObject faultObject(i, si, messageRouter);
+					if (faultObject.getFullInformation().faultCode == 0) {
+						break;
+					}
+
+					hasNewFault = true;
+					_newFaultHandler(faultObject);
 				}
 
-				Logger(LogLevel::INFO) << "All faults are read. Clean the queue";
-				writeCommand(DPIFaultManagerCommands::CLEAR_FAULT_QUEUE, si, messageRouter);
+				if (hasNewFault) {
+					Logger(LogLevel::INFO) << "All faults are read. Clean the queue";
+					writeCommand(DPIFaultManagerCommands::CLEAR_FAULT_QUEUE, si, messageRouter);
+				}
 			}
 
 		} else {
