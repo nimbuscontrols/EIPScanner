@@ -25,10 +25,14 @@ namespace powerFlex525 {
 		NUMBER_OF_RECORDED_FAULTS = 6
 	};
 
-	DPIFaultManager::DPIFaultManager()
+	DPIFaultManager::DPIFaultManager() : DPIFaultManager(true) {
+	}
+
+	DPIFaultManager::DPIFaultManager(bool clearFaults)
 		: _newFaultHandler([](auto){})
 		, _trippedDeviceHandler([](auto){})
-		, _lastTrippedState(-1) {
+		, _lastTrippedState(-1)
+		, _clearFaults(clearFaults) {
 	}
 
 	void DPIFaultManager::setNewFaultListener(DPIFaultManager::NewFaultHandler handler) {
@@ -70,25 +74,25 @@ namespace powerFlex525 {
 			buffer >> faultNumber;
 
 			if (faultNumber > 0) {
-				Logger(LogLevel::INFO) << "There are " << faultNumber << " faults in the queue";
-
-				bool hasNewFault = false;
+				int realFaultCount = 0;
 				for (int i = 1; i <= faultNumber; ++i) {
 					DPIFaultObject faultObject(i, si, messageRouter);
 					if (faultObject.getFullInformation().faultCode == 0) {
 						break;
 					}
 
-					hasNewFault = true;
+					if (_clearFaults) {
+						writeCommand(DPIFaultManagerCommands::CLEAR_FAULT, si, messageRouter);
+					}
+
+					realFaultCount++;
 					_newFaultHandler(faultObject);
 				}
 
-				if (hasNewFault) {
-					Logger(LogLevel::INFO) << "All faults are read. Clean the queue";
-					writeCommand(DPIFaultManagerCommands::CLEAR_FAULT_QUEUE, si, messageRouter);
+				if (realFaultCount > 0) {
+					Logger(LogLevel::INFO) << "There read " << realFaultCount << " faults in the queue";
 				}
 			}
-
 		} else {
 			logGeneralAndAdditionalStatus(response);
 			throw std::runtime_error("Failed to read NUMBER_OF_RECORDED_FAULTS attribute");

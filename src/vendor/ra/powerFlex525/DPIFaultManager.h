@@ -27,6 +27,7 @@ namespace powerFlex525 {
 		using TrippedDeviceHandler = std::function<void(bool)>;
 
 		DPIFaultManager();
+		explicit DPIFaultManager(bool clearFaults);
 		void setNewFaultListener(NewFaultHandler handler);
 		void setTrippedDeviceListener(TrippedDeviceHandler handler);
 		void handleFaultObjects(const SessionInfoIf::SPtr& si);
@@ -39,6 +40,7 @@ namespace powerFlex525 {
 		NewFaultHandler _newFaultHandler;
 		TrippedDeviceHandler _trippedDeviceHandler;
 		cip::CipUsint _lastTrippedState;
+		bool _clearFaults;
 	};
 
 }

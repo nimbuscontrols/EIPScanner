@@ -130,7 +130,9 @@ TEST_F(TestDPIFaultManager, ShouldGenerateEventForEachNewFaultAndWhenCleanTheQue
 
 	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::SET_ATTRIBUTE_SINGLE,
 											 cip::EPath(0x97, 0, 3),
-											 std::vector<uint8_t >{2})).WillOnce(::testing::Return(response));
+											 std::vector<uint8_t >{1}))
+											 .WillOnce(::testing::Return(response))
+											 .WillOnce(::testing::Return(response));
 
 	manager.handleFaultObjects(_nullSession, _messageRouter);
 	EXPECT_EQ(2, faultObjects.size());
@@ -174,4 +176,36 @@ TEST_F(TestDPIFaultManager, ShouldThrowExceptionIfFailedToReadNumberOfFaults) {
 
 	EXPECT_THROW(manager.handleFaultObjects(_nullSession, _messageRouter),
 				 std::runtime_error);
+}
+
+TEST_F(TestDPIFaultManager, ShouldGenerateEventForEachNewFaultAndNotCleanFaults) {
+	DPIFaultManager manager(false);
+
+	std::vector<DPIFaultObject> faultObjects;
+	manager.setNewFaultListener([&faultObjects](const DPIFaultObject& object) {
+		faultObjects.push_back(object);
+	});
+
+	cip::MessageRouterResponse response;
+	response.setData({2, 0});
+
+	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+											 cip::EPath(0x97, 0, 6))).WillOnce(::testing::Return(response));
+
+	response.setData(FULL_INFORMATION_DATA);
+
+	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+											 cip::EPath(0x97, 1, 0))).WillOnce(::testing::Return(response));
+
+	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+											 cip::EPath(0x97, 2, 0))).WillOnce(::testing::Return(response));
+
+	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::SET_ATTRIBUTE_SINGLE,
+											 cip::EPath(0x97, 0, 3),
+											 std::vector<uint8_t >{1})).Times(0);
+
+	manager.handleFaultObjects(_nullSession, _messageRouter);
+	EXPECT_EQ(2, faultObjects.size());
+	EXPECT_EQ(1, faultObjects[0].getFullInformation().faultCode);
+	EXPECT_EQ(1, faultObjects[1].getFullInformation().faultCode);
 }
