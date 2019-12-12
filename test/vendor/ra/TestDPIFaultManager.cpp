@@ -138,6 +138,31 @@ TEST_F(TestDPIFaultManager, ShouldGenerateEventForEachNewFaultAndWhenCleanTheQue
 	EXPECT_EQ(1, faultObjects[1].getFullInformation().faultCode);
 }
 
+TEST_F(TestDPIFaultManager, ShouldStopReadingFaultsIfHasFaultCodeZero) {
+	DPIFaultManager manager;
+
+	std::vector<DPIFaultObject> faultObjects;
+	manager.setNewFaultListener([&faultObjects](const DPIFaultObject &object) {
+		faultObjects.push_back(object);
+	});
+
+	cip::MessageRouterResponse response;
+	response.setData({2, 0});
+
+	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+											 cip::EPath(0x97, 0, 6))).WillOnce(::testing::Return(response));
+
+	auto data = FULL_INFORMATION_DATA;
+	data[0] = 0;
+	response.setData(data);
+
+	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+											 cip::EPath(0x97, 1, 0))).WillOnce(::testing::Return(response));
+
+	manager.handleFaultObjects(_nullSession, _messageRouter);
+	EXPECT_TRUE(faultObjects.empty());
+}
+
 TEST_F(TestDPIFaultManager, ShouldThrowExceptionIfFailedToReadNumberOfFaults) {
 	DPIFaultManager manager;
 
