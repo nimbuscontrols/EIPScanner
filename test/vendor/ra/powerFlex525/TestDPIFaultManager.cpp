@@ -4,10 +4,10 @@
 
 #include <gtest/gtest.h>
 #include "Mocks.h"
-#include "vendor/ra/DPIFaultManager.h"
+#include "vendor/ra/powerFlex525/DPIFaultManager.h"
 
 using namespace eipScanner;
-using namespace eipScanner::vendor::ra;
+using namespace eipScanner::vendor::ra::powerFlex525;
 
 class TestDPIFaultManager : public ::testing::Test {
 public:

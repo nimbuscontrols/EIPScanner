@@ -12,6 +12,7 @@
 namespace eipScanner {
 namespace vendor {
 namespace ra {
+namespace powerFlex525 {
 
 	enum DPIFaultManagerCommands : cip::CipUsint {
 		NO_OPERATION = 0,
@@ -40,6 +41,7 @@ namespace ra {
 		cip::CipUsint _lastTrippedState;
 	};
 
+}
 }
 }
 }

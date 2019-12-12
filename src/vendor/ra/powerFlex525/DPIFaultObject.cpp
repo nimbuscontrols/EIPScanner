@@ -8,9 +8,11 @@
 namespace eipScanner {
 namespace vendor {
 namespace ra {
+namespace powerFlex525 {
+
 	using namespace cip;
 	using utils::Buffer;
-	
+
 	enum DPIFaultObjectAttributeIds : CipUsint {
 		FULL_INFORMATION = 0
 	};
@@ -57,6 +59,7 @@ namespace ra {
 			throw std::runtime_error("Failed to read FULL_INFORMATION attribute");
 		}
 	}
+}
 }
 }
 }

@@ -13,6 +13,7 @@
 namespace eipScanner {
 namespace vendor {
 namespace ra {
+namespace powerFlex525 {
 
 	class DPIFaultObject : public BaseObject {
 	public:
@@ -48,5 +49,5 @@ namespace ra {
 }
 }
 }
-
+}
 #endif  // EIPSCANNER_VENDOR_DIPFAULTOBJECT_H

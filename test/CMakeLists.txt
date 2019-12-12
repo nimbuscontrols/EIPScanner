@@ -25,8 +25,8 @@ add_executable(test_eipscanner
 
         utils/TestBuffer.cpp
 
-        vendor/ra/TestDPIFaultManager.cpp
-        vendor/ra/TestDPIFaultObject.cpp
+        vendor/ra/powerFlex525/TestDPIFaultManager.cpp
+        vendor/ra/powerFlex525/TestDPIFaultObject.cpp
 
         TestIdentityObject.cpp
         TestMessageRouter.cpp
