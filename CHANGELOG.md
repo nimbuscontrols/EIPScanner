@@ -9,6 +9,7 @@
 **Bugs**:
 
 * fix implicit messaging on OSX and check connection sizes #10, @flipback
+* fix wrong encoding float and double types #12, @flipback
 
 # Release 1.0.0 (2019-12-08)
 
