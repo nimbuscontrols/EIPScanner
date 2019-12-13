@@ -35,6 +35,9 @@ namespace utils {
 		Buffer& operator << (uint32_t val);
 		Buffer& operator >> (uint32_t& val);
 
+		Buffer& operator << (uint64_t val);
+		Buffer& operator >> (uint64_t& val);
+
 		Buffer& operator << (int32_t val);
 		Buffer& operator >> (int32_t& val);
 

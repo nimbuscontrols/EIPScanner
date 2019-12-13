@@ -87,6 +87,32 @@ namespace utils {
 		return *this >> reinterpret_cast<uint32_t&>(val);
 	}
 
+	Buffer &Buffer::operator<<(uint64_t val) {
+		_buffer.push_back(static_cast<uint8_t>(val));
+		_buffer.push_back(static_cast<uint8_t>(val >> 8));
+		_buffer.push_back(static_cast<uint8_t>(val >> 16));
+		_buffer.push_back(static_cast<uint8_t>(val >> 24));
+		_buffer.push_back(static_cast<uint8_t>(val >> 32));
+		_buffer.push_back(static_cast<uint8_t>(val >> 40));
+		_buffer.push_back(static_cast<uint8_t>(val >> 48));
+		_buffer.push_back(static_cast<uint8_t>(val >> 56));
+
+		return *this;
+	}
+
+	Buffer &Buffer::operator>>(uint64_t &val) {
+		val = static_cast<uint64_t>(_buffer[_position++]);
+		val += static_cast<uint64_t>(_buffer[_position++]) << 8;
+		val += static_cast<uint64_t>(_buffer[_position++]) << 16;
+		val += static_cast<uint64_t>(_buffer[_position++]) << 24;
+		val += static_cast<uint64_t>(_buffer[_position++]) << 32;
+		val += static_cast<uint64_t>(_buffer[_position++]) << 40;
+		val += static_cast<uint64_t>(_buffer[_position++]) << 48;
+		val += static_cast<uint64_t>(_buffer[_position++]) << 56;
+
+		return *this;
+	}
+
 	Buffer &Buffer::operator<<(float val) {
 		return *this << static_cast<uint16_t>(val);
 	}
@@ -164,5 +190,6 @@ namespace utils {
 		val = sockets::EndPoint(addr);
 		return *this;
 	}
+
 }
 }

@@ -1,5 +1,6 @@
 enable_testing()
 include_directories("${CMAKE_SOURCE_DIR}/src")
+include_directories("${CMAKE_SOURCE_DIR}/test")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 find_package(GTest REQUIRED)
@@ -24,11 +25,15 @@ add_executable(test_eipscanner
 
         utils/TestBuffer.cpp
 
+        vendor/ra/powerFlex525/TestDPIFaultManager.cpp
+        vendor/ra/powerFlex525/TestDPIFaultObject.cpp
+
         TestIdentityObject.cpp
         TestMessageRouter.cpp
         TestParameterObject.cpp
         test.cpp
         )
+
 message(STATUS ${GTEST_BOTH_LIBRARIES})
 message(STATUS ${GMOCK_BOTH_LIBRARIES})
 

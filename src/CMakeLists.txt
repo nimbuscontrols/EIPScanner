@@ -32,6 +32,9 @@ set(SOURCE_FILES
         utils/Logger.cpp
         utils/Buffer.cpp
 
+        vendor/ra/powerFlex525/DPIFaultManager.cpp
+        vendor/ra/powerFlex525/DPIFaultObject.cpp
+
         BaseObject.cpp
         ConnectionManager.cpp
         FileObject.cpp

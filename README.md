@@ -10,10 +10,17 @@ Free implementation of Ethernet/IP scanner in C++
 ## Features
 
 * Explicit messaging
-* Implicit messaging
+* Implicit messaging (only point-to-point)
+
+CIP Standard objects:
+
 * File Object (upload only)
 * Parameter Object (read only)
 * Identity Object
+
+Vendor specific objects:
+
+* RA DPI Fault Object 
 
 ## Requirements
 
@@ -32,7 +39,6 @@ $ cmake --build . --target install
 ## Usage
 
 To see how to work with the library, look into `examples` directory 
-
 
 ## Authors
 
