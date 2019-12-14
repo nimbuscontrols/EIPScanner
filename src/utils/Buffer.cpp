@@ -114,19 +114,19 @@ namespace utils {
 	}
 
 	Buffer &Buffer::operator<<(float val) {
-		return *this << static_cast<uint16_t>(val);
+		return *this << reinterpret_cast<uint32_t&>(val);
 	}
 
 	Buffer &Buffer::operator>>(float &val)  {
-		return *this >> reinterpret_cast<uint16_t&>(val);
+		return *this >> reinterpret_cast<uint32_t&>(val);
 	}
 
 	Buffer &Buffer::operator<<(double val) {
-		return *this << static_cast<uint32_t>(val);
+		return *this << reinterpret_cast<uint64_t&>(val);
 	}
 
 	Buffer &Buffer::operator>>(double &val) {
-		return *this >> reinterpret_cast<uint32_t&>(val);
+		return *this >> reinterpret_cast<uint64_t&>(val);
 	}
 
 	Buffer &Buffer::operator<<(const std::vector<uint8_t> &val) {
