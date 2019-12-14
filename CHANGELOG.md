@@ -5,6 +5,7 @@
 * add Identity Object #5, @flipback
 * add utils::LogAppenderIf to customise logging #5, @flipback
 * add support of LWORD type #6, @flipback
+* add support of PowerFlex525 DIP Fault Object #6, @flipback
 
 **Bugs**:
 
