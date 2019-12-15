@@ -12,8 +12,8 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
+
+import os
 # sys.path.insert(0, os.path.abspath('.'))
 
 import sphinx_rtd_theme
@@ -199,13 +199,13 @@ exhale_args = {
     "containmentFolder":     "./api",
     "rootFileName":          "library_root.rst",
     "rootFileTitle":         "Library API",
-    "doxygenStripFromPath":  "..",
+    "doxygenStripFromPath":  os.path.join(os.path.abspath('.'), '..', '..'),
     # Suggested optional arguments
     "createTreeView":        True,
     # TIP: if using the sphinx-bootstrap-theme, you need
     # "treeViewIsBootstrap": True,
     "exhaleExecutesDoxygen": True,
-    "exhaleDoxygenStdin":    "INPUT = ../../src/"
+    "exhaleDoxygenStdin":    "INPUT = ../../src/\n FULL_PATH_NAMES = YES"
 }
 # Tell sphinx what the primary language being documented is.
 primary_domain = 'cpp'
