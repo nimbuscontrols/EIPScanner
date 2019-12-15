@@ -1,3 +1,11 @@
-sphinx-rtd-theme
-breathe
-exhale
+breathe==4.14.0
+exhale==0.2.3
+Sphinx==2.2.2
+sphinx-rtd-theme==0.4.3
+sphinxcontrib-applehelp==1.0.1
+sphinxcontrib-devhelp==1.0.1
+sphinxcontrib-htmlhelp==1.0.2
+sphinxcontrib-jsmath==1.0.1
+sphinxcontrib-qthelp==1.0.2
+sphinxcontrib-serializinghtml==1.1.3
+
