@@ -12,44 +12,50 @@
 
 namespace eipScanner {
 
-/**
- * Implements interface to Parameter Object.
- * It reads all data of from the instance in the constuctor
- *  @example
+ /**
+ * @class ParameterObject
  *
- * 	auto si = std::make_shared<SessionInfo>("172.28.1.3", 0xAF12);
- * 	ParameterObject param(1, true, si);
- * 	param.getActualValue<CipUint>(); # => 1
- * 	param.updateValue(si);
- * 	param.getActualValue<CipUint>(); # => 2
+ * @brief Implements interface to Parameter Object (0x0F).
+ *
+ * It reads all data from the CIP instance in the constructor
  */
 class ParameterObject : public BaseObject {
 public:
 	static const cip::CipUint CLASS_ID = 0x0f;
 
 	/**
-	 * Creates an instance and reads all its data via EIP
-	 * @param instanceId
+	 * @brief Creates an instance and reads all its data via EIP
+	 *
+	 * @param instanceId the ID of the CIP instance
 	 * @param fullAttributes if true, then read all the attributes
-	 * @param si
+	 * @param si the Session Info for explicit messaging
 	 */
 	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfoIf::SPtr& si);
 
-	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfoIf::SPtr& si, const MessageRouter::SPtr&);
-
 	/**
-	 * Create an empty instance without any EIP requests
-	 * @param instanceId
-	 * @param fullAttributes
-	 * @param typeSize
+	 * Creates an empty instance without any EIP requests
+	 * @param instanceId the ID of the CIP instance
+	 * @param fullAttributes if true, then read all the attributes
+	 * @param typeSize the size of the value in bytes
 	 */
 	ParameterObject(cip::CipUint instanceId, bool fullAttributes, size_t typeSize);
+
+	/**
+	 * @brief Creates an instance and reads all its data via EIP
+	 * @note Used for testing
+	 *
+	 * @param instanceId
+	 * @param fullAttributes
+	 * @param si
+	 */
+	ParameterObject(cip::CipUint instanceId, bool fullAttributes, const SessionInfoIf::SPtr& si, const MessageRouter::SPtr&);
+
 
 	~ParameterObject();
 
 	/**
-	 * Updates value from the instance
-	 * @param si
+	 * @brief Updates the parameter value from the instance
+	 * @param si the Session Info for explicit messaging
 	 */
 	void updateValue(const SessionInfoIf::SPtr& si);
 
