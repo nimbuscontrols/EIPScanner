@@ -194,6 +194,7 @@ breathe_projects = {
 }
 breathe_default_project = project
 # Setup the exhale extension
+import textwrap
 exhale_args = {
     # These arguments are required
     "containmentFolder":     "./api",
@@ -205,7 +206,9 @@ exhale_args = {
     # TIP: if using the sphinx-bootstrap-theme, you need
     # "treeViewIsBootstrap": True,
     "exhaleExecutesDoxygen": True,
-    "exhaleDoxygenStdin":    "INPUT = ../../src/\n FULL_PATH_NAMES = YES"
+    "exhaleDoxygenStdin": textwrap.dedent('''
+        INPUT = ../../src/
+        ''')
 }
 # Tell sphinx what the primary language being documented is.
 primary_domain = 'cpp'
