@@ -41,7 +41,7 @@ namespace powerFlex525 {
 
 		/**
 		 * @brief Constructor
-		 * @param clearFaults if true the manager clears the queue after I have retrieved a new fault
+		 * @param clearFaults if true the manager clears the queue after it has retrieved a new fault
 		 */
 		explicit DPIFaultManager(bool clearFaults);
 
