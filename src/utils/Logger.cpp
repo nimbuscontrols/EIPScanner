@@ -16,20 +16,8 @@ namespace utils {
 	}
 
 	Logger::~Logger() {
-		if (_globalLogLevel == LogLevel::OFF) {
-			return;
-		}
-
-		std::map<LogLevel, std::string> logNames = {
-			std::make_pair(LogLevel::TRACE, "[TRACE] "),
-			std::make_pair(LogLevel::DEBUG, "[DEBUG] "),
-			std::make_pair(LogLevel::INFO, "[INFO] "),
-			std::make_pair(LogLevel::WARNING, "[WARNING] "),
-			std::make_pair(LogLevel::ERROR, "[ERROR] "),
-		};
-
-		if (_logLevel <= _globalLogLevel) {
-			_appender->print(logNames[_logLevel] + (_stream).str());
+		if (_globalLogLevel != LogLevel::OFF && _logLevel <= _globalLogLevel) {
+			_appender->print(_logLevel, (_stream).str());
 		}
 	}
 
@@ -41,8 +29,16 @@ namespace utils {
 		_appender = std::move(appender);
 	}
 
-	void ConsoleAppender::print(const std::string &msg) {
-		std::cout << msg << std::endl;
+	void ConsoleAppender::print(LogLevel logLevel,const std::string &msg) {
+		const static std::map<LogLevel, std::string> LOGLEVEL_NAMES = {
+				std::make_pair(LogLevel::TRACE, "[TRACE] "),
+				std::make_pair(LogLevel::DEBUG, "[DEBUG] "),
+				std::make_pair(LogLevel::INFO, "[INFO] "),
+				std::make_pair(LogLevel::WARNING, "[WARNING] "),
+				std::make_pair(LogLevel::ERROR, "[ERROR] "),
+		};
+
+		std::cout << LOGLEVEL_NAMES.at(logLevel) << msg << std::endl;
 	}
 }
 }

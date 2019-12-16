@@ -31,7 +31,7 @@ namespace utils {
 		using UPtr = std::unique_ptr<LogAppenderIf>;
 		virtual ~LogAppenderIf() = default;
 
-		virtual void print(const std::string& msg) = 0;
+		virtual void print(LogLevel logLevel, const std::string& msg) = 0;
 	};
 
 	/**
@@ -42,7 +42,7 @@ namespace utils {
 	class ConsoleAppender : public LogAppenderIf {
 	public:
 		using UPtr = std::unique_ptr<LogAppenderIf>;
-		void print(const std::string& msg) override;
+		void print(LogLevel logLevel, const std::string& msg) override;
 	};
 
 
