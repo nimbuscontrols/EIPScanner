@@ -4,7 +4,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/nimbuscontrols/EIPScanner)
 
 
-Free implementation of Ethernet/IP scanner in C++
+Free implementation of Ethernet/IP scanner in C++.
 
 
 ## Features
