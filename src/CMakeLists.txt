@@ -61,6 +61,5 @@ install(TARGETS EIPScanner EIPScannerS
             DESTINATION lib)
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/
-        DESTINATION include
+        DESTINATION include/EIPScanner
         FILES_MATCHING PATTERN "*.h*")
-
