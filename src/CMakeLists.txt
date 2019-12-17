@@ -37,6 +37,7 @@ set(SOURCE_FILES
 
         BaseObject.cpp
         ConnectionManager.cpp
+        DiscoveryManager.cpp
         FileObject.cpp
         IdentityObject.cpp
         IOConnection.cpp

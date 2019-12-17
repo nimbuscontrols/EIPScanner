@@ -47,7 +47,7 @@ namespace eipScanner {
 	EncapsPacket SessionInfo::sendAndReceive(const EncapsPacket& packet) const {
 		_socket.Send(packet.pack());
 		auto header = _socket.Receive(EncapsPacket::HEADER_SIZE);
-		auto length = EncapsPacket::GetLengthFromHeader(header);
+		auto length = EncapsPacket::getLengthFromHeader(header);
 		auto data = _socket.Receive(length);
 
 		header.insert(header.end(), data.begin(), data.end());
