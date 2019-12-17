@@ -13,7 +13,7 @@ int main() {
 	Logger::setLogLevel(LogLevel::DEBUG);
 
 	DiscoveryManager discoveryManager("172.28.255.255", 0xAF12, std::chrono::seconds(1));
-	auto devices = discoveryManager.discovery();
+	auto devices = discoveryManager.discover();
 
 	for (auto& device : devices) {
 		Logger(LogLevel::INFO) << "Discovered device: "

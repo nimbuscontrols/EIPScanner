@@ -33,7 +33,7 @@ namespace eipScanner {
 
 	DiscoveryManager::~DiscoveryManager() = default;
 
-	IdentityItem::Vec DiscoveryManager::discovery() const {
+	IdentityItem::Vec DiscoveryManager::discover() const {
 		eipScanner::IdentityItem::Vec devices;
 
 		auto socket = makeSocket();

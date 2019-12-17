@@ -11,6 +11,7 @@ Free implementation of Ethernet/IP scanner in C++
 
 * Explicit messaging
 * Implicit messaging (only point-to-point)
+* Discovery
 
 CIP Standard objects:
 

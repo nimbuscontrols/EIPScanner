@@ -6,6 +6,7 @@
 * add utils::LogAppenderIf to customise logging #5, @flipback
 * add support of LWORD type #6, @flipback
 * add support of PowerFlex525 DIP Fault Object #6, @flipback
+* add discovery EIP devices in the network #8, @flipback
 
 **Bugs**:
 
