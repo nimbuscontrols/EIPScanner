@@ -179,7 +179,7 @@ TEST_F(TestDPIFaultManager, ShouldThrowExceptionIfFailedToReadNumberOfFaults) {
 }
 
 TEST_F(TestDPIFaultManager, ShouldGenerateEventForEachNewFaultAndNotCleanFaults) {
-	DPIFaultManager manager(false);
+	DPIFaultManager manager(false, false, false);
 
 	std::vector<DPIFaultObject> faultObjects;
 	manager.setNewFaultListener([&faultObjects](const DPIFaultObject& object) {
