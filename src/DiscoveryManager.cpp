@@ -41,48 +41,40 @@ namespace eipScanner {
 
 		try {
 			for(;;) {
-				auto header = socket->Receive(EncapsPacket::HEADER_SIZE);
-				auto len = EncapsPacket::getLengthFromHeader(header);
+				auto data = socket->Receive(504);
+				Buffer buffer(data);
+				std::vector<uint8_t> header(EncapsPacket::HEADER_SIZE);
+				buffer >> header;
 
-				EncapsPacket receivedPacket;
-				receivedPacket.expand(socket->Receive(EncapsPacket::HEADER_SIZE + len));
+				CipUint count;
+				buffer >> count;
+				for (int i = 1; i <= count; ++i) {
+					CipUint ignore;
+					buffer >> ignore >> ignore >> ignore;
+					sockets::EndPoint socketAddr("", 0);
 
-				if (receivedPacket.getStatusCode() == EncapsStatusCodes::SUCCESS
-					&& receivedPacket.getCommand() == EncapsCommands::LIST_IDENTITY) {
+					buffer >> socketAddr;
 
-					Buffer buffer(receivedPacket.getData());
-					CipUint count;
-					buffer >> count;
-					for (int i = 1; i <= count; ++i) {
-						CipUint ignore;
-						buffer >> ignore >> ignore >> ignore;
-						sockets::EndPoint socketAddr("", 0);
+					CipUint vendorId, deviceType, productCode;
+					CipRevision revision;
+					CipWord status;
+					CipUdint serialNumber;
+					CipShortString productName;
 
-						buffer >> socketAddr;
+					buffer >> vendorId >> deviceType >> productCode
+						   >> revision >> status
+						   >> serialNumber >> productName;
 
-						CipUint vendorId, deviceType, productCode;
-						CipRevision revision;
-						CipWord status;
-						CipUdint serialNumber;
-						CipShortString productName;
+					IdentityObject identityObject(i);
+					identityObject.setVendorId(vendorId);
+					identityObject.setDeviceType(deviceType);
+					identityObject.setProductCode(productCode);
+					identityObject.setRevision(revision);
+					identityObject.setStatus(status);
+					identityObject.setSerialNumber(serialNumber);
+					identityObject.setProductName(productName.toStdString());
 
-						buffer >> vendorId >> deviceType >> productCode
-							   >> revision >> status
-							   >> serialNumber >> productName;
-
-						IdentityObject identityObject(i);
-						identityObject.setVendorId(vendorId);
-						identityObject.setDeviceType(deviceType);
-						identityObject.setProductCode(productCode);
-						identityObject.setRevision(revision);
-						identityObject.setStatus(status);
-						identityObject.setSerialNumber(serialNumber);
-						identityObject.setProductName(productName.toStdString());
-
-						devices.push_back(IdentityItem{.identityObject=identityObject, .socketAddress=socketAddr});
-					}
-				} else {
-					//TODO: Handle exception.
+					devices.push_back(IdentityItem{.identityObject=identityObject, .socketAddress=socketAddr});
 				}
 			}
 		} catch (std::system_error& er) {
