@@ -25,14 +25,16 @@ namespace powerFlex525 {
 		NUMBER_OF_RECORDED_FAULTS = 6
 	};
 
-	DPIFaultManager::DPIFaultManager() : DPIFaultManager(true) {
+	DPIFaultManager::DPIFaultManager() : DPIFaultManager(true, false, false) {
 	}
 
-	DPIFaultManager::DPIFaultManager(bool clearFaults)
+	DPIFaultManager::DPIFaultManager(bool clearFaults, bool resetDevice, bool getFaultDetails)
 		: _newFaultHandler([](auto){})
 		, _trippedDeviceHandler([](auto){})
 		, _lastTrippedState(-1)
-		, _clearFaults(clearFaults) {
+		, _clearFaultsQueue(clearFaults)
+		, _resetFault(resetDevice)
+		, _getFaultDetails(getFaultDetails){
 	}
 
 	void DPIFaultManager::setNewFaultListener(DPIFaultManager::NewFaultHandler handler) {
@@ -43,8 +45,7 @@ namespace powerFlex525 {
 		_trippedDeviceHandler = std::move(handler);
 	}
 
-	void
-	DPIFaultManager::handleFaultObjects(const SessionInfoIf::SPtr &si, const MessageRouter::SPtr &messageRouter) {
+	void DPIFaultManager::handleFaultObjects(const SessionInfoIf::SPtr &si, const MessageRouter::SPtr &messageRouter) {
 		auto response = messageRouter->sendRequest(si,
 				ServiceCodes::GET_ATTRIBUTE_SINGLE,
 				EPath(DPIFaultObject::CLASS_ID, 0 , DPIFaultClassAttributeIds::FAULT_TRIP_INSTANCE_READ));
@@ -75,15 +76,26 @@ namespace powerFlex525 {
 
 			if (faultNumber > 0) {
 				int realFaultCount = 0;
+
 				for (int i = 1; i <= faultNumber; ++i) {
 					DPIFaultObject faultObject(i, si, messageRouter);
 					if (faultObject.getFullInformation().faultCode == 0) {
 						break;
 					}
 
-					if (_clearFaults) {
+					// i think we should clear the queue after the loop verses clearing 1 at a time
+					/*if (_clearFaultsQueue) {
 						writeCommand(DPIFaultManagerCommands::CLEAR_FAULT, si, messageRouter);
-					}
+					}*/
+
+
+                    // get details at time of fault (volts, current & frequency) and add to faultInformation
+					if(_getFaultDetails) {
+                        auto faultInformation = new DPIFaultObject(si, messageRouter, i);
+                        auto faultDetails = faultInformation->getFaultDetails();
+                        faultObject.setFaultDetails(faultDetails);
+                    }
+
 
 					realFaultCount++;
 					_newFaultHandler(faultObject);
@@ -92,6 +104,17 @@ namespace powerFlex525 {
 				if (realFaultCount > 0) {
 					Logger(LogLevel::INFO) << "There read " << realFaultCount << " faults in the queue";
 				}
+
+
+				// we should clear this in the end after the loop
+                if (_clearFaultsQueue && realFaultCount > 0) {
+                    writeCommand(DPIFaultManagerCommands::CLEAR_FAULT_QUEUE, si, messageRouter);
+                }
+
+                // device is stopped -> need to figure out how to 1) read fault that stops device and 2) reset device
+                if(_resetFault && realFaultCount > 0){
+
+                }
 			}
 		} else {
 			logGeneralAndAdditionalStatus(response);

@@ -5,6 +5,7 @@
 #ifndef EIPSCANNER_DPIFAULTMANAGER_H
 #define EIPSCANNER_DPIFAULTMANAGER_H
 
+#include <vector>
 #include <functional>
 #include "DPIFaultObject.h"
 #include "SessionInfoIf.h"
@@ -27,7 +28,7 @@ namespace powerFlex525 {
 		using TrippedDeviceHandler = std::function<void(bool)>;
 
 		DPIFaultManager();
-		explicit DPIFaultManager(bool clearFaults);
+		explicit DPIFaultManager(bool clearFaults, bool resetDevice, bool getFaultDetails);
 		void setNewFaultListener(NewFaultHandler handler);
 		void setTrippedDeviceListener(TrippedDeviceHandler handler);
 		void handleFaultObjects(const SessionInfoIf::SPtr& si);
@@ -36,11 +37,15 @@ namespace powerFlex525 {
 		void writeCommand(DPIFaultManagerCommands command, const SessionInfoIf::SPtr& si) const;
 		void writeCommand(DPIFaultManagerCommands command, const SessionInfoIf::SPtr& si,
 				const MessageRouter::SPtr& messageRouter) const;
+
+
 	private:
 		NewFaultHandler _newFaultHandler;
 		TrippedDeviceHandler _trippedDeviceHandler;
 		cip::CipUsint _lastTrippedState;
-		bool _clearFaults;
+		bool _clearFaultsQueue; // clears fault queue after reading all fault
+		bool _resetFault; // stops device after hard fault and restarts
+		bool _getFaultDetails; // returns details at time of fault (frequency, current, voltage)
 	};
 
 }
