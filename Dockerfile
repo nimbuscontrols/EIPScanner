@@ -17,4 +17,4 @@ ADD / /code
 RUN mkdir build
 WORKDIR build
 RUN cmake -DTEST_ENABLED=ON  -DEXAMPLE_ENABLED=ON /code
-RUN cmake --build . -- -j
+RUN cmake --build . -- -j 2
