@@ -126,8 +126,8 @@ Then we should form and send a request to the *Message Router*:
 
 
 Unfortunately, we can't send the service arguments "as is". Instead we should encode them and decode the result according **CIP**
-specification. To make it easer, **EIPScanner** provides a special class *utils::Buffer*. In this example, we encode 5 as INT type
-and get the result as a byte vector with method *utils::Buffer::data()*. 
+specification. To make it easer, **EIPScanner** provides a special class :ref:`utils::Buffer<buffer>`. In this example, we encode 5 as INT type
+and get the result as a byte vector with method *utils::Buffer::data()*.
 
 The result of the request is stroed in  *Message Router Response*:
 
