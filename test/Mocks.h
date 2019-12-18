@@ -39,4 +39,12 @@ public:
 	MOCK_CONST_METHOD0(getRemoteEndPoint, eipScanner::sockets::EndPoint());
 };
 
+class TMockSocket : public eipScanner::sockets::BaseSocket {
+public:
+	using SPtr = std::shared_ptr<TMockSocket>;
+	TMockSocket() : eipScanner::sockets::BaseSocket("", 0) {}
+	MOCK_CONST_METHOD1(Send, void(const std::vector<uint8_t>& data));
+	MOCK_CONST_METHOD1(Receive, std::vector<uint8_t>(size_t size));
+};
+
 #endif //EIPSCANNER_MOCKS_H
