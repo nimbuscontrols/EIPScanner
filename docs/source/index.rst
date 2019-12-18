@@ -18,11 +18,11 @@ EIPScanner is a free implementation of Ethernet/IP scanner in C++.
    getting_started
    explicit_messaging
    implicit_messaging
-   misc/_index
    
    standard_objects/_index
    vendor_specific_objects/_index
 
+   misc/_index
    api/library_root
 
 Indices and tables
