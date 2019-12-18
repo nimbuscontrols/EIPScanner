@@ -20,6 +20,7 @@ namespace sockets {
 	public:
 		using BeginReceiveHandler = std::function<void(BaseSocket&)>;
 		using SPtr = std::shared_ptr<BaseSocket>;
+		using UPtr = std::unique_ptr<BaseSocket>;
 
 		explicit BaseSocket(EndPoint endPoint);
 		BaseSocket(std::string host, int port);

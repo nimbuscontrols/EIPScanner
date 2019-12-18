@@ -39,7 +39,7 @@ namespace eip {
 	class EncapsPacket {
 	public:
 		static const size_t HEADER_SIZE = 24;
-		static size_t GetLengthFromHeader(const std::vector<uint8_t> data);
+		static size_t getLengthFromHeader(const std::vector<uint8_t>& data);
 
 		EncapsPacket();
 		~EncapsPacket();

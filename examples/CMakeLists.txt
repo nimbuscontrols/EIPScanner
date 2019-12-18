@@ -8,3 +8,6 @@ target_link_libraries(file_object_example EIPScanner)
 
 add_executable(parameter_object_example ParameterObjectExample.cpp)
 target_link_libraries(parameter_object_example EIPScanner)
+
+add_executable(discovery_example DiscoveryManagerExample.cpp)
+target_link_libraries(discovery_example EIPScanner)

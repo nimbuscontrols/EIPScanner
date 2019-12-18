@@ -46,5 +46,12 @@ namespace eip {
 
 		return packet;
 	}
+
+	EncapsPacket EncapsPacketFactory::createListIdentityPacket() const {
+		EncapsPacket packet;
+		packet.setCommand(EncapsCommands::LIST_IDENTITY);
+		packet.setSessionHandle(0);
+		return packet;
+	}
 }
 }

@@ -34,3 +34,11 @@ TEST(TestEncapsPacketFactory, ShouldCreateSendRRDataPacket) {
 	EncapsPacket packet = EncapsPacketFactory().createSendRRDataPacket(0xaabbccdd, 100, data);
 	EXPECT_EQ(expectedPacket, packet.pack());
 }
+
+TEST(TestEncapsPacketFactory, ShouldCreateListIdentityPacket) {
+	std::vector<uint8_t> expectedPacket = {0x63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+										   0, 0, 0, 0};
+
+	EncapsPacket packet = EncapsPacketFactory().createListIdentityPacket();
+	EXPECT_EQ(expectedPacket, packet.pack());
+}
