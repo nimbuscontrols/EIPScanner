@@ -46,7 +46,7 @@ namespace eipScanner {
 		 */
 		IdentityItem::Vec discover() const;
 	protected:
-		virtual sockets::BaseSocket::UPtr makeSocket() const;
+		virtual sockets::BaseSocket::SPtr makeSocket() const;
 
 	private:
 		sockets::EndPoint _broadCastAddress;

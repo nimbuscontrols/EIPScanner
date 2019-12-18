@@ -5,6 +5,7 @@
 #include <cerrno>
 
 #include "eip/EncapsPacketFactory.h"
+#include "eip/CommonPacket.h"
 #include "sockets/UDPSocket.h"
 #include "utils/Logger.h"
 #include "utils/Buffer.h"
@@ -18,6 +19,7 @@ namespace eipScanner {
 	using eip::EncapsPacket;
 	using eip::EncapsStatusCodes;
 	using eip::EncapsCommands;
+	using eip::CommonPacket;
 
 	using sockets::EndPoint;
 	using sockets::UDPSocket;
@@ -39,21 +41,20 @@ namespace eipScanner {
 		auto socket = makeSocket();
 		socket->Send(EncapsPacketFactory().createListIdentityPacket().pack());
 
+
 		try {
 			for(;;) {
 				auto data = socket->Receive(504);
-				Buffer buffer(data);
-				std::vector<uint8_t> header(EncapsPacket::HEADER_SIZE);
-				buffer >> header;
 
-				CipUint count;
-				buffer >> count;
-				for (int i = 1; i <= count; ++i) {
+				CommonPacket commonPacket;
+				commonPacket.expand(std::vector<uint8_t>(data.begin()+EncapsPacket::HEADER_SIZE, data.end()));
+
+				for (int i=0; i < commonPacket.getItems().size(); ++i) {
+					Buffer buffer(commonPacket.getItems()[i].getData());
 					CipUint ignore;
-					buffer >> ignore >> ignore >> ignore;
 					sockets::EndPoint socketAddr("", 0);
 
-					buffer >> socketAddr;
+					buffer >> ignore >> socketAddr;
 
 					CipUint vendorId, deviceType, productCode;
 					CipRevision revision;
@@ -86,8 +87,8 @@ namespace eipScanner {
 		return devices;
 	}
 
-	sockets::BaseSocket::UPtr DiscoveryManager::makeSocket() const {
-		auto socket =  std::make_unique<UDPSocket>(_broadCastAddress);
+	sockets::BaseSocket::SPtr DiscoveryManager::makeSocket() const {
+		auto socket =  std::make_shared<UDPSocket>(_broadCastAddress);
 		socket->setRecvTimeout(_receiveTimout);
 
 		int broadcast = 1;
