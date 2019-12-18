@@ -1,3 +1,5 @@
+.. _explicit_messaging:
+
 Explicit Messaging
 ==================
 
@@ -37,6 +39,9 @@ And the response should be:
 +----------------+----------+---------------------------------------+
 | Result         | INT      | 6                                     |
 +----------------+----------+---------------------------------------+
+
+Message Router
+--------------
 
 But whom should we send the request? In any EIP device, there is a special object for this.
 It is *Message Router*. The router is responsible for receiving explicit requests, routing them to 
@@ -142,7 +147,7 @@ this is only one number of type INT.
 
 
 Reading\\Writing CIP Attributes
-------------------------------
+-------------------------------
 
 The most typical operations in the explicit communication are reading and writing **CIP** attributes. The example that we used above is 
 suitable, but we should keep in mind 2 things:
