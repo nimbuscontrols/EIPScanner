@@ -77,7 +77,7 @@ namespace powerFlex525 {
 			if (faultNumber > 0) {
 				int realFaultCount = 0;
 
-				for (int i = 1; i <= 1; ++i) {
+				for (int i = 1; i <= faultNumber; ++i) {
 
 					DPIFaultObject faultObject(i, si, messageRouter);
 					if (faultObject.getFullInformation().faultCode == 0) {

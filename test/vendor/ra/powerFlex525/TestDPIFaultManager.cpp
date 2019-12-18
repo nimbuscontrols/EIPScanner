@@ -134,7 +134,7 @@ TEST_F(TestDPIFaultManager, ShouldGenerateEventForEachNewFaultAndWhenCleanTheQue
 											 .WillOnce(::testing::Return(response));
 
 	manager.handleFaultObjects(_nullSession, _messageRouter);
-	EXPECT_EQ(1, faultObjects.size());
+	EXPECT_EQ(2, faultObjects.size());
 	EXPECT_EQ(1, faultObjects[0].getFullInformation().faultCode);
 	EXPECT_EQ(1, faultObjects[1].getFullInformation().faultCode);
 }
