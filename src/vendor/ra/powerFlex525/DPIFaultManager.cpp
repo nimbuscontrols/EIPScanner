@@ -77,16 +77,12 @@ namespace powerFlex525 {
 			if (faultNumber > 0) {
 				int realFaultCount = 0;
 
-				for (int i = 1; i <= faultNumber; ++i) {
+				for (int i = 1; i <= 1; ++i) {
+
 					DPIFaultObject faultObject(i, si, messageRouter);
 					if (faultObject.getFullInformation().faultCode == 0) {
 						break;
 					}
-
-					// i think we should clear the queue after the loop verses clearing 1 at a time
-					/*if (_clearFaultsQueue) {
-						writeCommand(DPIFaultManagerCommands::CLEAR_FAULT, si, messageRouter);
-					}*/
 
 
                     // get details at time of fault (volts, current & frequency) and add to faultInformation

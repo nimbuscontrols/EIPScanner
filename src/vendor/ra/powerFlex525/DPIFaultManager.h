@@ -5,6 +5,8 @@
 #ifndef EIPSCANNER_DPIFAULTMANAGER_H
 #define EIPSCANNER_DPIFAULTMANAGER_H
 
+#include <iostream>
+
 #include <vector>
 #include <functional>
 #include "DPIFaultObject.h"

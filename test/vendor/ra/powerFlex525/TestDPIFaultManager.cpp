@@ -130,12 +130,11 @@ TEST_F(TestDPIFaultManager, ShouldGenerateEventForEachNewFaultAndWhenCleanTheQue
 
 	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::SET_ATTRIBUTE_SINGLE,
 											 cip::EPath(0x97, 0, 3),
-											 std::vector<uint8_t >{1}))
-											 .WillOnce(::testing::Return(response))
+											 std::vector<uint8_t >{2}))
 											 .WillOnce(::testing::Return(response));
 
 	manager.handleFaultObjects(_nullSession, _messageRouter);
-	EXPECT_EQ(2, faultObjects.size());
+	EXPECT_EQ(1, faultObjects.size());
 	EXPECT_EQ(1, faultObjects[0].getFullInformation().faultCode);
 	EXPECT_EQ(1, faultObjects[1].getFullInformation().faultCode);
 }

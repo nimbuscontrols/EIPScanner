@@ -23,7 +23,7 @@ namespace powerFlex525 {
 	};
 
 	enum FaultParams : CipUint {
-        /*FAULT_1_CODE = 7,
+        FAULT_1_CODE = 7,
         FAULT_2_CODE = 8,
         FAULT_3_CODE = 9,
         FAULT_4_CODE = 604,
@@ -33,7 +33,8 @@ namespace powerFlex525 {
         FAULT_8_CODE = 608,
         FAULT_9_CODE = 609,
         FAULT_10_CODE = 610,
-        FAULT_1_TIME_HR = 611,
+
+        /*FAULT_1_TIME_HR = 611,
         FAULT_2_TIME_HR = 612,
         FAULT_3_TIME_HR = 613,
         FAULT_4_TIME_HR = 614,
