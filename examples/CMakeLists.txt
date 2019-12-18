@@ -1,7 +1,10 @@
 include_directories("${CMAKE_SOURCE_DIR}/src")
 
-add_executable(explicit_implicit_messaging ExplicitAndImplicitMessagingExample.cpp)
-target_link_libraries(explicit_implicit_messaging EIPScanner)
+add_executable(implicit_messaging ImplicitMessagingExample.cpp)
+target_link_libraries(implicit_messaging EIPScanner)
+
+add_executable(explicit_messaging ExplicitMessagingExample.cpp)
+target_link_libraries(explicit_messaging EIPScanner)
 
 add_executable(file_object_example FileObjectExample.cpp)
 target_link_libraries(file_object_example EIPScanner)
