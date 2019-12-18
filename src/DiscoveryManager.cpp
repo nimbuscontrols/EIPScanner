@@ -41,10 +41,10 @@ namespace eipScanner {
 		auto socket = makeSocket();
 		socket->Send(EncapsPacketFactory().createListIdentityPacket().pack());
 
-
 		try {
 			for(;;) {
-				auto data = socket->Receive(504);
+				const size_t EIP_MAX_PACKET_SIZE = 504;
+				auto data = socket->Receive(EIP_MAX_PACKET_SIZE);
 
 				CommonPacket commonPacket;
 				commonPacket.expand(std::vector<uint8_t>(data.begin()+EncapsPacket::HEADER_SIZE, data.end()));
