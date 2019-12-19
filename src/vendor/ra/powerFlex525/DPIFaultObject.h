@@ -9,72 +9,63 @@
 #include "BaseObject.h"
 #include "SessionInfoIf.h"
 #include "MessageRouter.h"
-#include "ParameterObject.h"
-#include "DPIFaultCode.h"
 
 namespace eipScanner {
-namespace vendor {
-namespace ra {
-namespace powerFlex525 {
+    namespace vendor {
+        namespace ra {
+            namespace powerFlex525 {
 
-	class DPIFaultObject : public BaseObject {
-	public:
-		static const cip::CipUint CLASS_ID = 0x97;
+                /**
+                 * @class DPIFaultObject
+                 *
+                 * @brief Implements interface to DPI Fault Object (0x97) of PowerFlex 525
+                 */
+                class DPIFaultObject : public BaseObject {
+                public:
+                    static const cip::CipUint CLASS_ID = 0x97;
 
-        struct FaultDetails{
+                    /**
+                     * Informaion about the fault
+                     */
+                    struct FullInformation {
+                        cip::CipUint faultCode;			//!< the code of the fault (0 is no fault)
+                        cip::CipUsint dsiPort;			//!< DSI port
+                        cip::CipUsint dsiDeviceObject;  //!< DSI Device Object
+                        cip::CipString faultText;		//!< the text of the fault
+                        cip::CipLword timerValue;		//!< timer value
+                        bool isValidData;				//!< true if the timer value valid
+                        bool isRealTime;				//!< true if the time is real else it is elapsed
+                    };
 
-            int             faultNumber;
-            cip::CipUint    faultCode;
-            cip::CipLreal   busVoltage;
-            cip::CipLreal   current;
-            cip::CipLreal   frequency;
-            //cip::CipLword status;
-        };
+                    /**
+                     * @brief Creates an instance and reads all its data via EIP
+                     * @param instanceId
+                     * @param fullAttributes if true, then read all the attributes
+                     * @param si the EIP session for explicit messaging
+                     */
+                    DPIFaultObject(cip::CipUint instanceId,
+                                   const SessionInfoIf::SPtr &si);
 
-		struct FullInformation {
-			/*cip::CipUsint dsiPort;
-			cip::CipUsint dsiDeviceObject;
-			cip::CipString faultText;
-			cip::CipLword timerValue;
-			bool isValidData;
-			bool isRealTime;
-			cip::CipUint faultCode;*/
+                    /**
+                     * @note used for testing
+                     * @param instanceId
+                     * @param si
+                     * @param messageRouter
+                     */
+                    DPIFaultObject(cip::CipUint instanceId,
+                                   const SessionInfoIf::SPtr &si, const MessageRouter::SPtr& messageRouter);
 
-			FaultDetails faultDetails;
-            DPIFaultCode::FaultDescriptions faultDescription;
-		};
+                    /**
+                     * @brief Gets the full information [AttrID=1] of the fault
+                     * @return
+                     */
+                    const FullInformation &getFullInformation() const;
 
-
-		/**
-		* Creates an instance and reads all its data via EIP
-		* @param instanceId
-		* @param fullAttributes if true, then read all the attributes
-		* @param si
-		*/
-		/*DPIFaultObject(cip::CipUint instanceId,
-					   const SessionInfoIf::SPtr &si);*/
-
-		/*DPIFaultObject(cip::CipUint instanceId,
-					   const SessionInfoIf::SPtr &si, const MessageRouter::SPtr& messageRouter);*/
-
-		// for fault info at time of fault (volts, current, frequency)
-        DPIFaultObject(const SessionInfoIf::SPtr &si,
-                                       const MessageRouter::SPtr& messageRouter,
-                                       int faultNumber,
-                                       bool getFaultDetails);
-
-		const FullInformation &getFullInformation() const;
-        const FaultDetails &getFaultDetails() const; // returns struct fault details
-        void setFaultDetails(FaultDetails faultInfo); // sets fault details struct in FullInformation struct
-        void setFaultDescription(DPIFaultCode::FaultDescriptions faultDescriptions); // sets fault description (info mapped from fault code)
-
-	private:
-
-		FullInformation _fullInformation;
-        FaultDetails _faultDetails; // stores volts, current & frequency at time of fault
-	};
-}
-}
-}
+                private:
+                    FullInformation _fullInformation;
+                };
+            }
+        }
+    }
 }
 #endif  // EIPSCANNER_VENDOR_DIPFAULTOBJECT_H

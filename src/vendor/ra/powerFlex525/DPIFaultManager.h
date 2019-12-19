@@ -9,6 +9,7 @@
 #include <functional>
 #include "DPIFaultObject.h"
 #include "SessionInfoIf.h"
+#include "DPIFaultParameter.h"
 
 namespace eipScanner {
 namespace vendor {
@@ -24,15 +25,16 @@ namespace powerFlex525 {
 
 	class DPIFaultManager {
 	public:
-		using NewFaultHandler = std::function<void(const DPIFaultObject& fault)>;
+		using NewFaultObjectHandler = std::function<void(const DPIFaultObject& fault)>;
+        using NewFaultHandler = std::function<void(const DPIFaultParameter& fault)>;
 		using TrippedDeviceHandler = std::function<void(bool)>;
 
 		DPIFaultManager();
 		explicit DPIFaultManager(bool clearFaults, bool resetDevice, bool getFaultDetails);
 		void setNewFaultListener(NewFaultHandler handler);
 		void setTrippedDeviceListener(TrippedDeviceHandler handler);
-		void handleFaultObjects(const SessionInfoIf::SPtr& si);
-		void handleFaultObjects(const SessionInfoIf::SPtr& si, const MessageRouter::SPtr& messageRouter);
+		void handleFaultParamaters(const SessionInfoIf::SPtr& si);
+		void handleFaultParamaters(const SessionInfoIf::SPtr& si, const MessageRouter::SPtr& messageRouter);
 
 		void writeCommand(DPIFaultManagerCommands command, const SessionInfoIf::SPtr& si) const;
 		void writeCommand(DPIFaultManagerCommands command, const SessionInfoIf::SPtr& si,

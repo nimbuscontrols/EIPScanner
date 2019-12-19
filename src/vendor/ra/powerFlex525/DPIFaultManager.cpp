@@ -45,7 +45,7 @@ namespace powerFlex525 {
 		_trippedDeviceHandler = std::move(handler);
 	}
 
-	void DPIFaultManager::handleFaultObjects(const SessionInfoIf::SPtr &si, const MessageRouter::SPtr &messageRouter) {
+	void DPIFaultManager::handleFaultParamaters(const SessionInfoIf::SPtr &si, const MessageRouter::SPtr &messageRouter) {
 
 		uint16_t faultCount = 0; // keeps track of number of faults we count in the parameters
 
@@ -54,7 +54,7 @@ namespace powerFlex525 {
 
 
             // check if fault exists and if fault, return fault info
-            auto faultInformation = DPIFaultObject(si, messageRouter, i, _getFaultDetails);
+            auto faultInformation = DPIFaultParameter(si, messageRouter, i, _getFaultDetails);
             auto faultDetails = faultInformation.getFaultDetails();
 
 
@@ -91,8 +91,8 @@ namespace powerFlex525 {
         }
 	}
 
-	void DPIFaultManager::handleFaultObjects(const SessionInfoIf::SPtr &si) {
-		handleFaultObjects(si, std::make_shared<MessageRouter>());
+	void DPIFaultManager::handleFaultParamaters(const SessionInfoIf::SPtr &si) {
+        handleFaultParamaters(si, std::make_shared<MessageRouter>());
 	}
 
 	void DPIFaultManager::writeCommand(DPIFaultManagerCommands command, const SessionInfoIf::SPtr &si) const {
