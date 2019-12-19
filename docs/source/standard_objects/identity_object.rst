@@ -1,3 +1,5 @@
+.. _identity_object::
+
 Identity Object (0x01)
 ======================
 

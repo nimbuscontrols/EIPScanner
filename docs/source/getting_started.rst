@@ -78,8 +78,7 @@ Okay, we have *CMakeLists.txt*. Now we should create *main.cpp* and place there 
 
            // Read attribute
            auto response = messageRouter->sendRequest(si, ServiceCodes::GET_ATTRIBUTE_SINGLE,
-                                                          EPath(0x01, 1, 1),
-                                                          {});
+                                                          EPath(0x01, 1, 1));
 
            if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
                    Buffer buffer(response.getData());
