@@ -100,10 +100,10 @@ namespace powerFlex525 {
         FAULT_10_STATUS = 670,*/
     };
 
-	DPIFaultObject::DPIFaultObject(CipUint instanceId, const SessionInfoIf::SPtr &si)
+	/*DPIFaultObject::DPIFaultObject(CipUint instanceId, const SessionInfoIf::SPtr &si)
 			: DPIFaultObject(instanceId, si, std::make_shared<MessageRouter>()) {
 
-	}
+	}*/
 
 	const DPIFaultObject::FullInformation &DPIFaultObject::getFullInformation() const {
 		return _fullInformation;
@@ -114,7 +114,7 @@ namespace powerFlex525 {
     }
 
 
-	DPIFaultObject::DPIFaultObject(CipUint instanceId, const SessionInfoIf::SPtr &si,
+	/*DPIFaultObject::DPIFaultObject(CipUint instanceId, const SessionInfoIf::SPtr &si,
 								   const MessageRouter::SPtr& messageRouter)
 		: BaseObject(CLASS_ID, instanceId)
 		, _fullInformation{0} {
@@ -142,7 +142,7 @@ namespace powerFlex525 {
 			logGeneralAndAdditionalStatus(response);
 			throw std::runtime_error("Failed to read FULL_INFORMATION attribute");
 		}
-	}
+	}*/
 
 
     static cip::CipLreal processVolts(uint16_t volts, int voltsParam)
@@ -216,60 +216,71 @@ namespace powerFlex525 {
 	 * returns struct of data at time of fault (volts, current, frequency)
 	 */
     DPIFaultObject::DPIFaultObject(const SessionInfoIf::SPtr &si,
-                                   const MessageRouter::SPtr& messageRouter, int faultNumber)
+                                   const MessageRouter::SPtr& messageRouter, int faultNumber, bool getFaultDetails)
             : BaseObject(0x0E, 0) {
 
-        int faultVoltsParam = 0;
-        int faultCurrentParam = 0;
+        int faultCodeParam      = 0;
+        int faultVoltsParam     = 0;
+        int faultCurrentParam   = 0;
         int faultFrequencyParam = 0;
 
         switch(faultNumber){
             case 1:
+                faultCodeParam = FaultParams::FAULT_1_CODE;
                 faultVoltsParam = FaultParams::FAULT_1_BUS_VOLTS;
                 faultCurrentParam = FaultParams::FAULT_1_CURR;
                 faultFrequencyParam = FaultParams::FAULT_1_FREQ;
                 break;
             case 2:
+                faultCodeParam = FaultParams::FAULT_2_CODE;
                 faultVoltsParam = FaultParams::FAULT_2_BUS_VOLTS;
                 faultCurrentParam = FaultParams::FAULT_2_CURR;
                 faultFrequencyParam = FaultParams::FAULT_2_FREQ;
                 break;
             case 3:
+                faultCodeParam = FaultParams::FAULT_3_CODE;
                 faultVoltsParam = FaultParams::FAULT_3_BUS_VOLTS;
                 faultCurrentParam = FaultParams::FAULT_3_CURR;
                 faultFrequencyParam = FaultParams::FAULT_3_FREQ;
                 break;
             case 4:
+                faultCodeParam = FaultParams::FAULT_4_CODE;
                 faultVoltsParam = FaultParams::FAULT_4_BUS_VOLTS;
                 faultCurrentParam = FaultParams::FAULT_4_CURR;
                 faultFrequencyParam = FaultParams::FAULT_4_FREQ;
                 break;
             case 5:
+                faultCodeParam = FaultParams::FAULT_5_CODE;
                 faultVoltsParam = FaultParams::FAULT_5_BUS_VOLTS;
                 faultCurrentParam = FaultParams::FAULT_5_CURR;
                 faultFrequencyParam = FaultParams::FAULT_5_FREQ;
                 break;
             case 6:
+                faultCodeParam = FaultParams::FAULT_6_CODE;
                 faultVoltsParam = FaultParams::FAULT_6_BUS_VOLTS;
                 faultCurrentParam = FaultParams::FAULT_6_CURR;
                 faultFrequencyParam = FaultParams::FAULT_6_FREQ;
                 break;
             case 7:
+                faultCodeParam = FaultParams::FAULT_7_CODE;
                 faultVoltsParam = FaultParams::FAULT_7_BUS_VOLTS;
                 faultCurrentParam = FaultParams::FAULT_7_CURR;
                 faultFrequencyParam = FaultParams::FAULT_7_FREQ;
                 break;
             case 8:
+                faultCodeParam = FaultParams::FAULT_8_CODE;
                 faultVoltsParam = FaultParams::FAULT_8_BUS_VOLTS;
                 faultCurrentParam = FaultParams::FAULT_8_CURR;
                 faultFrequencyParam = FaultParams::FAULT_8_FREQ;
                 break;
             case 9:
+                faultCodeParam = FaultParams::FAULT_9_CODE;
                 faultVoltsParam = FaultParams::FAULT_9_BUS_VOLTS;
                 faultCurrentParam = FaultParams::FAULT_9_CURR;
                 faultFrequencyParam = FaultParams::FAULT_9_FREQ;
                 break;
             case 10:
+                faultCodeParam = FaultParams::FAULT_10_CODE;
                 faultVoltsParam = FaultParams::FAULT_10_BUS_VOLTS;
                 faultCurrentParam = FaultParams::FAULT_10_CURR;
                 faultFrequencyParam = FaultParams::FAULT_10_FREQ;
@@ -279,23 +290,57 @@ namespace powerFlex525 {
                 throw std::runtime_error("Invalid fault code (Fault code must be 1-10)");;
         }
 
-	    uint16_t volts = getFaultDetail(si, messageRouter, faultVoltsParam);
-        uint16_t current = getFaultDetail(si, messageRouter, faultCurrentParam);
-        uint16_t frequency = getFaultDetail(si, messageRouter, faultFrequencyParam);
+        // get fault code from the device
+        uint16_t faultCode = getFaultDetail(si, messageRouter, faultCodeParam);
 
+
+        // there is a fault
+        if(faultCode != 0){
+
+
+            // get fault details (volts, current, & frequency)
+            if(getFaultDetails){
+
+                // get values from parameters
+                uint16_t volts = getFaultDetail(si, messageRouter, faultVoltsParam);
+                uint16_t current = getFaultDetail(si, messageRouter, faultCurrentParam);
+                uint16_t frequency = getFaultDetail(si, messageRouter, faultFrequencyParam);
+
+
+                // process volts, current & frequency to get engineering value
+                _faultDetails = DPIFaultObject::FaultDetails {
+                        faultNumber,
+                        faultCode,
+                        processVolts(volts, faultVoltsParam),
+                        processCurrent(current, faultCurrentParam),
+                        processFrequency(frequency, faultFrequencyParam),
+                };
+
+                return;
+            }
+
+        }
+
+
+        // either no fault exists or don't want to get faults
         _faultDetails = DPIFaultObject::FaultDetails {
                 faultNumber,
-                processVolts(volts, faultVoltsParam),
-                processCurrent(current, faultCurrentParam),
-                processFrequency(frequency, faultFrequencyParam),
+                faultCode,
+                0,
+                0,
+                0,
         };
-
     }
 
 
     void DPIFaultObject::DPIFaultObject::setFaultDetails(DPIFaultObject::FaultDetails faultDetails)
     {
         _fullInformation.faultDetails = faultDetails;
+    }
+
+    void DPIFaultObject::DPIFaultObject::setFaultDescription(DPIFaultCode::FaultDescriptions faultDescriptions)
+    {
+        _fullInformation.faultDescription = faultDescriptions;
     }
 
 }

@@ -10,6 +10,7 @@
 #include "SessionInfoIf.h"
 #include "MessageRouter.h"
 #include "ParameterObject.h"
+#include "DPIFaultCode.h"
 
 namespace eipScanner {
 namespace vendor {
@@ -21,7 +22,9 @@ namespace powerFlex525 {
 		static const cip::CipUint CLASS_ID = 0x97;
 
         struct FaultDetails{
+
             int             faultNumber;
+            cip::CipUint    faultCode;
             cip::CipLreal   busVoltage;
             cip::CipLreal   current;
             cip::CipLreal   frequency;
@@ -29,15 +32,16 @@ namespace powerFlex525 {
         };
 
 		struct FullInformation {
-			cip::CipUint faultCode;
-			cip::CipUsint dsiPort;
+			/*cip::CipUsint dsiPort;
 			cip::CipUsint dsiDeviceObject;
 			cip::CipString faultText;
 			cip::CipLword timerValue;
 			bool isValidData;
-			bool isRealTime;
+			bool isRealTime;*/
 
+            cip::CipUint faultCode;
             FaultDetails faultDetails;
+            DPIFaultCode::FaultDescriptions faultDescription;
 		};
 
 
@@ -47,20 +51,22 @@ namespace powerFlex525 {
 		* @param fullAttributes if true, then read all the attributes
 		* @param si
 		*/
-		DPIFaultObject(cip::CipUint instanceId,
-					   const SessionInfoIf::SPtr &si);
+		/*DPIFaultObject(cip::CipUint instanceId,
+					   const SessionInfoIf::SPtr &si);*/
 
-		DPIFaultObject(cip::CipUint instanceId,
-					   const SessionInfoIf::SPtr &si, const MessageRouter::SPtr& messageRouter);
+		/*DPIFaultObject(cip::CipUint instanceId,
+					   const SessionInfoIf::SPtr &si, const MessageRouter::SPtr& messageRouter);*/
 
 		// for fault info at time of fault (volts, current, frequency)
         DPIFaultObject(const SessionInfoIf::SPtr &si,
                                        const MessageRouter::SPtr& messageRouter,
-                                       int faultNumber);
+                                       int faultNumber,
+                                       bool getFaultDetails);
 
 		const FullInformation &getFullInformation() const;
         const FaultDetails &getFaultDetails() const; // returns struct fault details
         void setFaultDetails(FaultDetails faultInfo); // sets fault details struct in FullInformation struct
+        void setFaultDescription(DPIFaultCode::FaultDescriptions faultDescriptions); // sets fault description (info mapped from fault code)
 
 	private:
 

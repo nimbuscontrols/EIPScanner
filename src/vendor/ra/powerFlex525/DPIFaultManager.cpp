@@ -46,76 +46,49 @@ namespace powerFlex525 {
 	}
 
 	void DPIFaultManager::handleFaultObjects(const SessionInfoIf::SPtr &si, const MessageRouter::SPtr &messageRouter) {
-		auto response = messageRouter->sendRequest(si,
-				ServiceCodes::GET_ATTRIBUTE_SINGLE,
-				EPath(DPIFaultObject::CLASS_ID, 0 , DPIFaultClassAttributeIds::FAULT_TRIP_INSTANCE_READ));
 
-		if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
-			Buffer buffer(response.getData());
-			CipUsint tripped;
-			buffer >> tripped;
+		uint16_t faultCount = 0; // keeps track of number of faults we count in the parameters
 
-			if (_lastTrippedState != tripped) {
-				Logger(LogLevel::INFO) << "Trip flag changed to " << static_cast<int>(tripped);
-				_trippedDeviceHandler(tripped);
-				_lastTrippedState = tripped;
-			}
-		} else {
-			logGeneralAndAdditionalStatus(response);
-			throw std::runtime_error("Failed to read FAULT_TRIP_INSTANCE_READ attribute");
-		}
-
-		response = messageRouter->sendRequest(si,
-				ServiceCodes::GET_ATTRIBUTE_SINGLE,
-				EPath(DPIFaultObject::CLASS_ID, 0 , DPIFaultClassAttributeIds::NUMBER_OF_RECORDED_FAULTS));
-
-		if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
-			Buffer buffer(response.getData());
-			CipUint faultNumber;
-			buffer >> faultNumber;
-
-			if (faultNumber > 0) {
-				int realFaultCount = 0;
-
-				for (int i = 1; i <= faultNumber; ++i) {
-
-					DPIFaultObject faultObject(i, si, messageRouter);
-					if (faultObject.getFullInformation().faultCode == 0) {
-						break;
-					}
+		// up to 10 faults in powerflex 525
+        for (int i = 1; i <= 10; ++i) {
 
 
-                    // get details at time of fault (volts, current & frequency) and add to faultInformation
-					if(_getFaultDetails) {
-                        auto faultInformation = new DPIFaultObject(si, messageRouter, i);
-                        auto faultDetails = faultInformation->getFaultDetails();
-                        faultObject.setFaultDetails(faultDetails);
-                    }
+            // check if fault exists and if fault, return fault info
+            auto faultInformation = DPIFaultObject(si, messageRouter, i, _getFaultDetails);
+            auto faultDetails = faultInformation.getFaultDetails();
 
 
-					realFaultCount++;
-					_newFaultHandler(faultObject);
-				}
+            // no fault
+            if(faultDetails.faultCode == 0)
+                break;
+            else {
 
-				if (realFaultCount > 0) {
-					Logger(LogLevel::INFO) << "There read " << realFaultCount << " faults in the queue";
-				}
+                // get fault descriptions mapped from fault code)
+                auto faultCodes = DPIFaultCode(faultDetails.faultCode).getFaultDescription();
+                faultInformation.setFaultDescription(faultCodes);
+                faultInformation.setFaultDetails(faultDetails);
+            }
 
 
-				// we should clear this in the end after the loop
-                if (_clearFaultsQueue && realFaultCount > 0) {
-                    writeCommand(DPIFaultManagerCommands::CLEAR_FAULT_QUEUE, si, messageRouter);
-                }
+            faultCount++;
+            _newFaultHandler(faultInformation);
+        }
 
-                // device is stopped -> need to figure out how to 1) read fault that stops device and 2) reset device
-                if(_resetFault && realFaultCount > 0){
 
-                }
-			}
-		} else {
-			logGeneralAndAdditionalStatus(response);
-			throw std::runtime_error("Failed to read NUMBER_OF_RECORDED_FAULTS attribute");
-		}
+        if (faultCount > 0) {
+            Logger(LogLevel::INFO) << "There read " << faultCount << " faults in the queue";
+        }
+
+
+        // we should clear this in the end after the loop
+        if (_clearFaultsQueue && faultCount > 0) {
+            writeCommand(DPIFaultManagerCommands::CLEAR_FAULT_QUEUE, si, messageRouter);
+        }
+
+        // device is stopped -> need to figure out how to 1) read fault that stops device and 2) reset device
+        if(_resetFault && faultCount > 0){
+
+        }
 	}
 
 	void DPIFaultManager::handleFaultObjects(const SessionInfoIf::SPtr &si) {
