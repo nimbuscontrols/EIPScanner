@@ -30,16 +30,11 @@ namespace powerFlex525 {
     DPIFaultCode::FaultDescriptions DPIFaultCode::getFaultDescription() {
 
         // make sure map contains faultCode - tried using try/catch but wasn't catching my exception
-        if (this->containsFaultCode()){
+        if (this->containsFaultCode())
             return this->_faultMap.at(this->_faultCode);
-        } else{
-            // faultCode doesn't exists
-            return FaultDescriptions{
-                    -1,
-                    "n/a",
-                    "n/a"
-            };
-        }
+        else
+            throw std::runtime_error("Fault code doesn't exist for Powerflex 525.");
+
     }
 
 

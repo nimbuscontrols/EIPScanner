@@ -17,16 +17,16 @@ namespace eipScanner {
 
                 class DPIFaultCode {
 
+                public:
+
+                    explicit DPIFaultCode(int faultCode);
+                    ~DPIFaultCode();
+
                     struct FaultDescriptions {
                         int faultType;
                         string faultText;
                         string faultDescription;
                     };
-
-                public:
-
-                    DPIFaultCode(int faultCode);
-                    ~DPIFaultCode();
 
                     FaultDescriptions getFaultDescription(); // returns FaultDescriptions struct{} related to fault
 
