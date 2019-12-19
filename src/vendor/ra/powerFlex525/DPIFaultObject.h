@@ -37,10 +37,10 @@ namespace powerFlex525 {
 			cip::CipString faultText;
 			cip::CipLword timerValue;
 			bool isValidData;
-			bool isRealTime;*/
+			bool isRealTime;
+			cip::CipUint faultCode;*/
 
-            cip::CipUint faultCode;
-            FaultDetails faultDetails;
+			FaultDetails faultDetails;
             DPIFaultCode::FaultDescriptions faultDescription;
 		};
 
