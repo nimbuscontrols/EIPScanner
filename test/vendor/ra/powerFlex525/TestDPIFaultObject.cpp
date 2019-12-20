@@ -6,7 +6,6 @@
 #include <gtest/gtest.h>
 #include "Mocks.h"
 #include "vendor/ra/powerFlex525/DPIFaultObject.h"
-#include "vendor/ra/powerFlex525/DPIFaultParameter.h"
 
 using namespace eipScanner;
 using namespace eipScanner::vendor::ra::powerFlex525;
@@ -15,14 +14,12 @@ class TestDPIFaultObject : public ::testing::Test {
 public:
 	const static cip::CipUint OBJECT_ID = 1;
 	const std::vector<uint8_t> FULL_INFORMATION_DATA = {
-		0x01,		// frequency
-		0x02,		// current
-		0x03,		// bus voltage
-		0x04,       // fault code
-		0x05,       // fault number
-		0x06,       // fault type
-		'U', 'N', 'D', 'E', 'R', 'V', 'O', 'L', 'T', 'A', 'G', 'E',  // fault text,
-		'E', 'R', 'R', 'O', 'R', ' ',  // fault description
+		0x01,0x0,		// fault code
+		0x02,			// DSI port
+		0x03,			// DSI device
+		'E', 'R', 'R', 'O', 'R', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',  // fault text
+		0x01, 0x02, 0x03, 0x4, 0x5, 0x6, 0x7,0x8,	// timer value
+		0x3, 0x0
 	};
 
 	void SetUp() override {
@@ -44,17 +41,16 @@ TEST_F(TestDPIFaultObject, ShouldReadAllDataInConstructor) {
 			cip::EPath(0x97, OBJECT_ID, 0)
 	)).WillOnce(::testing::Return(response));
 
-	DPIFaultParameter faultParameter(_nullSession, _messageRouter, 1, true);
+	DPIFaultObject faultObject(OBJECT_ID, _nullSession, _messageRouter);
 
-	const auto& fullInformation = faultParameter.getFullInformation();
-	EXPECT_EQ(1, fullInformation.faultDetails.frequency);
-	EXPECT_EQ(2, fullInformation.faultDetails.current);
-	EXPECT_EQ(3, fullInformation.faultDetails.busVoltage);
-	EXPECT_EQ(4, fullInformation.faultDetails.faultCode);
-	EXPECT_EQ(5, fullInformation.faultDetails.faultNumber);
-	EXPECT_EQ(6, fullInformation.faultDescription.faultType);
-	EXPECT_EQ("UNDERVOLTAGE", fullInformation.faultDescription.faultText);
-	EXPECT_EQ("ERROR ", fullInformation.faultDescription.faultDescription);
+	const auto& fullInformation = faultObject.getFullInformation();
+	EXPECT_EQ(1, fullInformation.faultCode);
+	EXPECT_EQ(2, fullInformation.dsiPort);
+	EXPECT_EQ(3, fullInformation.dsiDeviceObject);
+	EXPECT_EQ("ERROR           ", fullInformation.faultText.toStdString());
+	EXPECT_EQ(0x0807060504030201, fullInformation.timerValue);
+	EXPECT_TRUE(fullInformation.isValidData);
+	EXPECT_TRUE(fullInformation.isRealTime);
 }
 
 TEST_F(TestDPIFaultObject, ShouldThrowExecptionIfFailedToGetData) {
@@ -68,5 +64,5 @@ TEST_F(TestDPIFaultObject, ShouldThrowExecptionIfFailedToGetData) {
 			cip::EPath(0x97, OBJECT_ID, 0)
 	)).WillOnce(::testing::Return(response));
 
-	EXPECT_THROW(DPIFaultParameter(_nullSession, _messageRouter, 1, false), std::runtime_error);
+	EXPECT_THROW(DPIFaultObject(OBJECT_ID, _nullSession, _messageRouter), std::runtime_error);
 }
