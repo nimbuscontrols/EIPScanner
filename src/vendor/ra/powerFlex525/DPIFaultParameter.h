@@ -33,19 +33,6 @@ namespace powerFlex525 {
 			DPIFaultCode::FaultDescriptions faultDescription;
 		};
 
-		/**
-		* Creates an instance and reads all its data via EIP
-		* @param instanceId
-		* @param fullAttributes if true, then read all the attributes
-		* @param si
-		*/
-		/*DPIFaultObject(cip::CipUint instanceId,
-					   const SessionInfoIf::SPtr &si);*/
-
-		/*DPIFaultObject(cip::CipUint instanceId,
-					   const SessionInfoIf::SPtr &si, const MessageRouter::SPtr& messageRouter);*/
-
-		// for fault info at time of fault (volts, current, frequency)
 		DPIFaultParameter(const SessionInfoIf::SPtr &si,
 					   const MessageRouter::SPtr& messageRouter,
 					   int faultNumber,

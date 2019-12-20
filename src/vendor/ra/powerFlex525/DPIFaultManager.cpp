@@ -16,6 +16,8 @@ namespace powerFlex525 {
 	using utils::LogLevel;
 	using utils::Logger;
 
+	const int MAX_FAULT_PARAMETER_NUMBER = 10;
+
 	enum DPIFaultClassAttributeIds : CipUsint {
 		CLASS_REVISION = 1,
 		NUMBER_OF_INSTANCE = 2,
@@ -45,41 +47,33 @@ namespace powerFlex525 {
 		_trippedDeviceHandler = std::move(handler);
 	}
 
-	void DPIFaultManager::handleFaultParamaters(const SessionInfoIf::SPtr &si, const MessageRouter::SPtr &messageRouter) {
+	void DPIFaultManager::handleFaultParameters(const SessionInfoIf::SPtr &si, const MessageRouter::SPtr &messageRouter) {
 
 		uint16_t faultCount = 0; // keeps track of number of faults we count in the parameters
 
 		// up to 10 faults in powerflex 525
-		for (int i = 1; i <= 10; ++i) {
-
-
+		for (int faultNumber = 1; faultNumber <= MAX_FAULT_PARAMETER_NUMBER; ++faultNumber) {
 			// check if fault exists and if fault, return fault info
-			auto faultInformation = DPIFaultParameter(si, messageRouter, i, _getFaultDetails);
+			auto faultInformation = DPIFaultParameter(si, messageRouter, faultNumber, this->_getFaultDetails);
 			auto faultDetails = faultInformation.getFaultDetails();
-
 
 			// no fault
 			if(faultDetails.faultCode == 0)
 				break;
 			else {
-
 				// get fault descriptions mapped from fault code)
 				auto faultCodes = DPIFaultCode(faultDetails.faultCode).getFaultDescription();
 				faultInformation.setFaultDescription(faultCodes);
 				faultInformation.setFaultDetails(faultDetails);
 			}
-
-
 			faultCount++;
 			_newFaultHandler(faultInformation);
 		}
 
-
 		if (faultCount > 0) {
 			Logger(LogLevel::INFO) << "There read " << faultCount << " faults in the queue";
 		}
-
-
+		
 		// we should clear this in the end after the loop
 		if (_clearFaultsQueue && faultCount > 0) {
 			writeCommand(DPIFaultManagerCommands::CLEAR_FAULT_QUEUE, si, messageRouter);
@@ -91,8 +85,8 @@ namespace powerFlex525 {
 		}
 	}
 
-	void DPIFaultManager::handleFaultParamaters(const SessionInfoIf::SPtr &si) {
-		handleFaultParamaters(si, std::make_shared<MessageRouter>());
+	void DPIFaultManager::handleFaultParameters(const SessionInfoIf::SPtr &si) {
+		handleFaultParameters(si, std::make_shared<MessageRouter>());
 	}
 
 	void DPIFaultManager::writeCommand(DPIFaultManagerCommands command, const SessionInfoIf::SPtr &si) const {

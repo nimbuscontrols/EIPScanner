@@ -24,14 +24,6 @@ public:
 		_messageRouter = std::make_shared<TMockMessageRouter>();
 		_nullSession = nullptr;
 
-		cip::MessageRouterResponse response;
-		response.setData({0});
-		EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
-												 cip::EPath(0x0F, 7, 1))).WillRepeatedly(::testing::Return(response));
-
-		response.setData({0, 0});
-		EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
-												 cip::EPath(0x0F, 7, 3))).WillRepeatedly(::testing::Return(response));
 	}
 
 	TMockMessageRouter::SPtr _messageRouter;
@@ -113,102 +105,101 @@ TEST_F(TestDPIFaultManager, ShouldWriteCommand) {
 TEST_F(TestDPIFaultManager, ShouldGenerateEventForEachNewFaultAndWhenCleanTheQueue) {
 	DPIFaultManager manager;
 
-	std::vector<DPIFaultParameter> faultObjects;
-	manager.setNewFaultListener([&faultObjects](const DPIFaultParameter& object) {
-		faultObjects.push_back(object);
+	std::vector<DPIFaultParameter> faultParameters;
+	manager.setNewFaultListener([&faultParameters](const DPIFaultParameter& object) {
+		faultParameters.push_back(object);
 	});
 
 	cip::MessageRouterResponse response;
-	response.setData({2, 0});
+	response.setData({4,0});
 
-	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
-											 cip::EPath(0x97, 0, 6))).WillOnce(::testing::Return(response));
+	EXPECT_CALL(*_messageRouter, sendRequest(
+			_nullSession,
+			cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+			cip::EPath(0x0F, 7, 1)
+	)).WillOnce(::testing::Return(response));
 
-	response.setData(FULL_INFORMATION_DATA);
+	response.setData({5,0});
+	EXPECT_CALL(*_messageRouter, sendRequest(
+			_nullSession,
+			cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+			cip::EPath(0x0F, 8, 1)
+	)).WillOnce(::testing::Return(response));
 
-	/*EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
-											 cip::EPath(0x97, 1, 0))).WillOnce(::testing::Return(response));
-
-	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
-											 cip::EPath(0x97, 2, 0))).WillOnce(::testing::Return(response));
+	response.setData({0,0});
+	EXPECT_CALL(*_messageRouter, sendRequest(
+			_nullSession,
+			cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+			cip::EPath(0x0F, 9, 1)
+	)).WillOnce(::testing::Return(response));
 
 	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::SET_ATTRIBUTE_SINGLE,
 											 cip::EPath(0x97, 0, 3),
 											 std::vector<uint8_t >{2}))
 											 .WillOnce(::testing::Return(response));
 
-	manager.handleFaultObjects(_nullSession, _messageRouter);
-	EXPECT_EQ(0, faultObjects.size());
-	EXPECT_EQ(1, faultObjects[0].getFullInformation().faultDetails.faultCode);
-	EXPECT_EQ(1, faultObjects[1].getFullInformation().faultDetails.faultCode);*/
+	manager.handleFaultParameters(_nullSession, _messageRouter);
+	EXPECT_EQ(2, faultParameters.size());
+	EXPECT_EQ(4, faultParameters[0].getFullInformation().faultDetails.faultCode);
+	EXPECT_EQ(5, faultParameters[1].getFullInformation().faultDetails.faultCode);
 }
 
 TEST_F(TestDPIFaultManager, ShouldStopReadingFaultsIfHasFaultCodeZero) {
 	DPIFaultManager manager;
 
-	std::vector<DPIFaultParameter> faultObjects;
-	manager.setNewFaultListener([&faultObjects](const DPIFaultParameter &object) {
-		faultObjects.push_back(object);
+	std::vector<DPIFaultParameter> faultParameters;
+	manager.setNewFaultListener([&faultParameters](const DPIFaultParameter& object) {
+		faultParameters.push_back(object);
 	});
 
 	cip::MessageRouterResponse response;
-	response.setData({2, 0});
+	response.setData({0, 0});
 
-	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
-											 cip::EPath(0x97, 0, 6))).WillOnce(::testing::Return(response));
+	EXPECT_CALL(*_messageRouter, sendRequest(
+			_nullSession,
+			cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+			cip::EPath(0x0F, 7, 1)
+	)).WillOnce(::testing::Return(response));
 
-	auto data = FULL_INFORMATION_DATA;
-	data[0] = 0;
-	response.setData(data);
-
-	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
-											 cip::EPath(0x97, 1, 0))).WillOnce(::testing::Return(response));
-
-	manager.handleFaultParamaters(_nullSession, _messageRouter);
-	EXPECT_TRUE(faultObjects.empty());
-}
-
-TEST_F(TestDPIFaultManager, ShouldThrowExceptionIfFailedToReadNumberOfFaults) {
-	DPIFaultManager manager;
-
-	cip::MessageRouterResponse response;
-	response.setGeneralStatusCode(cip::GeneralStatusCodes::ATTRIBUTE_NOT_SUPPORTED);
-
-	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
-											 cip::EPath(0x97, 0, 6))).WillOnce(::testing::Return(response));
-
-	EXPECT_THROW(manager.handleFaultParamaters(_nullSession, _messageRouter),
-				 std::runtime_error);
+	manager.handleFaultParameters(_nullSession, _messageRouter);
+	EXPECT_TRUE(faultParameters.empty());
 }
 
 TEST_F(TestDPIFaultManager, ShouldGenerateEventForEachNewFaultAndNotCleanFaults) {
 	DPIFaultManager manager(false, false, false);
 
-	std::vector<DPIFaultParameter> faultObjects;
-	manager.setNewFaultListener([&faultObjects](const DPIFaultParameter& object) {
-		faultObjects.push_back(object);
+	std::vector<DPIFaultParameter> faultParameters;
+	manager.setNewFaultListener([&faultParameters](const DPIFaultParameter& object) {
+		faultParameters.push_back(object);
 	});
 
 	cip::MessageRouterResponse response;
-	response.setData({2, 0});
+	response.setData({4,0});
 
-	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
-											 cip::EPath(0x97, 0, 6))).WillOnce(::testing::Return(response));
+	EXPECT_CALL(*_messageRouter, sendRequest(
+			_nullSession,
+			cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+			cip::EPath(0x0F, 7, 1)
+	)).WillOnce(::testing::Return(response));
 
-	response.setData(FULL_INFORMATION_DATA);
+	response.setData({5,0});
+	EXPECT_CALL(*_messageRouter, sendRequest(
+			_nullSession,
+			cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+			cip::EPath(0x0F, 8, 1)
+	)).WillOnce(::testing::Return(response));
 
-	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
-											 cip::EPath(0x97, 1, 0))).WillOnce(::testing::Return(response));
-
-	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
-											 cip::EPath(0x97, 2, 0))).WillOnce(::testing::Return(response));
+	response.setData({0,0});
+	EXPECT_CALL(*_messageRouter, sendRequest(
+			_nullSession,
+			cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
+			cip::EPath(0x0F, 9, 1)
+	)).WillOnce(::testing::Return(response));
 
 	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::SET_ATTRIBUTE_SINGLE,
 											 cip::EPath(0x97, 0, 3),
-											 std::vector<uint8_t >{1})).Times(0);
+											 std::vector<uint8_t >{2})).Times(0);
 
-	manager.handleFaultParamaters(_nullSession, _messageRouter);
-	EXPECT_EQ(2, faultObjects.size());
-	EXPECT_EQ(1, faultObjects[0].getFullInformation().faultDetails.faultCode);
-	EXPECT_EQ(1, faultObjects[1].getFullInformation().faultDetails.faultCode);
+	manager.handleFaultParameters(_nullSession, _messageRouter);
+	EXPECT_EQ(2, faultParameters.size());
 }

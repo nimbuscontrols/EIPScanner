@@ -33,13 +33,12 @@ namespace powerFlex525 {
 		explicit DPIFaultManager(bool clearFaults, bool resetDevice, bool getFaultDetails);
 		void setNewFaultListener(NewFaultHandler handler);
 		void setTrippedDeviceListener(TrippedDeviceHandler handler);
-		void handleFaultParamaters(const SessionInfoIf::SPtr& si);
-		void handleFaultParamaters(const SessionInfoIf::SPtr& si, const MessageRouter::SPtr& messageRouter);
+		void handleFaultParameters(const SessionInfoIf::SPtr& si);
+		void handleFaultParameters(const SessionInfoIf::SPtr& si, const MessageRouter::SPtr& messageRouter);
 
 		void writeCommand(DPIFaultManagerCommands command, const SessionInfoIf::SPtr& si) const;
 		void writeCommand(DPIFaultManagerCommands command, const SessionInfoIf::SPtr& si,
 				const MessageRouter::SPtr& messageRouter) const;
-
 
 	private:
 		NewFaultHandler _newFaultHandler;
