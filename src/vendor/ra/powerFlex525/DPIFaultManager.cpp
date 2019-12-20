@@ -50,49 +50,49 @@ namespace powerFlex525 {
 		uint16_t faultCount = 0; // keeps track of number of faults we count in the parameters
 
 		// up to 10 faults in powerflex 525
-        for (int i = 1; i <= 10; ++i) {
+		for (int i = 1; i <= 10; ++i) {
 
 
-            // check if fault exists and if fault, return fault info
-            auto faultInformation = DPIFaultParameter(si, messageRouter, i, _getFaultDetails);
-            auto faultDetails = faultInformation.getFaultDetails();
+			// check if fault exists and if fault, return fault info
+			auto faultInformation = DPIFaultParameter(si, messageRouter, i, _getFaultDetails);
+			auto faultDetails = faultInformation.getFaultDetails();
 
 
-            // no fault
-            if(faultDetails.faultCode == 0)
-                break;
-            else {
+			// no fault
+			if(faultDetails.faultCode == 0)
+				break;
+			else {
 
-                // get fault descriptions mapped from fault code)
-                auto faultCodes = DPIFaultCode(faultDetails.faultCode).getFaultDescription();
-                faultInformation.setFaultDescription(faultCodes);
-                faultInformation.setFaultDetails(faultDetails);
-            }
-
-
-            faultCount++;
-            _newFaultHandler(faultInformation);
-        }
+				// get fault descriptions mapped from fault code)
+				auto faultCodes = DPIFaultCode(faultDetails.faultCode).getFaultDescription();
+				faultInformation.setFaultDescription(faultCodes);
+				faultInformation.setFaultDetails(faultDetails);
+			}
 
 
-        if (faultCount > 0) {
-            Logger(LogLevel::INFO) << "There read " << faultCount << " faults in the queue";
-        }
+			faultCount++;
+			_newFaultHandler(faultInformation);
+		}
 
 
-        // we should clear this in the end after the loop
-        if (_clearFaultsQueue && faultCount > 0) {
-            writeCommand(DPIFaultManagerCommands::CLEAR_FAULT_QUEUE, si, messageRouter);
-        }
+		if (faultCount > 0) {
+			Logger(LogLevel::INFO) << "There read " << faultCount << " faults in the queue";
+		}
 
-        // device is stopped -> need to figure out how to 1) read fault that stops device and 2) reset device
-        if(_resetFault && faultCount > 0){
 
-        }
+		// we should clear this in the end after the loop
+		if (_clearFaultsQueue && faultCount > 0) {
+			writeCommand(DPIFaultManagerCommands::CLEAR_FAULT_QUEUE, si, messageRouter);
+		}
+
+		// device is stopped -> need to figure out how to 1) read fault that stops device and 2) reset device
+		if(_resetFault && faultCount > 0){
+
+		}
 	}
 
 	void DPIFaultManager::handleFaultParamaters(const SessionInfoIf::SPtr &si) {
-        handleFaultParamaters(si, std::make_shared<MessageRouter>());
+		handleFaultParamaters(si, std::make_shared<MessageRouter>());
 	}
 
 	void DPIFaultManager::writeCommand(DPIFaultManagerCommands command, const SessionInfoIf::SPtr &si) const {

@@ -19,9 +19,9 @@ public:
 		0x02,		// current
 		0x03,		// bus voltage
 		0x04,       // fault code
-        0x05,       // fault number
-        0x06,       // fault type
-        'U', 'N', 'D', 'E', 'R', 'V', 'O', 'L', 'T', 'A', 'G', 'E',  // fault text,
+		0x05,       // fault number
+		0x06,       // fault type
+		'U', 'N', 'D', 'E', 'R', 'V', 'O', 'L', 'T', 'A', 'G', 'E',  // fault text,
 		'E', 'R', 'R', 'O', 'R', ' ',  // fault description
 	};
 
@@ -48,13 +48,13 @@ TEST_F(TestDPIFaultObject, ShouldReadAllDataInConstructor) {
 
 	const auto& fullInformation = faultParameter.getFullInformation();
 	EXPECT_EQ(1, fullInformation.faultDetails.frequency);
-    EXPECT_EQ(2, fullInformation.faultDetails.current);
-    EXPECT_EQ(3, fullInformation.faultDetails.busVoltage);
+	EXPECT_EQ(2, fullInformation.faultDetails.current);
+	EXPECT_EQ(3, fullInformation.faultDetails.busVoltage);
 	EXPECT_EQ(4, fullInformation.faultDetails.faultCode);
-    EXPECT_EQ(5, fullInformation.faultDetails.faultNumber);
+	EXPECT_EQ(5, fullInformation.faultDetails.faultNumber);
 	EXPECT_EQ(6, fullInformation.faultDescription.faultType);
-    EXPECT_EQ("UNDERVOLTAGE", fullInformation.faultDescription.faultText);
-    EXPECT_EQ("ERROR ", fullInformation.faultDescription.faultDescription);
+	EXPECT_EQ("UNDERVOLTAGE", fullInformation.faultDescription.faultText);
+	EXPECT_EQ("ERROR ", fullInformation.faultDescription.faultDescription);
 }
 
 TEST_F(TestDPIFaultObject, ShouldThrowExecptionIfFailedToGetData) {

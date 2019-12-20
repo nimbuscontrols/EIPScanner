@@ -26,7 +26,7 @@ namespace powerFlex525 {
 	class DPIFaultManager {
 	public:
 		using NewFaultObjectHandler = std::function<void(const DPIFaultObject& fault)>;
-        using NewFaultHandler = std::function<void(const DPIFaultParameter& fault)>;
+		using NewFaultHandler = std::function<void(const DPIFaultParameter& fault)>;
 		using TrippedDeviceHandler = std::function<void(bool)>;
 
 		DPIFaultManager();
