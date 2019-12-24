@@ -9,7 +9,6 @@
 
 using namespace eipScanner::cip;
 using eipScanner::SessionInfo;
-using eipScanner::MessageRouter;
 using eipScanner::utils::Logger;
 using eipScanner::utils::LogLevel;
 using eipScanner::FileObject;
@@ -17,9 +16,8 @@ using eipScanner::FileObject;
 int main() {
 	Logger::setLogLevel(LogLevel::DEBUG);
 	auto si = std::make_shared<SessionInfo>("172.28.1.3", 0xAF12);
-	auto messageRouter = std::make_shared<MessageRouter>();
 
-	FileObject edsFile(0xC8, si, messageRouter);
+	FileObject edsFile(0xC8, si);
 	edsFile.beginUpload(si, [](GeneralStatusCodes status, const std::vector<uint8_t> &fileContent) {
 		if (status == GeneralStatusCodes::SUCCESS) {
 			std::ofstream outFile("Device.eds", std::ios::out | std::ios::trunc | std::ios::binary);

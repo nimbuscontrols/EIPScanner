@@ -13,6 +13,10 @@
 * fix implicit messaging on OSX and check connection sizes #10, @flipback
 * fix wrong encoding float and double types #12, @flipback
 
+**Documentation**:
+
+* init Sphinx documentation #7, @flipback, @jadamroth
+
 # Release 1.0.0 (2019-12-08)
 
 Initial release

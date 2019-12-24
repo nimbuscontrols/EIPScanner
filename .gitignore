@@ -1,3 +1,7 @@
 /cmake-*
 /build
 .idea
+docs/build/
+docs/source/doxyoutput/
+docs/source/api/
+!docs/source/api/library_root.rst

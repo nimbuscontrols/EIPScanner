@@ -26,8 +26,17 @@ namespace eipScanner {
 	using sockets::UDPBoundSocket;
 	using sockets::BaseSocket;
 
-	ConnectionManager::ConnectionManager(MessageRouter::SPtr messageRouter)
-		: _messageRouter(std::move(messageRouter))
+	enum class ConnectionManagerServiceCodes : cip::CipUsint {
+		FORWARD_OPEN = 0x54,
+		FORWARD_CLOSE = 0x4E
+	};
+
+	ConnectionManager::ConnectionManager()
+		: ConnectionManager(std::make_shared<MessageRouter>()){
+	}
+
+	ConnectionManager::ConnectionManager(const MessageRouter::SPtr& messageRouter)
+		: _messageRouter(messageRouter)
 		, _connectionMap()
 		, _lastHandleTime(std::chrono::steady_clock::now()){
 
@@ -39,7 +48,7 @@ namespace eipScanner {
 	ConnectionManager::~ConnectionManager() = default;
 
 	IOConnection::WPtr
-	ConnectionManager::forwardOpen(SessionInfoIf::SPtr si, ConnectionParameters connectionParameters) {
+	ConnectionManager::forwardOpen(const SessionInfoIf::SPtr& si, ConnectionParameters connectionParameters) {
 		static int serialNumberCount = 0;
 		connectionParameters.connectionSerialNumber = ++serialNumberCount;
 
@@ -153,7 +162,7 @@ namespace eipScanner {
 		return ioConnection;
 	}
 
-	void ConnectionManager::forwardClose(SessionInfoIf::SPtr si, const IOConnection::WPtr& ioConnection) {
+	void ConnectionManager::forwardClose(const SessionInfoIf::SPtr& si, const IOConnection::WPtr& ioConnection) {
 		if (auto ptr = ioConnection.lock()) {
 			ForwardCloseRequest request;
 
@@ -248,5 +257,4 @@ namespace eipScanner {
 	bool ConnectionManager::hasOpenConnections() const {
 		return !_connectionMap.empty();
 	}
-
 }

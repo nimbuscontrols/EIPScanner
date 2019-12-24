@@ -14,25 +14,54 @@
 #include "sockets/UDPBoundSocket.h"
 
 namespace eipScanner {
-
-	enum class ConnectionManagerServiceCodes : cip::CipUsint {
-		FORWARD_OPEN = 0x54,
-		FORWARD_CLOSE = 0x4E
-	};
-
+	/**
+	* @class ConnectionManager
+	*
+	* @brief Implements the implicit messaging with EIP adapter
+	*/
 	class ConnectionManager {
 	public:
-		explicit ConnectionManager(MessageRouter::SPtr messageRouter);
-		~ConnectionManager();
-
-		IOConnection::WPtr forwardOpen(SessionInfoIf::SPtr si, cip::connectionManager::ConnectionParameters connectionParameters);
-		void forwardClose(SessionInfoIf::SPtr si, const IOConnection::WPtr& ioConnection);
+		/**
+		 * @brief Default constructor
+		 */
+		ConnectionManager();
 
 		/**
-		 * Handles active connections
+		 * @note used fot testing
+		 * @param messageRouter
+		 */
+		explicit ConnectionManager(const MessageRouter::SPtr& messageRouter);
+
+		/**
+		 * @brief Default destructor
+		 */
+		~ConnectionManager();
+
+		/**
+		 * @brief Opens an EIP IO connection with the EIP adapter
+		 * @param si the EIP session for explicit messaging
+		 * @param connectionParameters the parameters of the connection
+		 * @return weak pointer to the created connection or nullptr if got an error
+		 */
+		IOConnection::WPtr forwardOpen(const SessionInfoIf::SPtr& si, cip::connectionManager::ConnectionParameters connectionParameters);
+
+		/**
+		 * @brief Closes an EIP IO connection
+		 * @param si the EIP session for explicit messaging
+		 * @param ioConnection the connection to close
+		 */
+		void forwardClose(const SessionInfoIf::SPtr& si, const IOConnection::WPtr& ioConnection);
+
+		/**
+		 * @brief Handles active connections
 		 * @param timeout the timeout of receiving the data by select function
 		 */
 		void handleConnections(std::chrono::milliseconds timeout);
+
+		/**
+		 *
+		 * @return true if there are some opened IO connections
+		 */
 		bool hasOpenConnections() const;
 	private:
 		MessageRouter::SPtr _messageRouter;

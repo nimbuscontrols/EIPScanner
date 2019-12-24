@@ -10,15 +10,32 @@
 #include "sockets/EndPoint.h"
 
 namespace eipScanner {
-
+	/**
+	* @class SessionInfoIf
+	*
+	* @brief Abstract interface for EIP session
+	*/
 	class SessionInfoIf {
 	public:
 		using SPtr = std::shared_ptr<SessionInfoIf>;
 
+		/**
+		 * Sends and receives EIP Encapsulation packet
+		 * @param packet the EIP Encapsulation packet to send
+		 * @return the received EIP Encapsulation packet
+		 */
 		virtual eip::EncapsPacket sendAndReceive(const eip::EncapsPacket &packet) const = 0;
 
+		/**
+		 * Gets the handle of the current EIP session
+		 * @return
+		 */
 		virtual cip::CipUdint getSessionHandle() const = 0;
 
+		/**
+		 * Gets the address of the EIP adapter which the session is established with
+		 * @return
+		 */
 		virtual sockets::EndPoint getRemoteEndPoint() const = 0;
 	};
 }

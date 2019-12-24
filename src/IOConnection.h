@@ -14,6 +14,13 @@
 namespace eipScanner {
 	class ConnectionManager;
 
+	/**
+	 * @class IOConnection
+	 *
+	 * @brief Implements an implicit EIP connection
+	 *
+	 * @sa eipScanner::ConnectionManager
+	 */
 	class IOConnection {
 		friend class ConnectionManager;
 	public:
@@ -23,10 +30,30 @@ namespace eipScanner {
 		using WPtr=std::weak_ptr<IOConnection>;
 		using SPtr=std::shared_ptr<IOConnection>;
 
+		/**
+		 * Default destructor
+		 */
 		~IOConnection();
 
+		/**
+		 * @brief Sets data to send via the connection each API period
+		 *
+		 * @note Set only data. The sequence counter and the real time format header are append automatically
+		 * @param data the dat to send
+		 */
 		void setDataToSend(const std::vector<uint8_t>& data);
+
+		/**
+		 * @brief Sets a callback to handle received data
+		 *
+		 * @param handle
+		 */
 		void setReceiveDataListener(ReceiveDataHandle handle);
+
+		/**
+		 * @brief Sets a callback to notify that the connection was closed
+		 * @param handle
+		 */
 		void setCloseListener(CloseHandle handle);
 
 	private:
