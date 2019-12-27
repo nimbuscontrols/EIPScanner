@@ -67,4 +67,5 @@ namespace powerFlex525 {
 }
 }
 }
+}
 #endif  // EIPSCANNER_VENDOR_DIPFAULTOBJECT_H
