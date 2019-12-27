@@ -30,8 +30,8 @@ public:
 	SessionInfoIf::SPtr  _nullSession;
 };
 
-/* // tripped is not reimplemented
-TEST_F(TestDPIFaultManager, ShouldGenerateTrippedEvent) {
+// tripped is not reimplemented
+TEST_F(TestDPIFaultManager, DISABLED_ShouldGenerateTrippedEvent) {
 	DPIFaultManager manager;
 
 	cip::CipUsint  tripped = -1;
@@ -45,13 +45,12 @@ TEST_F(TestDPIFaultManager, ShouldGenerateTrippedEvent) {
 	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
 			cip::EPath(0x97, 0, 4))).WillOnce(::testing::Return(response));
 
-	manager.handleFaultObjects(_nullSession, _messageRouter);
+	manager.handleFaultParameters(_nullSession, _messageRouter);
 	EXPECT_EQ(1, tripped);
-}*/
+}
 
-/*
 // tripped is not reimplemented
-TEST_F(TestDPIFaultManager, ShouldNotGenerateTrippedEventIfItIsNotChanged) {
+TEST_F(TestDPIFaultManager, DISABLED_ShouldNotGenerateTrippedEventIfItIsNotChanged) {
 	DPIFaultManager manager;
 
 	cip::CipUsint  tripped = -1;
@@ -65,20 +64,20 @@ TEST_F(TestDPIFaultManager, ShouldNotGenerateTrippedEventIfItIsNotChanged) {
 	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
 											 cip::EPath(0x97, 0, 4))).WillOnce(::testing::Return(response));
 
-	manager.handleFaultObjects(_nullSession, _messageRouter);
+	manager.handleFaultParameters(_nullSession, _messageRouter);
 	//EXPECT_EQ(0, tripped);
 
 	tripped = 0xff;
 	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
 											 cip::EPath(0x97, 0, 4))).WillOnce(::testing::Return(response));
 
-	manager.handleFaultObjects(_nullSession, _messageRouter);
+	manager.handleFaultParameters(_nullSession, _messageRouter);
 	//EXPECT_EQ(0xff, tripped);
-}*/
+}
 
-/*
+
 // tripped is not reimplemented
-TEST_F(TestDPIFaultManager, ShouldThrowExceptionIfFailedToReadFaultTrip) {
+TEST_F(TestDPIFaultManager, DISABLED_ShouldThrowExceptionIfFailedToReadFaultTrip) {
 	DPIFaultManager manager;
 
 	cip::MessageRouterResponse response;
@@ -87,9 +86,9 @@ TEST_F(TestDPIFaultManager, ShouldThrowExceptionIfFailedToReadFaultTrip) {
 	EXPECT_CALL(*_messageRouter, sendRequest(_nullSession, cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
 											 cip::EPath(0x0F, 0, 4))).WillOnce(::testing::Return(response));
 
-	EXPECT_THROW(manager.handleFaultObjects(_nullSession, _messageRouter),std::runtime_error);
+	EXPECT_THROW(manager.handleFaultParameters(_nullSession, _messageRouter),std::runtime_error);
 }
-*/
+
 
 TEST_F(TestDPIFaultManager, ShouldWriteCommand) {
 	DPIFaultManager manager;
