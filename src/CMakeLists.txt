@@ -34,6 +34,8 @@ set(SOURCE_FILES
 
         vendor/ra/powerFlex525/DPIFaultManager.cpp
         vendor/ra/powerFlex525/DPIFaultObject.cpp
+        vendor/ra/powerFlex525/DPIFaultCode.cpp
+        vendor/ra/powerFlex525/DPIFaultParameter.cpp
 
         BaseObject.cpp
         ConnectionManager.cpp

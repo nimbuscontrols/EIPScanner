@@ -320,6 +320,9 @@ public:
 	 */
 	void setPrecision(cip::CipUsint precision);
 
+    cip::CipLreal actualToEngValue(cip::CipLreal actualValue) const;
+    cip::CipLreal engToActualValue(cip::CipLreal engValue) const;
+
 private:
 
 	template <typename T>
@@ -336,9 +339,6 @@ private:
 		buffer << v;
 		return buffer.data();
 	}
-
-	cip::CipLreal actualToEngValue(cip::CipLreal actualValue) const;
-	cip::CipLreal engToActualValue(cip::CipLreal engValue) const;
 
 	bool _hasFullAttributes;
 	bool _isScalable{};
