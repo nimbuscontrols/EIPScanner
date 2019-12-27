@@ -30,6 +30,9 @@ namespace powerFlex525 {
 	 * @class DPIFaultManager
 	 *
 	 * @brief Implements a manager to retrieve new faults and clean its queue
+	 *
+	 * It use PrarameterObejcts instead of FaultObject because it doesn't contain the needed information
+	 *
 	 */
 	class DPIFaultManager {
 	public:
@@ -38,13 +41,15 @@ namespace powerFlex525 {
 		using TrippedDeviceHandler = std::function<void(bool)>;
 
 		/**
-		 * @brief Default constructor (clearFaults = true)
+		 * @brief Default constructor (clearFaults = true, resetDevice = false, getFaultDetails = false)
 		 */
 		DPIFaultManager();
   
 		/**
 		 * @brief Constructor
 		 * @param clearFaults if true the manager clears the queue after it has retrieved a new fault
+		 * @param resetDevice isn't used yet
+		 * @param getFaultDetails if true the manager read all data from fault parameters
 		 */
 		explicit DPIFaultManager(bool clearFaults, bool resetDevice, bool getFaultDetails);
 
@@ -59,6 +64,11 @@ namespace powerFlex525 {
 		 * @param handler
 		 */
 		void setTrippedDeviceListener(TrippedDeviceHandler handler);
+
+		/**
+		 * @brief reads fault parameters and calls NewFaultHandler handler if it gets a new one
+		 * @param si
+		 */
 		void handleFaultParameters(const SessionInfoIf::SPtr& si);
 		void handleFaultParameters(const SessionInfoIf::SPtr& si, const MessageRouter::SPtr& messageRouter);
 
