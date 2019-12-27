@@ -68,6 +68,15 @@ TEST(TestBuffer, PushUint64) {
 	EXPECT_EQ(buf.data(), expectedData);
 }
 
+TEST(TestBuffer, PushInt64) {
+	Buffer buf;
+	std::vector<uint8_t> expectedData = {0, 1, 2, 3, 4, 5, 6, 7};
+
+	buf << (int64_t)0x0706050403020100;
+
+	EXPECT_EQ(buf.data(), expectedData);
+}
+
 TEST(TestBuffer, PushVectorUint8) {
 	Buffer buf;
 	std::vector<uint8_t> expectedData = {0, 1, 2, 3};
@@ -162,6 +171,15 @@ TEST(TestBuffer, PullUint64) {
 	EXPECT_EQ(0x0706050403020100,  a);
 }
 
+TEST(TestBuffer, PullInt64) {
+	std::vector<uint8_t> expectedData = {0, 1, 2, 3, 4, 5, 6, 7};
+	Buffer buf(expectedData);
+	int64_t a;
+
+	buf >> a;
+
+	EXPECT_EQ(0x0706050403020100,  a);
+}
 
 TEST(TestBuffer, PullVectorUint8) {
 	std::vector<uint8_t> expectedData = {0, 1, 2, 3};
