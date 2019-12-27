@@ -14,10 +14,40 @@
 
 namespace eipScanner {
 namespace utils {
+	/**
+	 * @class Buffer
+	 *
+	 * @brief Implements decode and encode data according CIP specification
+	 *
+	 * An example:
+	 * @code
+	 * Buffer buffer1();
+	 * cip::CipUint var1 = 1;
+	 * cip::CipDint var2 = 0xaa00000;
+	 *
+	 * buffer1 << var1 << var2;
+	 *
+	 * buffer1.data(); # => {0x01, 0x0, 0x0 ,0x0, 0x0, 0xaa}
+	 * @endcode
+	 */
 	class Buffer {
 	public:
+
+		/**
+		 * Creates an empty buffer
+		 * @param capacity the size that will be reserved in the buffer
+		 */
 		explicit Buffer(size_t capacity);
+
+		/**
+		 * Creates a buffer that contains the given data
+		 * @param data The data to encode
+		 */
 		explicit Buffer(const std::vector<uint8_t>& data);
+
+		/**
+		 * Creates an empty buffer
+		 */
 		Buffer();
 
 		Buffer& operator << (uint8_t val);

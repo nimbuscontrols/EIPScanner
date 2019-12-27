@@ -16,6 +16,7 @@ namespace eip {
 		EncapsPacket createUnRegisterSessionPacket(cip::CipUdint sessionHandle) const;
 		EncapsPacket createSendRRDataPacket(cip::CipUdint sessionHandle,
 				cip::CipUint timeout, std::vector<uint8_t> data) const;
+		EncapsPacket createListIdentityPacket() const;
 	};
 }
 }

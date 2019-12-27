@@ -234,3 +234,43 @@ TEST(TestBuffer, ShouldEncodeEndPPoint) {
 	EXPECT_EQ(0x0100007f, endPoint.getAddr().sin_addr.s_addr);
 	EXPECT_EQ(0xae08, endPoint.getAddr().sin_port);
 }
+
+TEST(TestBuffer, ShouldDecodeFloat) {
+	float val = 10.5;
+	std::vector<uint8_t> expectedData = {0, 0, 0x28, 0x41};
+
+	Buffer buffer;
+	buffer << val;
+
+	EXPECT_EQ(expectedData, buffer.data());
+}
+
+TEST(TestBuffer, ShouldEncodeFloat) {
+	std::vector<uint8_t> data = {0, 0, 0x28, 0x41};
+	float expectedValue = 10.5;
+
+	Buffer buffer(data);
+	buffer << expectedValue;
+
+	EXPECT_EQ(10.5, expectedValue);
+}
+
+TEST(TestBuffer, ShouldDecodeDouble) {
+	double val = 10.5;
+	std::vector<uint8_t> expectedData = {0, 0, 0, 0, 0, 0, 0x25, 0x40};
+
+	Buffer buffer;
+	buffer << val;
+
+	EXPECT_EQ(expectedData, buffer.data());
+}
+
+TEST(TestBuffer, ShouldEncodeDouble) {
+	std::vector<uint8_t> data = {0, 0, 0, 0, 0, 0, 0x25, 0x40};
+	double expectedValue = 10.5;
+
+	Buffer buffer(data);
+	buffer << expectedValue;
+
+	EXPECT_EQ(10.5, expectedValue);
+}
