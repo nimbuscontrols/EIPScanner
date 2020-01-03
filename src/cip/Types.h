@@ -23,6 +23,8 @@ namespace cip {
 	typedef float CipReal; /**< 32-bit IEEE 754 floating point */
 	typedef double CipLreal; /**< 64-bit IEEE 754 floating point */
 	typedef uint64_t CipLword; /**< 64-bit bit unsigned integer */
+	typedef int64_t CipLint;    /**< 64-bit bit signed integer */
+    typedef uint64_t CipUlint; /**< 64-bit bit unsigned integer */
 
 
 	enum class CipDataTypes : CipUsint {

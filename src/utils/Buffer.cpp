@@ -113,7 +113,15 @@ namespace utils {
 		return *this;
 	}
 
-	Buffer &Buffer::operator<<(float val) {
+	Buffer &Buffer::operator<<(int64_t val) {
+		return *this << static_cast<uint64_t >(val);;
+	}
+
+	Buffer &Buffer::operator>>(int64_t &val) {
+		return *this >> reinterpret_cast<uint64_t&>(val);
+	}
+
+Buffer &Buffer::operator<<(float val) {
 		return *this << reinterpret_cast<uint32_t&>(val);
 	}
 
@@ -190,6 +198,5 @@ namespace utils {
 		val = sockets::EndPoint(addr);
 		return *this;
 	}
-
 }
 }
