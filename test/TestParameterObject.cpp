@@ -12,11 +12,12 @@ using ::testing::Return;
 class TestParameterObject : public ::testing::Test {
 public:
 	const static cip::CipUint OBJECT_ID = 1;
-	const std::vector<uint8_t> PARAM_DATA = {
+	std::vector<uint8_t> makeParamData(uint8_t descriptor) {
+		return {
 			0x01, 0x0, 0x0, 0x0,  //value
 			0x6,                  //path size
 			0x20, 0x05, 0x24, 0x02, 0x30, 0x01,  // path
-			0x4, 0x0,             // descriptor (scalable)
+			descriptor, 0x0,             // descriptor (scalable)
 			(uint8_t)cip::CipDataTypes::UDINT, // type
 			0x4,                  // data size
 			5, 'P', 'A', 'R', 'A', 'M', //name
@@ -32,6 +33,8 @@ public:
 			0x00, 0x00, 0x00, 0x00,
 			0x00, 0x00, 0x00, 0x00,
 			0x1
+
+		};
 	};
 
 	void SetUp() override {
@@ -39,7 +42,7 @@ public:
 		_nullSession = nullptr;
 	}
 
-	void mockReadingParamData(bool isScalable) {
+	void mockReadingParamData(bool fullAttribute, uint8_t descriptor = 0x04) {
 		cip::MessageRouterResponse response;
 		response.setData({4});
 
@@ -47,13 +50,13 @@ public:
 												 cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
 												 cip::EPath(ParameterObject::CLASS_ID, OBJECT_ID, 6), std::vector<uint8_t>())).WillOnce(Return(response));
 
-		response.setData(PARAM_DATA);
+		response.setData(makeParamData(descriptor));
 
 		EXPECT_CALL(*_messageRouter, sendRequest(_nullSession,
 												 cip::ServiceCodes::GET_ATTRIBUTE_ALL,
 												 cip::EPath(ParameterObject::CLASS_ID, OBJECT_ID), std::vector<uint8_t>())).WillOnce(Return(response));
 
-		if (isScalable) {
+		if ((descriptor & 0x04) > 0 && fullAttribute) {
 			response.setData({0x2, 0x0});
 			EXPECT_CALL(*_messageRouter, sendRequest(_nullSession,
 													 cip::ServiceCodes::GET_ATTRIBUTE_SINGLE,
@@ -86,21 +89,23 @@ public:
 };
 
 TEST_F(TestParameterObject, ShouldReadAllStubDataInConstructor) {
-	mockReadingParamData(false);
+	mockReadingParamData(false,0x04);
 	ParameterObject parameterObject(OBJECT_ID, false, _nullSession, _messageRouter);
 
 	EXPECT_FALSE(parameterObject.hasFullAttributes());
-	EXPECT_FALSE(parameterObject.isScalable());
+	EXPECT_TRUE(parameterObject.isScalable());
+	EXPECT_FALSE(parameterObject.isReadOnly());
 	EXPECT_EQ(0x1, parameterObject.getActualValue<cip::CipUdint>());
 	EXPECT_EQ(cip::CipDataTypes::UDINT, parameterObject.getType());
 	EXPECT_EQ("", parameterObject.getName());
 }
 
 TEST_F(TestParameterObject, ShouldReadAllFullDataInConstructor) {
-	mockReadingParamData(true);
+	mockReadingParamData(true, 0x04);
 	ParameterObject parameterObject(OBJECT_ID, true, _nullSession, _messageRouter);
 
 	EXPECT_TRUE(parameterObject.hasFullAttributes());
+	EXPECT_FALSE(parameterObject.isReadOnly());
 	EXPECT_EQ(0x1, parameterObject.getActualValue<cip::CipUdint>());
 	EXPECT_EQ(cip::CipDataTypes::UDINT, parameterObject.getType());
 	EXPECT_EQ("PARAM", parameterObject.getName());
@@ -144,12 +149,15 @@ TEST_F(TestParameterObject, ShouldUpdateValue) {
 TEST_F(TestParameterObject, ShouldProvideSettersAndConstructorWithoutNetworkCommunication) {
 	ParameterObject parameterObject(OBJECT_ID, true, sizeof(cip::CipUdint));
 
+	parameterObject.setReadOnly(true);
 	parameterObject.setScalable(true);
 	parameterObject.setScalingMultiplier(2);
 	parameterObject.setScalingDivisor(4);
 	parameterObject.setScalingBase(1);
 	parameterObject.setScalingOffset(6);
 	parameterObject.setPrecision(1);
+
+	EXPECT_TRUE(parameterObject.isReadOnly());
 
 	EXPECT_DOUBLE_EQ(0.3, parameterObject.getEngValue<cip::CipUdint>());
 
@@ -164,4 +172,11 @@ TEST_F(TestParameterObject, ShouldProvideSettersAndConstructorWithoutNetworkComm
 	parameterObject.setEngDefaultValue<cip::CipUdint>(0.45);
 	EXPECT_DOUBLE_EQ(0.45, parameterObject.getEngDefaultValue<cip::CipUdint>());
 	EXPECT_DOUBLE_EQ(3, parameterObject.getDefaultValue<cip::CipUdint>());
+}
+
+TEST_F(TestParameterObject, ShouldReadFlagReadOnlyFromDescriptor) {
+	mockReadingParamData(false, 0x10);
+	ParameterObject parameterObject(OBJECT_ID, false, _nullSession, _messageRouter);
+
+	EXPECT_TRUE(parameterObject.isReadOnly());
 }
