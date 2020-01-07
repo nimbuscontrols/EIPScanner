@@ -8,6 +8,7 @@
 * add support of PowerFlex525 DIP Fault Object #6, @flipback
 * add discovery EIP devices in the network #8, @flipback
 * add support of LINT and ULINT types #17, @flipback
+* add ReadOnly flag to ParameterObject #19, @flipback
 
 **Bugs**:
 

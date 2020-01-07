@@ -66,6 +66,29 @@ public:
 	 */
 	void updateValue(const SessionInfoIf::SPtr& si);
 
+	//// Flags from Descriptor Atribute [AttrID=4]
+	/**
+	 * @return true if the parameter supports scaling
+	 */
+	bool isScalable() const;
+
+	/**
+	 *
+	 * @param isScalable true if the parameter supports scaling
+	 */
+	void setScalable(bool isScalable);
+
+	/**
+	 * @return true if the parameter value is read only
+	 */
+	bool isReadOnly() const;
+
+	/**
+	 *
+	 * @param isReadOnly true if the parameter value is read only
+	 */
+	void setReadOnly(bool isReadOnly);
+
 	/**
 	 * @brief Gets an actual value [AttrID=1] of the parameter.
 	 * @note This is just a getter. To read value from EIP device, use ParameterObject::updateValue
@@ -250,17 +273,6 @@ public:
 	void setHelp(const std::string &help);
 
 	/**
-	 * @return true if the parameter supports scaling
-	 */
-	bool isScalable() const;
-
-	/**
-	 *
-	 * @param isScalable true if the parameter supports scaling
-	 */
-	void setScalable(bool isScalable);
-
-	/**
 	 * @brief Gets the multiplier [AttrID=13] of the parameter
 	 * @return
 	 */
@@ -341,7 +353,8 @@ private:
 	}
 
 	bool _hasFullAttributes;
-	bool _isScalable{};
+	bool _isScalable;
+	bool _isReadOnly;
 
 	std::vector<uint8_t> _value;
 	cip::CipDataTypes _type;

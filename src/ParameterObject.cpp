@@ -32,6 +32,7 @@ namespace eipScanner {
 
 	enum DescriptorAttributeBits : cip::CipUint {
 		SUPPORTS_SCALING = 1 << 2,
+		READ_ONLY = 1 << 4,
 	};
 
 	ParameterObject::ParameterObject(cip::CipUint id, bool fullAttributes,
@@ -47,6 +48,7 @@ namespace eipScanner {
 		, _minValue(typeSize)
 		, _defaultValue(typeSize)
 		, _isScalable(false)
+		, _isReadOnly(false)
 		, _scalingMultiplier(1)
 		, _scalingDivisor(1)
 		, _scalingBase(1)
@@ -101,9 +103,12 @@ namespace eipScanner {
 			CipWord descriptor;
 			buffer >> descriptor >> reinterpret_cast<CipUsint&>(_type);
 
+			_isScalable = descriptor & DescriptorAttributeBits::SUPPORTS_SCALING;
+			_isReadOnly = descriptor & DescriptorAttributeBits::READ_ONLY;
 			Logger(LogLevel::DEBUG) << "Parameter object ID=" << instanceId
 									<< " has descriptor=0x" << std::hex << descriptor
-									<< " scalable=" << _isScalable;
+									<< " scalable=" << _isScalable
+									<< " readonly=" << _isReadOnly;
 
 			if (_hasFullAttributes) {
 				ignore.resize(1);
@@ -116,7 +121,6 @@ namespace eipScanner {
 				_units = units.toStdString();
 				_help = help.toStdString();
 
-				_isScalable = descriptor & DescriptorAttributeBits::SUPPORTS_SCALING;
 				if (_isScalable) {
 					ignore.resize(16); // Ignore scaling attributes we read it separately due to a bug
 					buffer >> ignore
@@ -193,6 +197,10 @@ namespace eipScanner {
 		return _isScalable;
 	}
 
+	bool ParameterObject::isReadOnly() const {
+		return _isReadOnly;
+	}
+
 	const std::string &ParameterObject::getUnits() const {
 		return _units;
 	}
@@ -223,6 +231,10 @@ namespace eipScanner {
 
 	void ParameterObject::setScalable(bool isScalable) {
 		_isScalable = isScalable;
+	}
+
+	void ParameterObject::setReadOnly(bool isReadOnly) {
+		_isReadOnly = isReadOnly;
 	}
 
 	void ParameterObject::setType(CipDataTypes type) {
