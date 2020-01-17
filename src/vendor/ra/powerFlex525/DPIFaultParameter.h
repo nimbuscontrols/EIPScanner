@@ -17,7 +17,7 @@ namespace vendor {
 namespace ra {
 namespace powerFlex525 {
 
-	class DPIFaultParameter : public BaseObject {
+	class DPIFaultParameter {
 	public:
 
 		struct FaultDetails{
@@ -37,6 +37,8 @@ namespace powerFlex525 {
 					   const MessageRouter::SPtr& messageRouter,
 					   int faultNumber,
 					   bool getFaultDetails);
+
+		DPIFaultParameter();
 
 		const FullInformation &getFullInformation() const;
 		const FaultDetails &getFaultDetails() const; // returns struct fault details

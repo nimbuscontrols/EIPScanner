@@ -182,8 +182,7 @@ namespace powerFlex525 {
 	 */
 	DPIFaultParameter::DPIFaultParameter(const SessionInfoIf::SPtr &si,
 								   const MessageRouter::SPtr& messageRouter, int faultNumber, bool getFaultDetails)
-			: BaseObject(0x0E, 0)
-			, _fullInformation{0} {
+			:  _fullInformation{0} {
 
 		int faultCodeParam      = 0;
 		int faultVoltsParam     = 0;
@@ -296,6 +295,10 @@ namespace powerFlex525 {
 
 	void DPIFaultParameter::DPIFaultParameter::setFaultDescription(DPIFaultCode::FaultDescriptions faultDescriptions) {
 		_fullInformation.faultDescription = std::move(faultDescriptions);
+	}
+
+	DPIFaultParameter::DPIFaultParameter()
+		: _fullInformation{} {
 	}
 
 }
