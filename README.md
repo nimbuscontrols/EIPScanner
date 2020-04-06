@@ -41,6 +41,14 @@ $ cmake --build . --target install
 
 To see how to work with the library, look into `examples` directory 
 
+## Contribution
+
+We welcome outside contributions for any improvements, features, or new devices (see below) to the library. Please create a pull request with unit/mock tests
+
+## Vendor specific objects & devices
+
+Our goal is to maintain an active device catalog of all EtherNet/IP devices and their objects that we encounter. We encourage others to contribute to this communal device catalog in /src/vendor/.
+
 ## Authors
 
 Aleksey Timin
