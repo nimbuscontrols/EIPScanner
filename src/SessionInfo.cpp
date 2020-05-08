@@ -17,10 +17,10 @@ namespace eipScanner {
 	using eip::EncapsPacketFactory;
 	using eip::EncapsStatusCodes;
 
-	SessionInfo::SessionInfo(const std::string &host, int port, const std::chrono::milliseconds &recvTimeout)
-			: _socket{host, port}
+	SessionInfo::SessionInfo(const std::string &host, int port, const std::chrono::milliseconds &timeout)
+			: _socket{sockets::EndPoint(host, port), timeout}
 			, _sessionHandle{0} {
-		_socket.setRecvTimeout(recvTimeout);
+		_socket.setRecvTimeout(timeout);
 
 		EncapsPacket packet = EncapsPacketFactory().createRegisterSessionPacket();
 		packet = sendAndReceive(packet);

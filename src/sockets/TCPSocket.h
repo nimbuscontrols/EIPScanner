@@ -14,6 +14,7 @@ namespace sockets {
 	class TCPSocket : public BaseSocket {
 	public:
 		explicit TCPSocket(EndPoint endPoint);
+		TCPSocket(EndPoint endPoint, std::chrono::milliseconds connTimeout);
 		TCPSocket(std::string host, int port);
 		virtual ~TCPSocket();
 
