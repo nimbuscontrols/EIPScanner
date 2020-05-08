@@ -26,11 +26,11 @@ namespace eipScanner {
 		 * @brief Establishes an EIP session with an EIP adapter
 		 * @param host The IP address of the adapter
 		 * @param port The port of the adapter
-		 * @param recvTimeout timout to receive the response
+		 * @param timeout timout to connect and receive the response
 		 * @throw std::runtime_error
 		 * @throw std::system_error
 		 */
-		SessionInfo(const std::string &host, int port, const std::chrono::milliseconds& recvTimeout);
+		SessionInfo(const std::string &host, int port, const std::chrono::milliseconds& timeout);
 
 		/**
 		 * @brief Establishes an EIP session with an EIP adapter

@@ -23,7 +23,7 @@ using eipScanner::utils::LogLevel;
 
 int main() {
 	Logger::setLogLevel(LogLevel::DEBUG);
-	auto si = std::make_shared<SessionInfo>("172.28.1.3", 0xAF12);
+	auto si = std::make_shared<SessionInfo>("127.0.0.1", 0xAF12, std::chrono::seconds(10));
 	auto messageRouter = std::make_shared<MessageRouter>();
 
 	// Read attribute
