@@ -62,5 +62,18 @@ namespace sockets {
 
 		return recvBuffer;
 	}
+
+	std::vector<uint8_t> UDPSocket::ReceiveFrom(size_t size, EndPoint& endPoint) const {
+		std::vector<uint8_t> recvBuffer(size);
+		struct sockaddr_in addr;
+		socklen_t addrFromLength = sizeof(addr);
+		auto len = recvfrom(_sockedFd, recvBuffer.data(), recvBuffer.size(), 0, (struct sockaddr*)&addr, &addrFromLength);
+		if (len < 0) {
+			throw std::system_error(errno, std::generic_category());
+		}
+
+		endPoint = EndPoint(addr);
+		return recvBuffer;
+	}
 }
 }

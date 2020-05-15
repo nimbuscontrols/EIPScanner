@@ -26,8 +26,10 @@ namespace sockets {
 
 		void Send(const std::vector<uint8_t>& data) const override;
 		std::vector<uint8_t> Receive(size_t size) const override ;
+		std::vector<uint8_t> ReceiveFrom(size_t size, EndPoint& endPoint) const ;
 	};
 }
 }
 
 #endif  // EIPSCANNER_SOCKETS_UDPSOCKET_H
+
