@@ -3,7 +3,9 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 set(SOURCE_FILES
         cip/connectionManager/ForwardCloseRequest.cpp
         cip/connectionManager/ForwardOpenRequest.cpp
+        cip/connectionManager/LargeForwardOpenRequest.cpp
         cip/connectionManager/ForwardOpenResponse.cpp
+        cip/connectionManager/NetworkConnectionParametersBuilder.cpp
 
         cip/CipRevision.cpp
         cip/EPath.cpp

@@ -21,9 +21,9 @@ namespace connectionManager {
 		CipUdint originatorSerialNumber = 0;
 		CipUsint connectionTimeoutMultiplier = 0;
 		CipUdint o2tRPI = 0;
-		CipUint o2tNetworkConnectionParams = 0;
+		CipUdint o2tNetworkConnectionParams = 0;
 		CipUdint t2oRPI = 0;
-		CipUint t2oNetworkConnectionParams = 0;
+		CipUdint t2oNetworkConnectionParams = 0;
 		CipUsint transportTypeTrigger = 0;
 		CipUsint connectionPathSize = 0;
 		CipBool o2tRealTimeFormat = 0;

@@ -1,8 +1,8 @@
 //
-// Created by Aleksey Timin on 11/18/19.
+// Created by Vincent Prince on 05/22/20.
 //
 
-#include "ForwardOpenRequest.h"
+#include "LargeForwardOpenRequest.h"
 
 #include <utility>
 #include <assert.h>
@@ -14,19 +14,16 @@ namespace connectionManager {
 
 	using utils::Buffer;
 
-	ForwardOpenRequest::ForwardOpenRequest(ConnectionParameters params)
+	LargeForwardOpenRequest::LargeForwardOpenRequest(ConnectionParameters params)
 		: _connectionParameters{std::move(params)} {
 	}
 
-	ForwardOpenRequest::~ForwardOpenRequest() = default;
+	LargeForwardOpenRequest::~LargeForwardOpenRequest() = default;
 
-	std::vector<uint8_t> ForwardOpenRequest::pack() const {
-		const size_t size = 36;
+	std::vector<uint8_t> LargeForwardOpenRequest::pack() const {
+		const size_t size = 40;
 		Buffer buffer(size);
 		CipUsint reserved = 0;
-
-		CipUint o2tNetworkConnectionParams = static_cast<CipUint>(_connectionParameters.o2tNetworkConnectionParams);
-		CipUint t2oNetworkConnectionParams = static_cast<CipUint>(_connectionParameters.t2oNetworkConnectionParams);
 
 		buffer << _connectionParameters.priorityTimeTick
 			<< _connectionParameters.timeoutTicks
@@ -38,9 +35,9 @@ namespace connectionManager {
 			<< _connectionParameters.connectionTimeoutMultiplier
 			<< reserved << reserved << reserved
 			<< _connectionParameters.o2tRPI
-			<< o2tNetworkConnectionParams
+			<< _connectionParameters.o2tNetworkConnectionParams
 			<< _connectionParameters.t2oRPI
-			<< t2oNetworkConnectionParams
+			<< _connectionParameters.t2oNetworkConnectionParams
 			<< _connectionParameters.transportTypeTrigger
 			<< _connectionParameters.connectionPathSize;
 
