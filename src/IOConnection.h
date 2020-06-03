@@ -59,7 +59,7 @@ namespace eipScanner {
 	private:
 		IOConnection();
 		void notifyReceiveData(const std::vector<uint8_t> &data);
-		bool notifyTick(std::chrono::milliseconds period);
+		bool notifyTick();
 
 		cip::CipUdint _o2tNetworkConnectionId;
 		cip::CipUdint _t2oNetworkConnectionId;
@@ -96,6 +96,8 @@ namespace eipScanner {
 
 		ReceiveDataHandle _receiveDataHandle;
 		CloseHandle _closeHandle;
+
+		std::chrono::steady_clock::time_point _lastHandleTime;
 	};
 }
 

@@ -10,8 +10,10 @@
 #include "eip/CommonPacket.h"
 #include "cip/connectionManager/ForwardOpenRequest.h"
 #include "cip/connectionManager/ForwardCloseRequest.h"
+#include "cip/connectionManager/LargeForwardOpenRequest.h"
 #include "cip/connectionManager/ForwardOpenResponse.h"
 #include "cip/connectionManager/NetworkConnectionParams.h"
+#include "cip/connectionManager/NetworkConnectionParametersBuilder.h"
 #include "utils/Logger.h"
 #include "utils/Buffer.h"
 
@@ -28,6 +30,7 @@ namespace eipScanner {
 
 	enum class ConnectionManagerServiceCodes : cip::CipUsint {
 		FORWARD_OPEN = 0x54,
+		LARGE_FORWARD_OPEN = 0x5B,
 		FORWARD_CLOSE = 0x4E
 	};
 
@@ -37,8 +40,7 @@ namespace eipScanner {
 
 	ConnectionManager::ConnectionManager(const MessageRouter::SPtr& messageRouter)
 		: _messageRouter(messageRouter)
-		, _connectionMap()
-		, _lastHandleTime(std::chrono::steady_clock::now()){
+		, _connectionMap(){
 
 		std::random_device rd;
 		std::uniform_int_distribution<cip::CipUint> dist(0, std::numeric_limits<cip::CipUint>::max());
@@ -48,26 +50,27 @@ namespace eipScanner {
 	ConnectionManager::~ConnectionManager() = default;
 
 	IOConnection::WPtr
-	ConnectionManager::forwardOpen(const SessionInfoIf::SPtr& si, ConnectionParameters connectionParameters) {
+	ConnectionManager::forwardOpen(const SessionInfoIf::SPtr& si, ConnectionParameters connectionParameters, bool isLarge) {
 		static int serialNumberCount = 0;
 		connectionParameters.connectionSerialNumber = ++serialNumberCount;
 
-		if ((connectionParameters.o2tNetworkConnectionParams
-			& NetworkConnectionParams::MULTICAST) > 0) {
+		NetworkConnectionParametersBuilder o2tNCP(connectionParameters.o2tNetworkConnectionParams, isLarge);
+		NetworkConnectionParametersBuilder t2oNCP(connectionParameters.t2oNetworkConnectionParams, isLarge);
+
+		if (o2tNCP.getConnectionType() == NetworkConnectionParametersBuilder::MULTICAST) {
 			static cip::CipUint idCount = _incarnationId << 16;
 			connectionParameters.o2tNetworkConnectionId = ++idCount;
 		}
 
-		if ((connectionParameters.t2oNetworkConnectionParams
-			 & NetworkConnectionParams::P2P) > 0) {
+		if (t2oNCP.getConnectionType() == NetworkConnectionParametersBuilder::P2P) {
 			static cip::CipUdint idCount = _incarnationId << 16;
 			connectionParameters.t2oNetworkConnectionId = ++idCount;
 		}
 
-		auto o2tSize = connectionParameters.o2tNetworkConnectionParams & 0x1ff;
-		auto t2oSize = connectionParameters.t2oNetworkConnectionParams & 0x1ff;
+		auto o2tSize = o2tNCP.getConnectionSize();
+		auto t2oSize = t2oNCP.getConnectionSize();
 
-		connectionParameters.connectionPathSize =  (connectionParameters.connectionPath .size() / 2)
+		connectionParameters.connectionPathSize = (connectionParameters.connectionPath .size() / 2)
 				+ (connectionParameters.connectionPath .size() % 2);
 
 		if ((connectionParameters.transportTypeTrigger & NetworkConnectionParams::CLASS1) > 0
@@ -88,10 +91,19 @@ namespace eipScanner {
 		buffer << sockets::EndPoint("0.0.0.0", 2222);
 		eip::CommonPacketItem addrItem(eip::CommonPacketItemIds::T2O_SOCKADDR_INFO, buffer.data());
 
-		ForwardOpenRequest request(connectionParameters);
-		auto messageRouterResponse = _messageRouter->sendRequest(si,
+
+		MessageRouterResponse messageRouterResponse;
+		if (isLarge) {
+			LargeForwardOpenRequest request(connectionParameters);
+			messageRouterResponse = _messageRouter->sendRequest(si,
+				static_cast<cip::CipUsint>(ConnectionManagerServiceCodes::LARGE_FORWARD_OPEN),
+				EPath(6, 1), request.pack(), {addrItem});
+		} else {
+			ForwardOpenRequest request(connectionParameters);
+			messageRouterResponse = _messageRouter->sendRequest(si,
 				static_cast<cip::CipUsint>(ConnectionManagerServiceCodes::FORWARD_OPEN),
 				EPath(6, 1), request.pack(), {addrItem});
+		}
 
 		IOConnection::SPtr ioConnection;
 		if (messageRouterResponse.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
@@ -118,10 +130,8 @@ namespace eipScanner {
 
 			ioConnection->_o2tDataSize = o2tSize;
 			ioConnection->_t2oDataSize = t2oSize;
-			ioConnection->_o2tFixedSize = (connectionParameters.o2tNetworkConnectionParams
-						& NetworkConnectionParams::VARIABLE) == 0;
-			ioConnection->_t2oFixedSize = (connectionParameters.t2oNetworkConnectionParams
-						& NetworkConnectionParams::VARIABLE) == 0;
+			ioConnection->_o2tFixedSize = (o2tNCP.getType() == NetworkConnectionParametersBuilder::FIXED);
+			ioConnection->_t2oFixedSize = (t2oNCP.getType() == NetworkConnectionParametersBuilder::FIXED);
 
 			const eip::CommonPacketItem::Vec &additionalItems = messageRouterResponse.getAdditionalPacketItems();
 			auto o2tSockAddrInfo = std::find_if(additionalItems.begin(), additionalItems.end(),
@@ -160,6 +170,11 @@ namespace eipScanner {
 		}
 
 		return ioConnection;
+	}
+
+	IOConnection::WPtr
+	ConnectionManager::largeForwardOpen(const SessionInfoIf::SPtr& si, ConnectionParameters connectionParameters) {
+		return forwardOpen(si, connectionParameters, true);
 	}
 
 	void ConnectionManager::forwardClose(const SessionInfoIf::SPtr& si, const IOConnection::WPtr& ioConnection) {
@@ -202,13 +217,9 @@ namespace eipScanner {
 
 		BaseSocket::select(sockets, timeout);
 
-		auto now = std::chrono::steady_clock::now();
 		std::vector<cip::CipUdint> connectionsToClose;
-		auto sinceLastHandle =
-				std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastHandleTime);
-		Logger(LogLevel::TRACE) << "Last call was " << sinceLastHandle.count() << "ms ago";
 		for (auto& entry : _connectionMap) {
-			if (!entry.second->notifyTick(sinceLastHandle)) {
+			if (!entry.second->notifyTick()) {
 				connectionsToClose.push_back(entry.first);
 			}
 		}
@@ -216,8 +227,6 @@ namespace eipScanner {
 		for (auto& id : connectionsToClose) {
 			_connectionMap.erase(id);
 		}
-
-		_lastHandleTime = now;
 	}
 
 	UDPBoundSocket::SPtr ConnectionManager::findOrCreateSocket(const sockets::EndPoint& endPoint) {
@@ -230,7 +239,7 @@ namespace eipScanner {
 			});
 
 			newSocket->setBeginReceiveHandler([this](BaseSocket& sock) {
-				auto recvData = sock.Receive(504);
+				auto recvData = sock.Receive(8192);
 				CommonPacket commonPacket;
 				commonPacket.expand(recvData);
 

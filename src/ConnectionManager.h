@@ -41,9 +41,19 @@ namespace eipScanner {
 		 * @brief Opens an EIP IO connection with the EIP adapter
 		 * @param si the EIP session for explicit messaging
 		 * @param connectionParameters the parameters of the connection
+		 * @param isLarge use large forward open if true
 		 * @return weak pointer to the created connection or nullptr if got an error
 		 */
-		IOConnection::WPtr forwardOpen(const SessionInfoIf::SPtr& si, cip::connectionManager::ConnectionParameters connectionParameters);
+		IOConnection::WPtr forwardOpen(const SessionInfoIf::SPtr& si, cip::connectionManager::ConnectionParameters connectionParameters, bool isLarge = false);
+
+		/**
+		 * @brief Opens an EIP IO connection with the EIP adapter
+		 * @param si the EIP session for explicit messaging
+		 * @param connectionParameters the parameters of the connection
+		 * @return weak pointer to the created connection or nullptr if got an error
+		 */
+		IOConnection::WPtr largeForwardOpen(const SessionInfoIf::SPtr& si, cip::connectionManager::ConnectionParameters connectionParameters);
+
 
 		/**
 		 * @brief Closes an EIP IO connection
@@ -69,7 +79,6 @@ namespace eipScanner {
 		std::map<sockets::EndPoint, std::shared_ptr<sockets::UDPBoundSocket>> _socketMap;
 
 		sockets::UDPBoundSocket::SPtr  findOrCreateSocket(const sockets::EndPoint& endPoint);
-		std::chrono::steady_clock::time_point _lastHandleTime;
 		cip::CipUint _incarnationId;
 	};
 }

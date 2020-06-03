@@ -41,6 +41,7 @@ namespace eipScanner {
 			, _originatorSerialNumber{0}
 			, _serialNumber{0}
 			, _outputData()
+			, _lastHandleTime(std::chrono::steady_clock::now())
 			, _receiveDataHandle([](auto a, auto b, auto data) {})
 			, _closeHandle([]() {}) {
 	}
@@ -85,14 +86,20 @@ namespace eipScanner {
 		}
 	}
 
-	bool IOConnection::notifyTick(std::chrono::milliseconds period) {
-		auto periodInMicroS = period.count() * 1000;
+	bool IOConnection::notifyTick() {
+		auto now = std::chrono::steady_clock::now();
+		auto sinceLastHandle =
+			std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastHandleTime);
+
+		auto periodInMicroS = sinceLastHandle.count() * 1000;
 		_connectionTimeoutCount += periodInMicroS;
 		if (_connectionTimeoutCount > _connectionTimeoutMultiplier * _t2oAPI) {
 			Logger(LogLevel::WARNING) << "Connection SeriaNumber=" << _serialNumber << " is closed by timeout";
 			_closeHandle();
 			return false;
 		}
+
+		_lastHandleTime = now;
 
 		_o2tTimer += periodInMicroS;
 		if (_o2tTimer >= _o2tAPI) {
