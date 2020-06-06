@@ -25,6 +25,7 @@ namespace eipScanner {
 		friend class ConnectionManager;
 	public:
 		using ReceiveDataHandle = std::function<void(cip::CipUdint, cip::CipUint, const std::vector<uint8_t>&)>;
+		using SendDataHandle = std::function<void(std::vector<uint8_t>&)>;
 		using CloseHandle = std::function<void()>;
 
 		using WPtr=std::weak_ptr<IOConnection>;
@@ -55,6 +56,13 @@ namespace eipScanner {
 		 * @param handle
 		 */
 		void setCloseListener(CloseHandle handle);
+
+        /**
+         * @brief Sets a callback to handle data to send
+         *
+         * @param handle
+         */
+        void setSendDataListener(SendDataHandle handle);
 
 	private:
 		IOConnection();
@@ -96,6 +104,7 @@ namespace eipScanner {
 
 		ReceiveDataHandle _receiveDataHandle;
 		CloseHandle _closeHandle;
+		SendDataHandle _sendDataHandle;
 
 		std::chrono::steady_clock::time_point _lastHandleTime;
 	};

@@ -43,6 +43,7 @@ namespace eipScanner {
 			, _outputData()
 			, _lastHandleTime(std::chrono::steady_clock::now())
 			, _receiveDataHandle([](auto a, auto b, auto data) {})
+			, _sendDataHandle([](auto data) {})
 			, _closeHandle([]() {}) {
 	}
 
@@ -54,6 +55,10 @@ namespace eipScanner {
 
 	void IOConnection::setReceiveDataListener(ReceiveDataHandle handle) {
 		_receiveDataHandle = std::move(handle);
+	}
+
+	void IOConnection::setSendDataListener(SendDataHandle handle) {
+        	_sendDataHandle = std::move(handle);
 	}
 
 	void IOConnection::setCloseListener(CloseHandle handle) {
@@ -120,6 +125,7 @@ namespace eipScanner {
 			}
 
 			_o2tTimer = 0;
+			_sendDataHandle(_outputData);
 			if (_o2tFixedSize && _outputData.size() != _o2tDataSize)  {
 				Logger(LogLevel::WARNING) << "Connection O2T_ID=" << _o2tNetworkConnectionId
 										  << " has fixed size " << _o2tDataSize << " bytes but " << _outputData.size()
