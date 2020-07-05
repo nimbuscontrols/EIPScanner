@@ -5,6 +5,7 @@
 #ifndef EIPSCANNER_FILEOBJECT_H
 #define EIPSCANNER_FILEOBJECT_H
 
+#include <stdexcept>
 
 #include "cip/Types.h"
 #include "cip/GeneralStatusCodes.h"

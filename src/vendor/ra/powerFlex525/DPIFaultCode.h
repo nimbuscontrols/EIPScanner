@@ -5,6 +5,7 @@
 #ifndef EIPSCANNER_DPIFAULTCODES_HPP
 #define EIPSCANNER_DPIFAULTCODES_HPP
 
+#include <stdexcept>
 #include <unordered_map>
 #include <string>
 

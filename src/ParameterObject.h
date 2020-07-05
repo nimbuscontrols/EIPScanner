@@ -6,6 +6,7 @@
 #define EIPSCANNER_PARAMETEROBJECT_H
 
 #include <cmath>
+#include <stdexcept>
 #include "MessageRouter.h"
 #include "utils/Buffer.h"
 #include "BaseObject.h"

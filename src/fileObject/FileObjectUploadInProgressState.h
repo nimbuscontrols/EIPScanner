@@ -5,6 +5,8 @@
 #ifndef EIPSCANNER_FILEOBJECT_FILEOBJECTUPLOADINPROGRESSSTATE_H
 #define EIPSCANNER_FILEOBJECT_FILEOBJECTUPLOADINPROGRESSSTATE_H
 
+#include <stdexcept>
+
 #include "FileObjectState.h"
 #include "cip/Types.h"
 

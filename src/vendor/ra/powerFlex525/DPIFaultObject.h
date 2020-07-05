@@ -5,6 +5,8 @@
 #ifndef EIPSCANNER_VENDOR_DIPFAULTOBJECT_H
 #define EIPSCANNER_VENDOR_DIPFAULTOBJECT_H
 
+#include <stdexcept>
+
 #include "cip/CipString.h"
 #include "BaseObject.h"
 #include "SessionInfoIf.h"
