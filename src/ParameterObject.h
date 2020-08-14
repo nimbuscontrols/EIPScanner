@@ -256,6 +256,12 @@ public:
 	const std::string &getHelp() const;
 
 	/**
+	 * @brief Gets the number of parameter (instance ID)
+	 * @return
+	 */
+	 const cip::CipUint &getParameter() const;
+
+	/**
 	 * @brief Sets the name [AttrID=7] of the parameter
 	 * @param name
 	 */
@@ -357,6 +363,7 @@ private:
 	bool _isScalable;
 	bool _isReadOnly;
 
+    cip::CipUint _parameter;
 	std::vector<uint8_t> _value;
 	cip::CipDataTypes _type;
 	std::string _name;
