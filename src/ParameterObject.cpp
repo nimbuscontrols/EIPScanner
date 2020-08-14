@@ -40,29 +40,36 @@ namespace eipScanner {
 		: ParameterObject(id, fullAttributes, si, std::make_shared<MessageRouter>()) {
 	}
 
-	ParameterObject::ParameterObject(cip::CipUint instanceId, bool fullAttributes, size_t typeSize)
-		:  BaseObject(CLASS_ID, instanceId)
-		, _hasFullAttributes(fullAttributes)
-		, _value(typeSize)
-		, _maxValue(typeSize)
-		, _minValue(typeSize)
-		, _defaultValue(typeSize)
-		, _isScalable(false)
-		, _isReadOnly(false)
-		, _scalingMultiplier(1)
-		, _scalingDivisor(1)
-		, _scalingBase(1)
-		, _scalingOffset(0) {
-	}
+    ParameterObject::ParameterObject(cip::CipUint instanceId, bool fullAttributes, size_t typeSize)
+            :  BaseObject(CLASS_ID, instanceId)
+            , _hasFullAttributes(fullAttributes)
+            , _value(typeSize)
+            , _maxValue(typeSize)
+            , _minValue(typeSize)
+            , _defaultValue(typeSize)
+            , _isScalable(false)
+            , _isReadOnly(false)
+            , _scalingMultiplier(1)
+            , _scalingDivisor(1)
+            , _scalingBase(1)
+            , _scalingOffset(0)
+            , _precision(0) {
+    }
 
-	ParameterObject::ParameterObject(cip::CipUint instanceId, bool fullAttributes,
-			const SessionInfoIf::SPtr &si,
-			const MessageRouter::SPtr& messageRouter)
-		:  BaseObject(CLASS_ID, instanceId)
-		, _name{""}
-		, _hasFullAttributes{fullAttributes}
-		, _isScalable{false}
-		, _messageRouter{messageRouter} {
+    ParameterObject::ParameterObject(cip::CipUint instanceId, bool fullAttributes,
+                                     const SessionInfoIf::SPtr &si,
+                                     const MessageRouter::SPtr& messageRouter)
+            :  BaseObject(CLASS_ID, instanceId)
+            , _name{""}
+            , _hasFullAttributes{fullAttributes}
+            , _isScalable{false}
+            , _isReadOnly(false)
+            , _scalingMultiplier(1)
+            , _scalingDivisor(1)
+            , _scalingBase(1)
+            , _scalingOffset(0)
+            , _precision(0)
+            , _messageRouter{messageRouter} {
 
 
 		Logger(LogLevel::DEBUG) << "Read data from parameter ID=" << instanceId;
@@ -103,7 +110,8 @@ namespace eipScanner {
 			CipWord descriptor;
 			buffer >> descriptor >> reinterpret_cast<CipUsint&>(_type);
 
-			_isScalable = descriptor & DescriptorAttributeBits::SUPPORTS_SCALING;
+            _parameter = instanceId;
+            _isScalable = descriptor & DescriptorAttributeBits::SUPPORTS_SCALING;
 			_isReadOnly = descriptor & DescriptorAttributeBits::READ_ONLY;
 			Logger(LogLevel::DEBUG) << "Parameter object ID=" << instanceId
 									<< " has descriptor=0x" << std::hex << descriptor
@@ -207,6 +215,10 @@ namespace eipScanner {
 
 	const std::string &ParameterObject::getHelp() const {
 		return _help;
+	}
+
+    const cip::CipUint &ParameterObject::getParameter() const {
+	    return _parameter;
 	}
 
 	CipUint ParameterObject::getScalingMultiplier() const {
