@@ -28,7 +28,6 @@ add_executable(test_eipscanner
         vendor/ra/powerFlex525/TestDPIFaultManager.cpp
         vendor/ra/powerFlex525/TestDPIFaultObject.cpp
         vendor/ra/powerFlex525/TestDPIFaultParameter.cpp
-	vendor/yaskawa/mp3300iec/Yaskawa_ReadWriteAssemblyObjectExample.cpp
 
         TestDiscoveryManager.cpp
         TestIdentityObject.cpp

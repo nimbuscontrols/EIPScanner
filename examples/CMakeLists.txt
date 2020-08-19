@@ -16,3 +16,6 @@ add_executable(parameter_object_example ParameterObjectExample.cpp)
 target_link_libraries(parameter_object_example EIPScanner)
 add_executable(discovery_example DiscoveryManagerExample.cpp)
 target_link_libraries(discovery_example EIPScanner)
+
+add_executable(yaskawa_assembly_object_example vendors/yaskawa/mp3300iec/Yaskawa_AssemblyObjectExample.cpp)
+target_link_libraries(yaskawa_assembly_object_example EIPScanner)
