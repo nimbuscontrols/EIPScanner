@@ -22,7 +22,7 @@ namespace cip {
 			, _size{0}{
 
 	}
-	Yaskawa_EPath::Yaskawa_EPath(CipUint classId)
+	Yaskawa_EPath::Yaskawa_EPath(CipUsint classId)
 		: _classId{classId}
 		, _objectId{0}
 		, _attributeId{0}
@@ -30,7 +30,7 @@ namespace cip {
 
 	}
 
-	Yaskawa_EPath::Yaskawa_EPath(CipUint classId, CipUint objectId)
+	Yaskawa_EPath::Yaskawa_EPath(CipUsint classId, CipUsint objectId)
 			: _classId{classId}
 			, _objectId{objectId}
 			, _attributeId{0}
@@ -38,7 +38,7 @@ namespace cip {
 
 	}
 
-	Yaskawa_EPath::Yaskawa_EPath(CipUint classId, CipUint objectId, CipUint attributeId)
+	Yaskawa_EPath::Yaskawa_EPath(CipUsint classId, CipUsint objectId, CipUsint attributeId)
 			: _classId{classId}
 			, _objectId{objectId}
 			, _attributeId{attributeId}

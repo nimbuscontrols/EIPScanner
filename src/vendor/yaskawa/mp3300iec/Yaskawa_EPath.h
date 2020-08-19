@@ -13,9 +13,9 @@ namespace cip {
 	class Yaskawa_EPath {
 	public:
 		Yaskawa_EPath();
-		explicit Yaskawa_EPath(CipUint classId);
-		Yaskawa_EPath(CipUint classId, CipUint objectId);
-		Yaskawa_EPath(CipUint classId, CipUint objectId, CipUint attributeId);
+		explicit Yaskawa_EPath(CipUsint classId);
+		Yaskawa_EPath(CipUsint classId, CipUsint objectId);
+		Yaskawa_EPath(CipUsint classId, CipUsint objectId, CipUsint attributeId);
 		std::vector<uint8_t> packPaddedPath() const;
 		void expandPaddedPath(const std::vector<uint8_t>& data);
 
