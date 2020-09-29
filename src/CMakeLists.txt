@@ -38,6 +38,9 @@ set(SOURCE_FILES
         vendor/ra/powerFlex525/DPIFaultObject.cpp
         vendor/ra/powerFlex525/DPIFaultCode.cpp
         vendor/ra/powerFlex525/DPIFaultParameter.cpp
+	vendor/yaskawa/mp3300iec/Yaskawa_EPath.cpp
+	vendor/yaskawa/mp3300iec/Yaskawa_MessageRouter.cpp
+	vendor/yaskawa/mp3300iec/Yaskawa_MessageRouterRequest.cpp
 
         BaseObject.cpp
         ConnectionManager.cpp
