@@ -5,7 +5,7 @@
 #ifndef EIPSCANNER_SOCKETS_ENDPOINT_H
 #define EIPSCANNER_SOCKETS_ENDPOINT_H
 
-#ifdef __linux
+#ifdef __linux__
 #include <netinet/in.h>
 #elif defined _WIN32
 #include <winsock2.h>
