@@ -8,6 +8,10 @@
 #include <sstream>
 #include <memory>
 
+#ifdef _WIN32
+#undef ERROR
+#endif
+
 namespace eipScanner {
 namespace utils {
 

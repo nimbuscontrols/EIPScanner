@@ -182,7 +182,7 @@ Buffer &Buffer::operator<<(float val) {
 		sockaddr_in addr = v.getAddr();
 		return *this << htons(static_cast<cip::CipInt>(addr.sin_family))
 					 << addr.sin_port
-					 << addr.sin_addr.s_addr
+					 << uint32_t(addr.sin_addr.s_addr)
 					 << zeros;
 	}
 
@@ -191,7 +191,7 @@ Buffer &Buffer::operator<<(float val) {
 		sockaddr_in addr{0};
 		*this >> reinterpret_cast<cip::CipInt&>(addr.sin_family)
 			 >> addr.sin_port
-			 >> addr.sin_addr.s_addr
+			 >> (uint32_t&)addr.sin_addr.s_addr
 			 >> zeros;
 
 		addr.sin_family =  htons(addr.sin_family);

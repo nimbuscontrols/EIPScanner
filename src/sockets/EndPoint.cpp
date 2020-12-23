@@ -3,7 +3,13 @@
 //
 
 #include "EndPoint.h"
+
+#ifdef __linux__
 #include <arpa/inet.h>
+#elif defined _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#endif
 #include <system_error>
 #include <utility>
 
@@ -23,7 +29,11 @@ namespace sockets {
 
 		_addr.sin_family = AF_INET;
 		_addr.sin_port = htons(_port);
+#ifdef __linux__
 		if (inet_aton(_host.c_str(), &_addr.sin_addr) < 0) {
+#elif defined _WIN32
+		if ((_addr.sin_addr.s_addr = inet_addr(_host.c_str())) == INADDR_NONE) {
+#endif
 			throw std::system_error(errno, std::generic_category());
 		}
 	}

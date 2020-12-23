@@ -2,8 +2,14 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
+#ifdef __linux__
 #include <sys/socket.h>
 #include <sys/select.h>
+#elif defined _WIN32
+#include <winsock2.h>
+#include <time.h>
+#endif
+
 #include <utility>
 #include <algorithm>
 #include <system_error>
@@ -52,8 +58,8 @@ namespace sockets {
 
 #elif _WIN32
 		// not sure what the macro is for windows
-		.tv_sec = static_cast<_time64>(recvTimeout.count()/1000),
-		.tv_usec =  static_cast<_time64>((recvTimeout.count()%1000)*1000)
+		.tv_sec = static_cast<long int>(recvTimeout.count()/1000),
+		.tv_usec =  static_cast<long int>((recvTimeout.count()%1000)*1000)
 #endif
 
 		};

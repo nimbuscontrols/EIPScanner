@@ -5,7 +5,11 @@
 #ifndef EIPSCANNER_SOCKETS_ENDPOINT_H
 #define EIPSCANNER_SOCKETS_ENDPOINT_H
 
+#ifdef __linux
 #include <netinet/in.h>
+#elif defined _WIN32
+#include <winsock2.h>
+#endif
 #include <string>
 
 namespace eipScanner {

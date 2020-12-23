@@ -2,8 +2,10 @@
 // Created by Aleksey Timin on 11/21/19.
 //
 #include <system_error>
-#include <sys/socket.h>
-#include <netinet/in.h>
+
+//#include <sys/socket.h>
+//#include <netinet/in.h>
+
 #include "UDPBoundSocket.h"
 
 namespace eipScanner {

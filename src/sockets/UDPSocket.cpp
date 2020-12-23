@@ -3,9 +3,21 @@
 //
 
 #include <system_error>
+
+#ifdef __linux__
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#elif defined _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#endif
+
+#if !(defined __linux__) && !(defined SHUT_RDWR)
+#define SHUT_RDWR SD_BOTH
+#endif
+
+
 #include <unistd.h>
 
 #include "utils/Logger.h"
@@ -45,7 +57,7 @@ namespace sockets {
 		Logger(LogLevel::TRACE) << "Send " << data.size() << " bytes from UDP socket #" << _sockedFd << ".";
 
 		auto addr = _remoteEndPoint.getAddr();
-		int count = sendto(_sockedFd, data.data(), data.size(), 0,
+		int count = sendto(_sockedFd, (char*)data.data(), data.size(), 0,
 				(struct sockaddr *)&addr, sizeof(addr));
 		if (count < data.size()) {
 			throw std::system_error(errno, std::generic_category());
@@ -55,7 +67,7 @@ namespace sockets {
 	std::vector<uint8_t> UDPSocket::Receive(size_t size) const {
 		std::vector<uint8_t> recvBuffer(size);
 
-		auto len = recvfrom(_sockedFd, recvBuffer.data(), recvBuffer.size(), 0, NULL, NULL);
+		auto len = recvfrom(_sockedFd, (char*)recvBuffer.data(), recvBuffer.size(), 0, NULL, NULL);
 		if (len < 0) {
 			throw std::system_error(errno, std::generic_category());
 		}
@@ -67,7 +79,7 @@ namespace sockets {
 		std::vector<uint8_t> recvBuffer(size);
 		struct sockaddr_in addr;
 		socklen_t addrFromLength = sizeof(addr);
-		auto len = recvfrom(_sockedFd, recvBuffer.data(), recvBuffer.size(), 0, (struct sockaddr*)&addr, &addrFromLength);
+		auto len = recvfrom(_sockedFd, (char*)recvBuffer.data(), recvBuffer.size(), 0, (struct sockaddr*)&addr, &addrFromLength);
 		if (len < 0) {
 			throw std::system_error(errno, std::generic_category());
 		}

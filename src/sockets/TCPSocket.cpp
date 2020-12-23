@@ -3,14 +3,26 @@
 //
 
 #include <system_error>
+
+#ifdef __linux__
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#elif defined _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <time.h>
+#endif
+
 #include <unistd.h>
 #include <fcntl.h>
 
 #include "utils/Logger.h"
 #include "TCPSocket.h"
+
+#if !(defined __linux__) && !(defined SHUT_RDWR)
+#define SHUT_RDWR SD_BOTH
+#endif
 
 
 namespace eipScanner {
@@ -30,6 +42,7 @@ namespace eipScanner {
 			}
 
 			// Set non-blocking
+#ifdef __linux__
 			auto arg = fcntl(_sockedFd, F_GETFL, NULL);
 			if (arg < 0) {
 				throw std::system_error(errno, std::generic_category());
@@ -39,6 +52,13 @@ namespace eipScanner {
 			if (fcntl(_sockedFd, F_SETFL, arg) < 0) {
 				throw std::system_error(errno, std::generic_category());
 			}
+#elif defined _WIN32
+			unsigned long flag = 1;
+			if (ioctlsocket(_sockedFd, FIONBIO, &flag) != 0)
+			{
+				throw std::system_error(errno, std::generic_category());
+			}
+#endif
 
 			Logger(LogLevel::DEBUG) << "Opened socket fd=" << _sockedFd;
 
@@ -61,7 +81,7 @@ namespace eipScanner {
 							// Socket selected for write
 							int err;
 							socklen_t lon = sizeof(int);
-							if (getsockopt(_sockedFd, SOL_SOCKET, SO_ERROR, (void *) (&err), &lon) < 0) {
+							if (getsockopt(_sockedFd, SOL_SOCKET, SO_ERROR, (char *) (&err), &lon) < 0) {
 								throw std::system_error(errno, std::generic_category());
 							}
 							// Check the value returned...
@@ -77,6 +97,8 @@ namespace eipScanner {
 					throw std::system_error(errno, std::generic_category());
 				}
 			}
+
+#ifdef __linux__
 			// Set to blocking mode again...
 			if ((arg = fcntl(_sockedFd, F_GETFL, NULL)) < 0) {
 				throw std::system_error(errno, std::generic_category());
@@ -85,6 +107,13 @@ namespace eipScanner {
 			if (fcntl(_sockedFd, F_SETFL, arg) < 0) {
 				throw std::system_error(errno, std::generic_category());
 			}
+#elif defined _WIN32
+			flag = 0;
+			if (ioctlsocket(_sockedFd, FIONBIO, &flag) != 0)
+			{
+				throw std::system_error(errno, std::generic_category());
+			}
+#endif
 		}
 
 
@@ -102,7 +131,7 @@ namespace eipScanner {
 		void TCPSocket::Send(const std::vector<uint8_t> &data) const {
 			Logger(LogLevel::TRACE) << "Send " << data.size() << " bytes from TCP socket #" << _sockedFd << ".";
 
-			int count = send(_sockedFd, data.data(), data.size(), 0);
+			int count = send(_sockedFd, (char*)data.data(), data.size(), 0);
 			if (count < data.size()) {
 				throw std::system_error(errno, std::generic_category());
 			}
@@ -113,7 +142,7 @@ namespace eipScanner {
 
 			int count = 0;
 			while (size > count) {
-				auto len = recv(_sockedFd, recvBuffer.data() + count, size - count, 0);
+				auto len = recv(_sockedFd, (char*)(recvBuffer.data() + count), size - count, 0);
 				count += len;
 				if (len < 0) {
 					throw std::system_error(errno, std::generic_category());
