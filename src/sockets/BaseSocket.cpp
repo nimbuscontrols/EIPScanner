@@ -2,7 +2,7 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
 #include <sys/socket.h>
 #include <sys/select.h>
 #elif defined _WIN32
