@@ -52,12 +52,6 @@ namespace eipScanner {
 			if (fcntl(_sockedFd, F_SETFL, arg) < 0) {
 				throw std::system_error(errno, std::generic_category());
 			}
-#elif defined _WIN32
-			unsigned long flag = 1;
-			if (ioctlsocket(_sockedFd, FIONBIO, &flag) != 0)
-			{
-				throw std::system_error(errno, std::generic_category());
-			}
 #endif
 
 			Logger(LogLevel::DEBUG) << "Opened socket fd=" << _sockedFd;
@@ -105,12 +99,6 @@ namespace eipScanner {
 			}
 			arg &= (~O_NONBLOCK);
 			if (fcntl(_sockedFd, F_SETFL, arg) < 0) {
-				throw std::system_error(errno, std::generic_category());
-			}
-#elif defined _WIN32
-			flag = 0;
-			if (ioctlsocket(_sockedFd, FIONBIO, &flag) != 0)
-			{
 				throw std::system_error(errno, std::generic_category());
 			}
 #endif
