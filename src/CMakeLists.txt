@@ -55,8 +55,6 @@ set(SOURCE_FILES
 add_library(EIPScanner SHARED ${SOURCE_FILES})
 add_library(EIPScannerS STATIC ${SOURCE_FILES})
 
-message(${PROJECT_SOURCE_DIR}/src)
-
 target_include_directories(EIPScanner PUBLIC
     ${PROJECT_SOURCE_DIR}/src/
     ${PROJECT_SOURCE_DIR}/src/cip
