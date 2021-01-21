@@ -55,30 +55,6 @@ set(SOURCE_FILES
 add_library(EIPScanner SHARED ${SOURCE_FILES})
 add_library(EIPScannerS STATIC ${SOURCE_FILES})
 
-target_include_directories(EIPScanner PUBLIC
-    ${PROJECT_SOURCE_DIR}/src/
-    ${PROJECT_SOURCE_DIR}/src/cip
-    ${PROJECT_SOURCE_DIR}/src/cip/connectionManager
-    ${PROJECT_SOURCE_DIR}/src/eip
-    ${PROJECT_SOURCE_DIR}/src/fileObject
-    ${PROJECT_SOURCE_DIR}/src/sockets
-    ${PROJECT_SOURCE_DIR}/src/utils
-    ${PROJECT_SOURCE_DIR}/src/vendor
-    ${PROJECT_SOURCE_DIR}/src/vendor/ra/powerFlex525
-    ${PROJECT_SOURCE_DIR}/src/vendor/yaskawa/mp3300iec)
-
-target_include_directories(EIPScannerS PUBLIC
-    ${PROJECT_SOURCE_DIR}/src/
-    ${PROJECT_SOURCE_DIR}/src/cip
-    ${PROJECT_SOURCE_DIR}/src/cip/connectionManager
-    ${PROJECT_SOURCE_DIR}/src/eip
-    ${PROJECT_SOURCE_DIR}/src/fileObject
-    ${PROJECT_SOURCE_DIR}/src/sockets
-    ${PROJECT_SOURCE_DIR}/src/utils
-    ${PROJECT_SOURCE_DIR}/src/vendor
-    ${PROJECT_SOURCE_DIR}/src/vendor/ra/powerFlex525
-    ${PROJECT_SOURCE_DIR}/src/vendor/yaskawa/mp3300iec)
-
 if(WIN32)
 	target_link_libraries(EIPScanner ws2_32)
 	target_link_libraries(EIPScannerS ws2_32)
