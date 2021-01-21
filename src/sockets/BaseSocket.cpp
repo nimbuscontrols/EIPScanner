@@ -42,8 +42,14 @@ namespace sockets {
 	void BaseSocket::setRecvTimeout(const std::chrono::milliseconds &recvTimeout) {
 		_recvTimeout = recvTimeout;
 
-		timeval tv = makePortableInterval(recvTimeout);
-		setsockopt(_sockedFd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+#ifdef _WIN32
+                uint32_t ms = recvTimeout.count();
+                setsockopt(_sockedFd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&ms, sizeof tv);
+#else
+                timeval tv = makePortableInterval(recvTimeout);
+                setsockopt(_sockedFd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+#endif
+
 	}
 
 	timeval BaseSocket::makePortableInterval(const std::chrono::milliseconds &recvTimeout) {
