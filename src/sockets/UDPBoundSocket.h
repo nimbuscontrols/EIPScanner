@@ -8,7 +8,7 @@
 #include <vector>
 #include <chrono>
 #include <memory>
-#include <netinet/in.h>
+//#include <netinet/in.h>
 #include "UDPSocket.h"
 
 namespace eipScanner {

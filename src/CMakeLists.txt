@@ -55,6 +55,11 @@ set(SOURCE_FILES
 add_library(EIPScanner SHARED ${SOURCE_FILES})
 add_library(EIPScannerS STATIC ${SOURCE_FILES})
 
+if(WIN32)
+	target_link_libraries(EIPScanner ws2_32)
+	target_link_libraries(EIPScannerS ws2_32)
+endif()
+
 set_target_properties(
         EIPScanner
         PROPERTIES

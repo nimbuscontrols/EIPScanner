@@ -2,8 +2,14 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
+#if defined(__linux__) || defined(__APPLE__)
 #include <sys/socket.h>
 #include <sys/select.h>
+#elif defined _WIN32
+#include <winsock2.h>
+#include <time.h>
+#endif
+
 #include <utility>
 #include <algorithm>
 #include <system_error>
@@ -36,8 +42,14 @@ namespace sockets {
 	void BaseSocket::setRecvTimeout(const std::chrono::milliseconds &recvTimeout) {
 		_recvTimeout = recvTimeout;
 
-		timeval tv = makePortableInterval(recvTimeout);
-		setsockopt(_sockedFd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+#ifdef _WIN32
+                uint32_t ms = recvTimeout.count();
+                setsockopt(_sockedFd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&ms, sizeof ms);
+#else
+                timeval tv = makePortableInterval(recvTimeout);
+                setsockopt(_sockedFd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+#endif
+
 	}
 
 	timeval BaseSocket::makePortableInterval(const std::chrono::milliseconds &recvTimeout) {
@@ -52,8 +64,8 @@ namespace sockets {
 
 #elif _WIN32
 		// not sure what the macro is for windows
-		.tv_sec = static_cast<_time64>(recvTimeout.count()/1000),
-		.tv_usec =  static_cast<_time64>((recvTimeout.count()%1000)*1000)
+		.tv_sec = static_cast<long int>(recvTimeout.count()/1000),
+		.tv_usec =  static_cast<long int>((recvTimeout.count()%1000)*1000)
 #endif
 
 		};

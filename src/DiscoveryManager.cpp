@@ -92,7 +92,7 @@ namespace eipScanner {
 		socket->setRecvTimeout(_receiveTimout);
 
 		int broadcast = 1;
-		if(setsockopt(socket->getSocketFd(), SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof(broadcast)) < 0) {
+		if(setsockopt(socket->getSocketFd(), SOL_SOCKET, SO_BROADCAST, (char*)&broadcast, sizeof(broadcast)) < 0) {
 			throw std::system_error(errno, std::generic_category());
 		}
 
