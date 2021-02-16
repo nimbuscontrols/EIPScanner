@@ -34,14 +34,6 @@ set(SOURCE_FILES
         utils/Logger.cpp
         utils/Buffer.cpp
 
-        vendor/ra/powerFlex525/DPIFaultManager.cpp
-        vendor/ra/powerFlex525/DPIFaultObject.cpp
-        vendor/ra/powerFlex525/DPIFaultCode.cpp
-        vendor/ra/powerFlex525/DPIFaultParameter.cpp
-	vendor/yaskawa/mp3300iec/Yaskawa_EPath.cpp
-	vendor/yaskawa/mp3300iec/Yaskawa_MessageRouter.cpp
-	vendor/yaskawa/mp3300iec/Yaskawa_MessageRouterRequest.cpp
-
         BaseObject.cpp
         ConnectionManager.cpp
         DiscoveryManager.cpp
@@ -52,8 +44,13 @@ set(SOURCE_FILES
         ParameterObject.cpp
         SessionInfo.cpp)
 
-add_library(EIPScanner SHARED ${SOURCE_FILES})
-add_library(EIPScannerS STATIC ${SOURCE_FILES})
+# if vendor scripts are enabled
+if(ENABLE_VENDOR_SRC)
+	add_subdirectory(vendor)
+endif()
+
+add_library(EIPScanner SHARED ${SOURCE_FILES} ${VENDOR_FILES})
+add_library(EIPScannerS STATIC ${SOURCE_FILES} ${VENDOR_FILES})
 
 if(WIN32)
 	target_link_libraries(EIPScanner ws2_32)

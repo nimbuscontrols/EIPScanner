@@ -49,6 +49,17 @@ We welcome outside contributions for any improvements, features, or new devices 
 
 Our goal is to maintain an active device catalog of all EtherNet/IP devices and their objects that we encounter. We encourage others to contribute to this communal device catalog in /src/vendor/.
 
+All vendor source files are automatically enabled. If you'd like to disable vendor files, you can disable with any of the below options.
+1) set this option in CMakeLists.txt
+```cmake
+option(ENABLE_VENDOR_SRC "Enable vendor source" OFF)
+```
+2) set the cmake build flag 
+```shell
+-DENABLE_VENDOR_SRC=OFF
+```
+3) manually comment needed files in src/vendor/CMakeLists.txt
+
 ## Authors
 
 Aleksey Timin
