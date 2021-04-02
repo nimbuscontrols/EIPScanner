@@ -51,7 +51,7 @@ namespace eipScanner {
 
 	IOConnection::WPtr
 	ConnectionManager::forwardOpen(const SessionInfoIf::SPtr& si, ConnectionParameters connectionParameters, bool isLarge) {
-		static cip::CipUint serialNumberCount = 0;
+		static int serialNumberCount = 0;
 		connectionParameters.connectionSerialNumber = ++serialNumberCount;
 
 		NetworkConnectionParametersBuilder o2tNCP(connectionParameters.o2tNetworkConnectionParams, isLarge);

@@ -55,7 +55,7 @@ namespace eipScanner {
 				CommonPacket commonPacket;
 				commonPacket.expand(std::vector<uint8_t>(data.begin()+EncapsPacket::HEADER_SIZE, data.end()));
 
-				for (CipUint i=0; i < commonPacket.getItems().size(); ++i) {
+				for (int i=0; i < commonPacket.getItems().size(); ++i) {
 					Buffer buffer(commonPacket.getItems()[i].getData());
 					CipUint ignore;
 					sockets::EndPoint socketAddr("", 0);

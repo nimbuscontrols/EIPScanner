@@ -17,7 +17,7 @@ namespace cip {
 	public:
 		CipBaseString() = default;
 		explicit CipBaseString(const std::string& string) {
-			_length = static_cast<T>(string.size());
+			_length = string.size();
 			uint8_t buffer[_length];
 			std::memcpy(buffer, string.data(), _length);
 
@@ -25,7 +25,7 @@ namespace cip {
 		}
 
 		CipBaseString(const std::vector<uint8_t>& data) {
-			_length = static_cast<T>(data.size());
+			_length = data.size();
 			_data = data;
 		}
 

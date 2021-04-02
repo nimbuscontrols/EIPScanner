@@ -18,7 +18,7 @@ namespace eip {
 
 	CommonPacketItem::CommonPacketItem(CommonPacketItemIds typeId, const std::vector<uint8_t> &data)
 		: _typeId{typeId}
-		, _length((cip::CipUint)data.size())
+		, _length(data.size())
 		, _data(data) {
 
 	}

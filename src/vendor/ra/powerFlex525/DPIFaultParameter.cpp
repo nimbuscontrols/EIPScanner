@@ -113,7 +113,7 @@ namespace powerFlex525 {
 	}
 
 
-	static cip::CipLreal processVolts(uint16_t volts, cip::CipUint voltsParam) {
+	static cip::CipLreal processVolts(uint16_t volts, int voltsParam) {
 		auto * parameterObject = new ParameterObject(voltsParam, true, 4);
 
 		parameterObject->setScalable(true);
@@ -126,7 +126,7 @@ namespace powerFlex525 {
 		return parameterObject->actualToEngValue(volts);
 	}
 
-	static cip::CipLreal processCurrent(uint16_t current, cip::CipUint currentParam) {
+	static cip::CipLreal processCurrent(uint16_t current, int currentParam) {
 		auto * parameterObject = new ParameterObject(currentParam, true, 4);
 
 		parameterObject->setScalable(true);
@@ -139,7 +139,7 @@ namespace powerFlex525 {
 		return parameterObject->actualToEngValue(current);
 	}
 
-	static cip::CipLreal processFrequency(uint16_t frequency, cip::CipUint frequencyParam) {
+	static cip::CipLreal processFrequency(uint16_t frequency, int frequencyParam) {
 		auto * parameterObject = new ParameterObject(frequencyParam, true, 4);
 
 		parameterObject->setScalable(true);
@@ -158,7 +158,7 @@ namespace powerFlex525 {
 	 */
 	static uint16_t getFaultDetail(const SessionInfoIf::SPtr &si,
 								   const MessageRouter::SPtr& messageRouter,
-								   cip::CipUint parameterNumber){
+								   int parameterNumber){
 
 		auto response = messageRouter->sendRequest(si, ServiceCodes::GET_ATTRIBUTE_SINGLE,
 												   EPath(0x0F, parameterNumber, 1));
@@ -184,10 +184,10 @@ namespace powerFlex525 {
 								   const MessageRouter::SPtr& messageRouter, int faultNumber, bool getFaultDetails)
 			:  _fullInformation{} {
 
-		cip::CipUint faultCodeParam      = 0;
-		cip::CipUint faultVoltsParam     = 0;
-		cip::CipUint faultCurrentParam   = 0;
-		cip::CipUint faultFrequencyParam = 0;
+		int faultCodeParam      = 0;
+		int faultVoltsParam     = 0;
+		int faultCurrentParam   = 0;
+		int faultFrequencyParam = 0;
 
 		switch(faultNumber){
 			case 1:

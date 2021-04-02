@@ -105,7 +105,7 @@ namespace cip {
 		_attributeId = 0;
 		_size = 0;
 
-		for (unsigned int i = 0; i < data.size() && !buffer.empty(); ++i) {
+		for (int i = 0; i < data.size() && !buffer.empty(); ++i) {
 			EPathSegmentTypes segmentType;
 			CipUsint ignore = 0;
 			CipUsint byte;

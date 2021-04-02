@@ -95,7 +95,7 @@ namespace eip {
 
 	void EncapsPacket::setData(const std::vector<uint8_t> &data) {
 		_data = data;
-		_length = (cip::CipUint)data.size();
+		_length = data.size();
 	}
 
 	size_t EncapsPacket::getLengthFromHeader(const std::vector<uint8_t>& data) {

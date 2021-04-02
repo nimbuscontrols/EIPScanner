@@ -144,7 +144,7 @@ namespace eipScanner {
 						>> _precision;
 
 					std::vector<uint8_t> data;
-					for (CipUint attrId = ParameterObjectAttributeIds::SCALING_MULTIPLIER;
+					for (int attrId = ParameterObjectAttributeIds::SCALING_MULTIPLIER;
 						 attrId <= ParameterObjectAttributeIds::SCALING_OFFSET;
 						 ++attrId) {
 						auto response = _messageRouter->sendRequest(si,
