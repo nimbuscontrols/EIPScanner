@@ -51,7 +51,7 @@ namespace eipScanner {
 
 	IOConnection::WPtr
 	ConnectionManager::forwardOpen(const SessionInfoIf::SPtr& si, ConnectionParameters connectionParameters, bool isLarge) {
-		static int serialNumberCount = 0;
+		static cip::CipUint serialNumberCount = 0;
 		connectionParameters.connectionSerialNumber = ++serialNumberCount;
 
 		NetworkConnectionParametersBuilder o2tNCP(connectionParameters.o2tNetworkConnectionParams, isLarge);
@@ -71,7 +71,7 @@ namespace eipScanner {
 		auto t2oSize = t2oNCP.getConnectionSize();
 
 		connectionParameters.connectionPathSize = (connectionParameters.connectionPath .size() / 2)
-				+ (connectionParameters.connectionPath .size() % 2);
+				+ (connectionParameters.connectionPath.size() % 2);
 
 		if ((connectionParameters.transportTypeTrigger & NetworkConnectionParams::CLASS1) > 0
 			|| (connectionParameters.transportTypeTrigger & NetworkConnectionParams::CLASS3) > 0) {
@@ -87,22 +87,17 @@ namespace eipScanner {
 			connectionParameters.t2oNetworkConnectionParams += 4;
 		}
 
-		Buffer buffer;
-		buffer << sockets::EndPoint("0.0.0.0", 2222);
-		eip::CommonPacketItem addrItem(eip::CommonPacketItemIds::T2O_SOCKADDR_INFO, buffer.data());
-
-
 		MessageRouterResponse messageRouterResponse;
 		if (isLarge) {
 			LargeForwardOpenRequest request(connectionParameters);
 			messageRouterResponse = _messageRouter->sendRequest(si,
 				static_cast<cip::CipUsint>(ConnectionManagerServiceCodes::LARGE_FORWARD_OPEN),
-				EPath(6, 1), request.pack(), {addrItem});
+				EPath(6, 1), request.pack(), {});
 		} else {
 			ForwardOpenRequest request(connectionParameters);
 			messageRouterResponse = _messageRouter->sendRequest(si,
 				static_cast<cip::CipUsint>(ConnectionManagerServiceCodes::FORWARD_OPEN),
-				EPath(6, 1), request.pack(), {addrItem});
+				EPath(6, 1), request.pack(), {});
 		}
 
 		IOConnection::SPtr ioConnection;
@@ -148,9 +143,9 @@ namespace eipScanner {
 				} else {
 					ioConnection->_socket = std::make_unique<UDPSocket>(endPoint);
 				}
-				
+
 			} else {
-				ioConnection->_socket = std::make_unique<UDPSocket>(si->getRemoteEndPoint().getHost(), 2222);	
+				ioConnection->_socket = std::make_unique<UDPSocket>(si->getRemoteEndPoint().getHost(), 2222);
 			}
 
 			Logger(LogLevel::INFO) << "Open UDP socket to send data to "
@@ -202,6 +197,7 @@ namespace eipScanner {
 			}
 
 			auto rc = _connectionMap.erase(ptr->_t2oNetworkConnectionId);
+			(void) rc;
 			assert(rc);
 		} else {
 			Logger(LogLevel::WARNING) << "Attempt to close an already closed connection";
@@ -212,6 +208,7 @@ namespace eipScanner {
 		std::vector<BaseSocket::SPtr > sockets;
 		std::transform(_socketMap.begin(), _socketMap.end(), std::back_inserter(sockets), [](auto entry) {
 			auto fd = entry.second->getSocketFd();
+			(void) fd;
 			return entry.second;
 		});
 
@@ -235,6 +232,7 @@ namespace eipScanner {
 			auto newSocket = std::make_shared<UDPBoundSocket>(endPoint);
 			_socketMap[endPoint] = newSocket;
 			newSocket->setBeginReceiveHandler([](sockets::BaseSocket& sock) {
+			  (void) sock;
 				Logger(LogLevel::DEBUG) << "Received something";
 			});
 
@@ -253,7 +251,7 @@ namespace eipScanner {
 				if (io != _connectionMap.end()) {
 					io->second->notifyReceiveData(commonPacket.getItems().at(1).getData());
 				} else {
-					Logger(LogLevel::ERROR) << "Received data from unknow connection T2O_ID=" << connectionId;
+					Logger(LogLevel::ERROR) << "Received data from unknown connection T2O_ID=" << connectionId;
 				}
 			});
 

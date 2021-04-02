@@ -363,7 +363,7 @@ private:
 	bool _isScalable;
 	bool _isReadOnly;
 
-    cip::CipUint _parameter;
+  cip::CipUint _parameter;
 	std::vector<uint8_t> _value;
 	cip::CipDataTypes _type;
 	std::string _name;

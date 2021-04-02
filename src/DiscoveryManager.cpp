@@ -2,7 +2,6 @@
 // Created by Aleksey Timin on 12/17/19.
 //
 #include <system_error>
-#include <cerrno>
 
 #include "eip/EncapsPacketFactory.h"
 #include "eip/CommonPacket.h"
@@ -11,6 +10,13 @@
 #include "utils/Buffer.h"
 
 #include "DiscoveryManager.h"
+#include "sockets/Platform.h"
+
+#if defined (__unix__)
+#define DISCOVER_END (EAGAIN)
+#elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+#define DISCOVER_END (ETIMEDOUT)
+#endif
 
 namespace eipScanner {
 	using namespace cip;
@@ -49,7 +55,7 @@ namespace eipScanner {
 				CommonPacket commonPacket;
 				commonPacket.expand(std::vector<uint8_t>(data.begin()+EncapsPacket::HEADER_SIZE, data.end()));
 
-				for (int i=0; i < commonPacket.getItems().size(); ++i) {
+				for (CipUint i=0; i < commonPacket.getItems().size(); ++i) {
 					Buffer buffer(commonPacket.getItems()[i].getData());
 					CipUint ignore;
 					sockets::EndPoint socketAddr("", 0);
@@ -79,7 +85,7 @@ namespace eipScanner {
 				}
 			}
 		} catch (std::system_error& er) {
-			if (er.code().value() != EAGAIN) {
+			if (er.code().value() != DISCOVER_END) {
 				throw er;
 			}
 		}
@@ -93,7 +99,7 @@ namespace eipScanner {
 
 		int broadcast = 1;
 		if(setsockopt(socket->getSocketFd(), SOL_SOCKET, SO_BROADCAST, (char*)&broadcast, sizeof(broadcast)) < 0) {
-			throw std::system_error(errno, std::generic_category());
+			throw std::system_error(SOCKET_ERRNO(), std::generic_category());
 		}
 
 		return socket;

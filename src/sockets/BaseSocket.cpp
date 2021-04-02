@@ -2,10 +2,10 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
-#if defined(__linux__) || defined(__APPLE__)
+#if defined (__unix__)
 #include <sys/socket.h>
 #include <sys/select.h>
-#elif defined _WIN32
+#elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 #include <winsock2.h>
 #include <time.h>
 #endif
@@ -14,12 +14,14 @@
 #include <algorithm>
 #include <system_error>
 #include "BaseSocket.h"
+#include "Platform.h"
 
 namespace eipScanner {
 namespace sockets {
 
 	BaseSocket::BaseSocket(EndPoint endPoint)
-			: _remoteEndPoint(std::move(endPoint))
+			: _sockedFd(0)
+			, _remoteEndPoint(std::move(endPoint))
 			, _recvTimeout(0)
 			, _beginReceiveHandler() {
 
@@ -42,8 +44,8 @@ namespace sockets {
 	void BaseSocket::setRecvTimeout(const std::chrono::milliseconds &recvTimeout) {
 		_recvTimeout = recvTimeout;
 
-#ifdef _WIN32
-                uint32_t ms = recvTimeout.count();
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+                uint32_t ms = (uint32_t)recvTimeout.count();
                 setsockopt(_sockedFd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&ms, sizeof ms);
 #else
                 timeval tv = makePortableInterval(recvTimeout);
@@ -62,8 +64,7 @@ namespace sockets {
 		.tv_sec = static_cast<__time_t>(recvTimeout.count()/1000),
 		.tv_usec =  static_cast<__time_t>((recvTimeout.count()%1000)*1000)
 
-#elif _WIN32
-		// not sure what the macro is for windows
+#elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 		.tv_sec = static_cast<long int>(recvTimeout.count()/1000),
 		.tv_usec =  static_cast<long int>((recvTimeout.count()%1000)*1000)
 #endif
@@ -102,7 +103,7 @@ namespace sockets {
 
 			ready = ::select(socketWithMaxFd->getSocketFd() + 1, &recvSet, NULL, NULL, &tv);
 			if (ready < 0) {
-				throw std::system_error(errno, std::generic_category());
+				throw std::system_error(SOCKET_ERRNO(), std::generic_category());
 			}
 
 			for (auto& sock : sockets) {

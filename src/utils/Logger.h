@@ -8,7 +8,7 @@
 #include <sstream>
 #include <memory>
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 #undef ERROR
 #endif
 

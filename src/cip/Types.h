@@ -24,7 +24,7 @@ namespace cip {
 	typedef double CipLreal; /**< 64-bit IEEE 754 floating point */
 	typedef uint64_t CipLword; /**< 64-bit bit unsigned integer */
 	typedef int64_t CipLint;    /**< 64-bit bit signed integer */
-    typedef uint64_t CipUlint; /**< 64-bit bit unsigned integer */
+  typedef uint64_t CipUlint; /**< 64-bit bit unsigned integer */
 
 
 	enum class CipDataTypes : CipUsint {
@@ -54,8 +54,7 @@ namespace cip {
 		LTIME = 0xD7, /**< Duration in micro-seconds, high resolution, range of LINT */
 		ITIME = 0xD8, /**< Duration in milli-seconds, short; range of INT*/
 		STRINGN = 0xD9, /**< Character string, N byte per character */
-		SHORT_STRING = 0xDA, /**< Character string, 1 byte per character, 1 byte
-                             length indicator */
+		SHORT_STRING = 0xDA, /**< Character string, 1 byte per character, 1 byte length indicator */
 		TIME = 0xDB, /**< Duration in milli-seconds; range of DINT */
 		EPATH = 0xDC, /**< CIP path segments*/
 		ENG_UNIT = 0xDD, /**< Engineering Units*/

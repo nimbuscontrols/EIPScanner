@@ -5,9 +5,9 @@
 #ifndef EIPSCANNER_SOCKETS_ENDPOINT_H
 #define EIPSCANNER_SOCKETS_ENDPOINT_H
 
-#if defined(__linux__) || defined(__APPLE__)
+#if defined(__unix__)
 #include <netinet/in.h>
-#elif defined _WIN32
+#elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 #include <winsock2.h>
 #endif
 #include <string>
