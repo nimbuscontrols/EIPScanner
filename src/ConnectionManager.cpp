@@ -145,13 +145,13 @@ namespace eipScanner {
 				}
 
 			} else {
-				ioConnection->_socket = std::make_unique<UDPSocket>(si->getRemoteEndPoint().getHost(), 2222);
+				ioConnection->_socket = std::make_unique<UDPSocket>(si->getRemoteEndPoint().getHost(), sockets::EndPoint::defaultImplicitPort);
 			}
 
 			Logger(LogLevel::INFO) << "Open UDP socket to send data to "
 					<< ioConnection->_socket->getRemoteEndPoint().toString();
 
-			findOrCreateSocket(sockets::EndPoint(si->getRemoteEndPoint().getHost(), 2222));
+			findOrCreateSocket(sockets::EndPoint(si->getRemoteEndPoint().getHost(), sockets::EndPoint::defaultImplicitPort));
 
 			auto result = _connectionMap
 					.insert(std::make_pair(response.getT2ONetworkConnectionId(), ioConnection));

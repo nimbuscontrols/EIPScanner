@@ -17,6 +17,9 @@ namespace sockets {
 
 	class EndPoint {
 	public:
+	  static constexpr auto defaultExplicitPort = 44818;
+	  static constexpr auto defaultImplicitPort = 2222;
+
 		EndPoint(std::string  host, int port);
 		EndPoint(struct sockaddr_in& addr);
 
