@@ -21,13 +21,13 @@ namespace sockets {
 		: UDPSocket(std::move(endPoint)) {
 		int on = 1;
 		if (setsockopt(_sockedFd, SOL_SOCKET, SO_REUSEADDR, (char *) &on, sizeof(on)) < 0) {
-			throw std::system_error(SOCKET_ERRNO(), std::generic_category());
+			throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
 		}
 
 		auto addr = _remoteEndPoint.getAddr();
 		addr.sin_addr.s_addr = INADDR_ANY;
 		if (bind(_sockedFd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-			throw std::system_error(SOCKET_ERRNO(), std::generic_category());
+			throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
 		}
 	}
 

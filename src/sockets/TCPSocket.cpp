@@ -8,13 +8,13 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 #elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <time.h>
 #endif
 
-#include <unistd.h>
 #include <fcntl.h>
 
 #include "utils/Logger.h"
@@ -32,21 +32,22 @@ namespace eipScanner {
 
 		TCPSocket::TCPSocket(EndPoint endPoint, std::chrono::milliseconds connTimeout)
 				: BaseSocket(std::move(endPoint)) {
+
 			_sockedFd = socket(AF_INET, SOCK_STREAM, 0);
 			if (_sockedFd < 0) {
-				throw std::system_error(SOCKET_ERRNO(), std::generic_category());
+				throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
 			}
 
 			// Set non-blocking
 #if defined(__unix__)
 			auto arg = fcntl(_sockedFd, F_GETFL, NULL);
 			if (arg < 0) {
-				throw std::system_error(SOCKET_ERRNO(), std::generic_category());
+				throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
 			}
 
 			arg |= O_NONBLOCK;
 			if (fcntl(_sockedFd, F_SETFL, arg) < 0) {
-				throw std::system_error(SOCKET_ERRNO(), std::generic_category());
+				throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
 			}
 #endif
 
@@ -66,36 +67,36 @@ namespace eipScanner {
 						res = ::select(_sockedFd + 1, NULL, &myset, NULL, &tv);
 
 						if (res < 0 && SOCKET_ERRNO() != EINTR) {
-							throw std::system_error(SOCKET_ERRNO(), std::generic_category());
+							throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
 						} else if (res > 0) {
 							// Socket selected for write
 							int err;
 							socklen_t lon = sizeof(int);
 							if (getsockopt(_sockedFd, SOL_SOCKET, SO_ERROR, (char *) (&err), &lon) < 0) {
-								throw std::system_error(SOCKET_ERRNO(), std::generic_category());
+								throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
 							}
 							// Check the value returned...
 							if (err) {
-								throw std::system_error(err, std::generic_category());
+								throw std::system_error(err, SOCKET_ERROR_CATEGORY());
 							}
 							break;
 						} else {
-							throw std::system_error(ETIMEDOUT, std::generic_category());
+							throw std::system_error(ETIMEDOUT, SOCKET_ERROR_CATEGORY());
 						}
 					} while (1);
 				} else {
-					throw std::system_error(SOCKET_ERRNO(), std::generic_category());
+					throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
 				}
 			}
 
 #if defined(__unix__)
 			// Set to blocking mode again...
 			if ((arg = fcntl(_sockedFd, F_GETFL, NULL)) < 0) {
-				throw std::system_error(SOCKET_ERRNO(), std::generic_category());
+				throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
 			}
 			arg &= (~O_NONBLOCK);
 			if (fcntl(_sockedFd, F_SETFL, arg) < 0) {
-				throw std::system_error(SOCKET_ERRNO(), std::generic_category());
+				throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
 			}
 #endif
 		}
@@ -109,7 +110,7 @@ namespace eipScanner {
 		TCPSocket::~TCPSocket() {
 			Logger(LogLevel::DEBUG) << "Close TCP socket fd=" << _sockedFd;
 			shutdown(_sockedFd, SOCKET_SHUTDOWN_OPERATION);
-			close(_sockedFd);
+			SOCKET_CLOSE(_sockedFd);
 		}
 
 		void TCPSocket::Send(const std::vector<uint8_t> &data) const {
@@ -117,7 +118,7 @@ namespace eipScanner {
 
 			int count = send(_sockedFd, (char*)data.data(), data.size(), 0);
 			if (count < data.size()) {
-				throw std::system_error(SOCKET_ERRNO(), std::generic_category());
+				throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
 			}
 		}
 
@@ -130,7 +131,7 @@ namespace eipScanner {
 				Logger(LogLevel::TRACE) << "Received " << len << " bytes from TCP socket #" << _sockedFd << ".";
 				count += len;
 				if (len < 0) {
-					throw std::system_error(SOCKET_ERRNO(), std::generic_category());
+					throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
 				}
 
 				if (len == 0) {

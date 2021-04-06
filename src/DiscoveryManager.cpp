@@ -99,7 +99,7 @@ namespace eipScanner {
 
 		int broadcast = 1;
 		if(setsockopt(socket->getSocketFd(), SOL_SOCKET, SO_BROADCAST, (char*)&broadcast, sizeof(broadcast)) < 0) {
-			throw std::system_error(SOCKET_ERRNO(), std::generic_category());
+			throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
 		}
 
 		return socket;

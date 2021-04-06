@@ -103,7 +103,7 @@ namespace sockets {
 
 			ready = ::select(socketWithMaxFd->getSocketFd() + 1, &recvSet, NULL, NULL, &tv);
 			if (ready < 0) {
-				throw std::system_error(SOCKET_ERRNO(), std::generic_category());
+				throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
 			}
 
 			for (auto& sock : sockets) {
