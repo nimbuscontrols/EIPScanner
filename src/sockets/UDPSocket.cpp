@@ -2,8 +2,6 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
-#include <system_error>
-
 #if defined(__unix__)
 #include <sys/socket.h>
 #include <netinet/in.h>

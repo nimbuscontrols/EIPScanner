@@ -5,6 +5,7 @@
 #if defined (__unix__)
 #include <sys/socket.h>
 #include <sys/select.h>
+#include <unistd.h>
 #elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 #include <winsock2.h>
 #include <time.h>
@@ -12,7 +13,7 @@
 
 #include <utility>
 #include <algorithm>
-#include <system_error>
+
 #include "BaseSocket.h"
 #include "Platform.h"
 
