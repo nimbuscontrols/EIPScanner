@@ -5,6 +5,7 @@
 #include "Platform.h"
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+#include <windows.h>
 
 namespace detail
 {

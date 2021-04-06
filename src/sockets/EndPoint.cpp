@@ -3,6 +3,7 @@
 //
 
 #include "EndPoint.h"
+#include "BaseSocket.h"
 #include "Platform.h"
 
 #if defined(__unix__)
@@ -36,7 +37,7 @@ namespace sockets {
 #elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
     if (inet_pton(AF_INET, _host.c_str(), &_addr.sin_addr.s_addr) < 0) {
 #endif
-			throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+			throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 		}
 	}
 

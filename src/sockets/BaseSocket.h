@@ -30,11 +30,13 @@ namespace sockets {
 		virtual std::vector<uint8_t> Receive(size_t size) const = 0;
 		void setBeginReceiveHandler(BeginReceiveHandler handler);
 
-
 		const std::chrono::milliseconds &getRecvTimeout() const;
 		void setRecvTimeout(const std::chrono::milliseconds &recvTimeout);
 
 		int getSocketFd() const;
+
+		static int getLastError();
+		static const std::error_category& getErrorCategory() noexcept;
 
 		const EndPoint &getRemoteEndPoint() const;
 
@@ -42,6 +44,8 @@ namespace sockets {
 
 	protected:
 		void BeginReceive();
+    void Shutdown();
+    void Close();
 
 		int _sockedFd;
 		EndPoint _remoteEndPoint;

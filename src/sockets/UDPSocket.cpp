@@ -33,7 +33,7 @@ namespace sockets {
 
 		_sockedFd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 		if (_sockedFd < 0) {
-			throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+			throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 		}
 
 		Logger(LogLevel::DEBUG) << "Opened UDP socket fd=" << _sockedFd;
@@ -41,8 +41,8 @@ namespace sockets {
 
 	UDPSocket::~UDPSocket() {
 		Logger(LogLevel::DEBUG) << "Close UDP socket fd=" << _sockedFd;
-		shutdown(_sockedFd, SOCKET_SHUTDOWN_OPERATION);
-		SOCKET_CLOSE(_sockedFd);
+		Shutdown();
+		Close();
 	}
 
 	void UDPSocket::Send(const std::vector <uint8_t> &data) const {
@@ -52,7 +52,7 @@ namespace sockets {
 		int count = sendto(_sockedFd, (char*)data.data(), data.size(), 0,
 				(struct sockaddr *)&addr, sizeof(addr));
 		if (count < data.size()) {
-			throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+			throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 		}
 	}
 
@@ -62,7 +62,7 @@ namespace sockets {
 		auto len = recvfrom(_sockedFd, (char*)recvBuffer.data(), recvBuffer.size(), 0, NULL, NULL);
 		Logger(LogLevel::TRACE) << "Received " << len << " bytes from UDP socket #" << _sockedFd << ".";
 		if (len < 0) {
-			throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+			throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 		}
 
 		return recvBuffer;
@@ -75,7 +75,7 @@ namespace sockets {
 		auto len = recvfrom(_sockedFd, (char*)recvBuffer.data(), recvBuffer.size(), 0, (struct sockaddr*)&addr, &addrFromLength);
 		Logger(LogLevel::TRACE) << "Received " << len << " bytes from UDP socket #" << _sockedFd << ".";
 		if (len < 0) {
-			throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+			throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 		}
 
 		endPoint = EndPoint(addr);

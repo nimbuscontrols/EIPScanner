@@ -33,6 +33,39 @@ namespace sockets {
 
 	BaseSocket::~BaseSocket() = default;
 
+	void BaseSocket::Shutdown() {
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+	  shutdown(_sockedFd, SD_BOTH);
+#else
+	  shutdown(_sockedFd, SHUT_RDWR);
+#endif
+	}
+
+	void BaseSocket::Close() {
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+	  closesocket(_sockedFd);
+#else
+	  close(_sockedFd);
+#endif
+	}
+
+	/*static*/int BaseSocket::getLastError() {
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+    return WSAGetLastError();
+#else
+    return errno;
+#endif
+	}
+
+	/*static*/const std::error_category& BaseSocket::getErrorCategory() noexcept
+	{
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+    return win32_error_category();
+#else
+    return std::generic_category();
+#endif
+	}
+
 	int BaseSocket::getSocketFd() const {
 		return _sockedFd;
 	}
@@ -60,10 +93,9 @@ namespace sockets {
 #ifdef __APPLE__
 		.tv_sec = static_cast<__darwin_suseconds_t>(recvTimeout.count()/1000),
 		.tv_usec =  static_cast<__darwin_suseconds_t>((recvTimeout.count()%1000)*1000)
-#elif __linux__
+#elif __unix__
 		.tv_sec = static_cast<__time_t>(recvTimeout.count()/1000),
 		.tv_usec =  static_cast<__time_t>((recvTimeout.count()%1000)*1000)
-
 #elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 		.tv_sec = static_cast<long int>(recvTimeout.count()/1000),
 		.tv_usec =  static_cast<long int>((recvTimeout.count()%1000)*1000)
@@ -72,7 +104,7 @@ namespace sockets {
 		};
 
 		tv.tv_sec = std::max<decltype(tv.tv_sec)>(tv.tv_sec, 0);
-        tv.tv_usec = std::max<decltype(tv.tv_usec)>(tv.tv_usec, 0);
+    tv.tv_usec = std::max<decltype(tv.tv_usec)>(tv.tv_usec, 0);
 		return tv;
 	}
 
@@ -103,7 +135,7 @@ namespace sockets {
 
 			ready = ::select(socketWithMaxFd->getSocketFd() + 1, &recvSet, NULL, NULL, &tv);
 			if (ready < 0) {
-				throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+				throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 			}
 
 			for (auto& sock : sockets) {

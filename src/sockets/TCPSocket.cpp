@@ -35,19 +35,19 @@ namespace eipScanner {
 
 			_sockedFd = socket(AF_INET, SOCK_STREAM, 0);
 			if (_sockedFd < 0) {
-				throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+				throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 			}
 
 			// Set non-blocking
 #if defined(__unix__)
 			auto arg = fcntl(_sockedFd, F_GETFL, NULL);
 			if (arg < 0) {
-				throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+				throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 			}
 
 			arg |= O_NONBLOCK;
 			if (fcntl(_sockedFd, F_SETFL, arg) < 0) {
-				throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+				throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 			}
 #endif
 
@@ -57,7 +57,7 @@ namespace eipScanner {
 			auto addr = _remoteEndPoint.getAddr();
 			auto res = connect(_sockedFd, (struct sockaddr *) &addr, sizeof(addr));
 			if (res < 0) {
-				if (SOCKET_ERRNO() == EINPROGRESS) {
+				if (BaseSocket::getLastError() == EIPSCANNER_SOCKET_ERROR(EINPROGRESS)) {
 					do {
 						fd_set myset;
 						auto tv = makePortableInterval(connTimeout);
@@ -66,37 +66,37 @@ namespace eipScanner {
 						FD_SET(_sockedFd, &myset);
 						res = ::select(_sockedFd + 1, NULL, &myset, NULL, &tv);
 
-						if (res < 0 && SOCKET_ERRNO() != EINTR) {
-							throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+						if (res < 0 && BaseSocket::getLastError() != EIPSCANNER_SOCKET_ERROR(EINTR)) {
+							throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 						} else if (res > 0) {
 							// Socket selected for write
 							int err;
 							socklen_t lon = sizeof(int);
 							if (getsockopt(_sockedFd, SOL_SOCKET, SO_ERROR, (char *) (&err), &lon) < 0) {
-								throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+								throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 							}
 							// Check the value returned...
 							if (err) {
-								throw std::system_error(err, SOCKET_ERROR_CATEGORY());
+								throw std::system_error(err, BaseSocket::getErrorCategory());
 							}
 							break;
 						} else {
-							throw std::system_error(ETIMEDOUT, SOCKET_ERROR_CATEGORY());
+							throw std::system_error(EIPSCANNER_SOCKET_ERROR(ETIMEDOUT), BaseSocket::getErrorCategory());
 						}
 					} while (1);
 				} else {
-					throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+					throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 				}
 			}
 
 #if defined(__unix__)
 			// Set to blocking mode again...
 			if ((arg = fcntl(_sockedFd, F_GETFL, NULL)) < 0) {
-				throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+				throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 			}
 			arg &= (~O_NONBLOCK);
 			if (fcntl(_sockedFd, F_SETFL, arg) < 0) {
-				throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+				throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 			}
 #endif
 		}
@@ -109,8 +109,8 @@ namespace eipScanner {
 
 		TCPSocket::~TCPSocket() {
 			Logger(LogLevel::DEBUG) << "Close TCP socket fd=" << _sockedFd;
-			shutdown(_sockedFd, SOCKET_SHUTDOWN_OPERATION);
-			SOCKET_CLOSE(_sockedFd);
+			Shutdown();
+			Close();
 		}
 
 		void TCPSocket::Send(const std::vector<uint8_t> &data) const {
@@ -118,7 +118,7 @@ namespace eipScanner {
 
 			int count = send(_sockedFd, (char*)data.data(), data.size(), 0);
 			if (count < data.size()) {
-				throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+				throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 			}
 		}
 
@@ -131,7 +131,7 @@ namespace eipScanner {
 				Logger(LogLevel::TRACE) << "Received " << len << " bytes from TCP socket #" << _sockedFd << ".";
 				count += len;
 				if (len < 0) {
-					throw std::system_error(SOCKET_ERRNO(), SOCKET_ERROR_CATEGORY());
+					throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 				}
 
 				if (len == 0) {

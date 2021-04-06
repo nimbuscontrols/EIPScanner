@@ -37,7 +37,7 @@ namespace eipScanner {
 		/**
 		 * @brief default destructor
 		 */
-		~DiscoveryManager();
+		virtual ~DiscoveryManager();
 
 		/**
 		 * @brief Discovers the EIP network
