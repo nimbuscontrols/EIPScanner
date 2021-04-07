@@ -30,6 +30,7 @@ set(SOURCE_FILES
         sockets/TCPSocket.cpp
         sockets/UDPBoundSocket.cpp
         sockets/UDPSocket.cpp
+        sockets/Platform.cpp
 
         utils/Logger.cpp
         utils/Buffer.cpp
