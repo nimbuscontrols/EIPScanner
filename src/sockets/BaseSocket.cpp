@@ -61,7 +61,7 @@ namespace sockets {
 	/*static*/const std::error_category& BaseSocket::getErrorCategory() noexcept
 	{
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
-    return win32_error_category();
+    return win32ErrorCategory::category();
 #else
     return std::generic_category();
 #endif

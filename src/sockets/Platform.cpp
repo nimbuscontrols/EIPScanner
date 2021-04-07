@@ -7,13 +7,13 @@
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 #include <windows.h>
 
-namespace detail
-{
-  char const* win32_error_category::name() const noexcept {
+namespace eipScanner {
+namespace sockets {
+  char const* win32ErrorCategory::name() const noexcept {
     return "Win32Error";
   }
 
-  std::string win32_error_category::message(int c) const {
+  std::string win32ErrorCategory::message(int c) const {
     char error[UINT8_MAX];
     auto len = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, static_cast<DWORD>(c), 0, error, sizeof(error), nullptr);
     if (len == 0) {
@@ -25,10 +25,11 @@ namespace detail
     }
     return std::string(error, len);
   }
-}
 
-detail::win32_error_category const& win32_error_category() {
-  static detail::win32_error_category c;
-  return c;
+  /*static*/win32ErrorCategory const& win32ErrorCategory::category() {
+    static win32ErrorCategory c;
+    return c;
+  }
+}
 }
 #endif
