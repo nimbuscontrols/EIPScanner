@@ -12,14 +12,14 @@
 #endif
 #include <string>
 
+#define EIP_DEFAULT_EXPLICIT_PORT (uint16_t)(44818)
+#define EIP_DEFAULT_IMPLICIT_PORT (uint16_t)(2222)
+
 namespace eipScanner {
 namespace sockets {
 
 	class EndPoint {
 	public:
-	  static constexpr auto defaultExplicitPort = 44818;
-	  static constexpr auto defaultImplicitPort = 2222;
-
 		EndPoint(std::string  host, int port);
 		EndPoint(struct sockaddr_in& addr);
 
