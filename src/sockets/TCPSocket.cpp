@@ -2,7 +2,7 @@
 // Created by Aleksey Timin on 11/16/19.
 //
 
-#if defined(__unix__)
+#if defined(__unix__) || defined(__APPLE__)
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -37,7 +37,7 @@ namespace eipScanner {
 			}
 
 			// Set non-blocking
-#if defined(__unix__)
+#if defined(__unix__) || defined(__APPLE__)
 			auto arg = fcntl(_sockedFd, F_GETFL, NULL);
 			if (arg < 0) {
 				throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
@@ -87,7 +87,7 @@ namespace eipScanner {
 				}
 			}
 
-#if defined(__unix__)
+#if defined(__unix__) || defined(__APPLE__)
 			// Set to blocking mode again...
 			if ((arg = fcntl(_sockedFd, F_GETFL, NULL)) < 0) {
 				throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
