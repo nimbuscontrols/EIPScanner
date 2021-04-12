@@ -43,12 +43,15 @@ namespace eipScanner {
     ParameterObject::ParameterObject(cip::CipUint instanceId, bool fullAttributes, size_t typeSize)
             :  BaseObject(CLASS_ID, instanceId)
             , _hasFullAttributes(fullAttributes)
-            , _value(typeSize)
-            , _maxValue(typeSize)
-            , _minValue(typeSize)
-            , _defaultValue(typeSize)
             , _isScalable(false)
             , _isReadOnly(false)
+            , _parameter(0)
+            , _value(typeSize)
+            , _type(CipDataTypes::ANY)
+            , _name{""}
+            , _minValue(typeSize)
+            , _maxValue(typeSize)
+            , _defaultValue(typeSize)
             , _scalingMultiplier(1)
             , _scalingDivisor(1)
             , _scalingBase(1)
@@ -60,10 +63,16 @@ namespace eipScanner {
                                      const SessionInfoIf::SPtr &si,
                                      const MessageRouter::SPtr& messageRouter)
             :  BaseObject(CLASS_ID, instanceId)
-            , _name{""}
-            , _hasFullAttributes{fullAttributes}
-            , _isScalable{false}
+            , _hasFullAttributes(fullAttributes)
+            , _isScalable(false)
             , _isReadOnly(false)
+            , _parameter(0)
+            , _value(0)
+            , _type(CipDataTypes::ANY)
+            , _name{""}
+            , _minValue(0)
+            , _maxValue(0)
+            , _defaultValue(0)
             , _scalingMultiplier(1)
             , _scalingDivisor(1)
             , _scalingBase(1)
@@ -302,4 +311,4 @@ namespace eipScanner {
 			return engValue;
 		}
 	}
-};
+}

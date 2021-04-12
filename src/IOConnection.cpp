@@ -31,20 +31,20 @@ namespace eipScanner {
 			, _connectionTimeoutMultiplier{0}
 			, _connectionTimeoutCount{0}
 			, _o2tSequenceNumber{0}
+			, _t2oSequenceNumber{0}
+			, _serialNumber{0}
 			, _transportTypeTrigger{0}
 			, _o2tRealTimeFormat{0}
 			, _t2oRealTimeFormat{0}
-			, _t2oSequenceNumber{0}
 			, _sequenceValueCount{0}
 			, _connectionPath(0)
 			, _originatorVendorId{0}
 			, _originatorSerialNumber{0}
-			, _serialNumber{0}
 			, _outputData()
-			, _lastHandleTime(std::chrono::steady_clock::now())
-			, _receiveDataHandle([](auto a, auto b, auto data) {})
-			, _sendDataHandle([](auto data) {})
-			, _closeHandle([]() {}) {
+			, _receiveDataHandle([](auto, auto, auto) {})
+			, _closeHandle([]() {})
+			, _sendDataHandle([](auto) {})
+			, _lastHandleTime(std::chrono::steady_clock::now()) {
 	}
 
 	IOConnection::~IOConnection() = default;

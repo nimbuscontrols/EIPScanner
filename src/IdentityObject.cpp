@@ -8,7 +8,7 @@
 namespace eipScanner {
 	using namespace cip;
 	using utils::Buffer;
-	
+
 	IdentityObject::IdentityObject(cip::CipUint instanceId)
 		: BaseObject(CLASS_ID, instanceId)
 		, _vendorId(0)
@@ -25,7 +25,14 @@ namespace eipScanner {
 	}
 
 	IdentityObject::IdentityObject(cip::CipUint instanceId, const SessionInfoIf::SPtr &si, const MessageRouter::SPtr &messageRouter)
-		: BaseObject(CLASS_ID, instanceId) {
+		: BaseObject(CLASS_ID, instanceId)
+	  , _vendorId(0)
+	  , _deviceType(0)
+	  , _productCode(0)
+	  , _revision(0,0)
+	  , _status(0)
+	  , _serialNumber(0)
+	  , _productName("") {
 
 		auto response = messageRouter->sendRequest(
 				si,

@@ -15,9 +15,9 @@ namespace connectionManager {
 	using utils::Buffer;
 
 	NetworkConnectionParametersBuilder::NetworkConnectionParametersBuilder(CipUdint val, bool lfo) :
-			_lfo{lfo}, _value{val} {
+     _value{val}, _lfo{lfo} {
 
-	};
+	}
 
 	NetworkConnectionParametersBuilder NetworkConnectionParametersBuilder::setRedundantOwner(RedundantOwner val) {
 		if (_lfo) {

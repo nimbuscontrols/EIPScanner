@@ -18,10 +18,10 @@ namespace fileObject {
 
 	FileObjectState::FileObjectState(FileObjectStateCodes state, FileObject &owner,
 				cip::CipUint objectId, MessageRouter::SPtr messageRouter)
-		: _stateCode{state}
-		, _owner(owner)
+		: _messageRouter{messageRouter}
 		, _objectId{objectId}
-		, _messageRouter{messageRouter} {
+		, _stateCode{state}
+		, _owner(owner) {
 
 		logWithStateName(utils::LogLevel::DEBUG, "Start");
 	}
@@ -90,10 +90,13 @@ namespace fileObject {
 	}
 
 	void FileObjectState::initiateUpload(SessionInfoIf::SPtr si, EndUploadHandler handle) {
+	  (void) si;
+	  (void) handle;
 		logWithStateName(LogLevel::ERROR, "Not implemented call");
 	}
 
 	bool FileObjectState::transfer(SessionInfoIf::SPtr si) {
+	  (void) si;
 		logWithStateName(LogLevel::ERROR, "Not implemented call");
 		return false;
 	}

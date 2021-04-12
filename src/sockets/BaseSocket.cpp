@@ -2,24 +2,27 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
-#if defined(__linux__) || defined(__APPLE__)
+#if defined (__unix__) || defined(__APPLE__)
 #include <sys/socket.h>
 #include <sys/select.h>
-#elif defined _WIN32
+#include <unistd.h>
+#elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 #include <winsock2.h>
 #include <time.h>
 #endif
 
 #include <utility>
 #include <algorithm>
-#include <system_error>
+
 #include "BaseSocket.h"
+#include "Platform.h"
 
 namespace eipScanner {
 namespace sockets {
 
 	BaseSocket::BaseSocket(EndPoint endPoint)
-			: _remoteEndPoint(std::move(endPoint))
+			: _sockedFd(0)
+			, _remoteEndPoint(std::move(endPoint))
 			, _recvTimeout(0)
 			, _beginReceiveHandler() {
 
@@ -30,6 +33,39 @@ namespace sockets {
 	}
 
 	BaseSocket::~BaseSocket() = default;
+
+	void BaseSocket::Shutdown() {
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+	  shutdown(_sockedFd, SD_BOTH);
+#else
+	  shutdown(_sockedFd, SHUT_RDWR);
+#endif
+	}
+
+	void BaseSocket::Close() {
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+	  closesocket(_sockedFd);
+#else
+	  close(_sockedFd);
+#endif
+	}
+
+	/*static*/int BaseSocket::getLastError() {
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+    return WSAGetLastError();
+#else
+    return errno;
+#endif
+	}
+
+	/*static*/const std::error_category& BaseSocket::getErrorCategory() noexcept
+	{
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+    return win32ErrorCategory::category();
+#else
+    return std::generic_category();
+#endif
+	}
 
 	int BaseSocket::getSocketFd() const {
 		return _sockedFd;
@@ -42,7 +78,7 @@ namespace sockets {
 	void BaseSocket::setRecvTimeout(const std::chrono::milliseconds &recvTimeout) {
 		_recvTimeout = recvTimeout;
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
                 uint32_t ms = recvTimeout.count();
                 setsockopt(_sockedFd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&ms, sizeof ms);
 #else
@@ -58,12 +94,10 @@ namespace sockets {
 #ifdef __APPLE__
 		.tv_sec = static_cast<__darwin_suseconds_t>(recvTimeout.count()/1000),
 		.tv_usec =  static_cast<__darwin_suseconds_t>((recvTimeout.count()%1000)*1000)
-#elif __linux__
+#elif __unix__
 		.tv_sec = static_cast<__time_t>(recvTimeout.count()/1000),
 		.tv_usec =  static_cast<__time_t>((recvTimeout.count()%1000)*1000)
-
-#elif _WIN32
-		// not sure what the macro is for windows
+#elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 		.tv_sec = static_cast<long int>(recvTimeout.count()/1000),
 		.tv_usec =  static_cast<long int>((recvTimeout.count()%1000)*1000)
 #endif
@@ -71,7 +105,7 @@ namespace sockets {
 		};
 
 		tv.tv_sec = std::max<decltype(tv.tv_sec)>(tv.tv_sec, 0);
-        tv.tv_usec = std::max<decltype(tv.tv_usec)>(tv.tv_usec, 0);
+    tv.tv_usec = std::max<decltype(tv.tv_usec)>(tv.tv_usec, 0);
 		return tv;
 	}
 
@@ -102,7 +136,7 @@ namespace sockets {
 
 			ready = ::select(socketWithMaxFd->getSocketFd() + 1, &recvSet, NULL, NULL, &tv);
 			if (ready < 0) {
-				throw std::system_error(errno, std::generic_category());
+				throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 			}
 
 			for (auto& sock : sockets) {

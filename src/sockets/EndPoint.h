@@ -5,12 +5,15 @@
 #ifndef EIPSCANNER_SOCKETS_ENDPOINT_H
 #define EIPSCANNER_SOCKETS_ENDPOINT_H
 
-#if defined(__linux__) || defined(__APPLE__)
+#if defined(__unix__) || defined(__APPLE__)
 #include <netinet/in.h>
-#elif defined _WIN32
+#elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 #include <winsock2.h>
 #endif
 #include <string>
+
+#define EIP_DEFAULT_EXPLICIT_PORT (uint16_t)(44818)
+#define EIP_DEFAULT_IMPLICIT_PORT (uint16_t)(2222)
 
 namespace eipScanner {
 namespace sockets {

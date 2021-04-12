@@ -2,34 +2,24 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
-#include <system_error>
-
-#ifdef __linux__
+#if defined(__unix__) || defined(__APPLE__)
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#elif defined _WIN32
+#include <unistd.h>
+#elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #endif
 
-#if !(defined __linux__) && !(defined SHUT_RDWR)
-#define SHUT_RDWR SD_BOTH
-#endif
-
-
-#include <unistd.h>
-
 #include "utils/Logger.h"
 #include "UDPSocket.h"
+#include "Platform.h"
 
 namespace eipScanner {
 namespace sockets {
 	using eipScanner::utils::Logger;
 	using eipScanner::utils::LogLevel;
-
-
-
 
 	UDPSocket::UDPSocket(std::string host, int port)
 		: UDPSocket(EndPoint(host, port)){
@@ -41,16 +31,16 @@ namespace sockets {
 
 		_sockedFd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 		if (_sockedFd < 0) {
-			throw std::system_error(errno, std::generic_category());
+			throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 		}
 
-		Logger(LogLevel::DEBUG) << "Opened socket fd=" << _sockedFd;
+		Logger(LogLevel::DEBUG) << "Opened UDP socket fd=" << _sockedFd;
 	}
 
 	UDPSocket::~UDPSocket() {
-		Logger(LogLevel::DEBUG) << "Close socket fd=" << _sockedFd;
-		shutdown(_sockedFd, SHUT_RDWR);
-		close(_sockedFd);
+		Logger(LogLevel::DEBUG) << "Close UDP socket fd=" << _sockedFd;
+		Shutdown();
+		Close();
 	}
 
 	void UDPSocket::Send(const std::vector <uint8_t> &data) const {
@@ -60,7 +50,7 @@ namespace sockets {
 		int count = sendto(_sockedFd, (char*)data.data(), data.size(), 0,
 				(struct sockaddr *)&addr, sizeof(addr));
 		if (count < data.size()) {
-			throw std::system_error(errno, std::generic_category());
+			throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 		}
 	}
 
@@ -68,8 +58,9 @@ namespace sockets {
 		std::vector<uint8_t> recvBuffer(size);
 
 		auto len = recvfrom(_sockedFd, (char*)recvBuffer.data(), recvBuffer.size(), 0, NULL, NULL);
+		Logger(LogLevel::TRACE) << "Received " << len << " bytes from UDP socket #" << _sockedFd << ".";
 		if (len < 0) {
-			throw std::system_error(errno, std::generic_category());
+			throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 		}
 
 		return recvBuffer;
@@ -80,8 +71,9 @@ namespace sockets {
 		struct sockaddr_in addr;
 		socklen_t addrFromLength = sizeof(addr);
 		auto len = recvfrom(_sockedFd, (char*)recvBuffer.data(), recvBuffer.size(), 0, (struct sockaddr*)&addr, &addrFromLength);
+		Logger(LogLevel::TRACE) << "Received " << len << " bytes from UDP socket #" << _sockedFd << ".";
 		if (len < 0) {
-			throw std::system_error(errno, std::generic_category());
+			throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 		}
 
 		endPoint = EndPoint(addr);

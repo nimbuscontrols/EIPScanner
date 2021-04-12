@@ -36,7 +36,7 @@ namespace powerFlex525 {
     DPIFaultObject::DPIFaultObject(CipUint instanceId, const SessionInfoIf::SPtr &si,
                                    const MessageRouter::SPtr& messageRouter)
             : BaseObject(CLASS_ID, instanceId)
-            , _fullInformation{0} {
+            , _fullInformation{} {
 
         auto response = messageRouter->sendRequest(si, ServiceCodes::GET_ATTRIBUTE_SINGLE,
                                                    EPath(CLASS_ID, instanceId, DPIFaultObjectAttributeIds::FULL_INFORMATION));

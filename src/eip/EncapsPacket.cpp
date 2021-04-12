@@ -27,7 +27,7 @@ namespace eip {
 		if (data.size() < HEADER_SIZE) {
 			throw std::runtime_error("EncapsPacket header must be 24 bytes");
 		}
-		
+
 		Buffer buffer(data);
 		buffer >> reinterpret_cast<cip::CipUint&>(_command)
 			>> _length
@@ -41,7 +41,7 @@ namespace eip {
 			throw std::runtime_error("EncapsPacket data must be "  + std::to_string(_length)
 				+ " but we have only " + std::to_string(dataSize) + " bytes");
 		}
-		
+
 		_data.resize(_length);
 		buffer >> _data;
 	}

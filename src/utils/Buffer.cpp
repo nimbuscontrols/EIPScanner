@@ -188,7 +188,7 @@ Buffer &Buffer::operator<<(float val) {
 
 	Buffer &Buffer::operator>>(sockets::EndPoint &val) {
 		std::vector<uint8_t> zeros(8);
-		sockaddr_in addr{0};
+		sockaddr_in addr{};
 		*this >> reinterpret_cast<cip::CipInt&>(addr.sin_family)
 			 >> addr.sin_port
 			 >> (uint32_t&)addr.sin_addr.s_addr

@@ -3,10 +3,12 @@
 //
 
 #include "EndPoint.h"
+#include "BaseSocket.h"
+#include "Platform.h"
 
-#if defined(__linux__) || defined(__APPLE__)
+#if defined(__unix__) || defined(__APPLE__)
 #include <arpa/inet.h>
-#elif defined _WIN32
+#elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #endif
@@ -26,16 +28,16 @@ namespace sockets {
 	EndPoint::EndPoint(std::string host, int port)
 		: _host(std::move(host))
 		, _port(port)
-		, _addr{0} {
+		, _addr{} {
 
 		_addr.sin_family = AF_INET;
 		_addr.sin_port = htons(_port);
-#if defined(__linux__) || defined(__APPLE__)
+#if defined(__unix__) || defined(__APPLE__)
 		if (inet_aton(_host.c_str(), &_addr.sin_addr) < 0) {
-#elif defined _WIN32
-		if ((_addr.sin_addr.s_addr = inet_addr(_host.c_str())) == INADDR_NONE) {
+#elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+    if (inet_pton(AF_INET, _host.c_str(), &_addr.sin_addr.s_addr) < 0) {
 #endif
-			throw std::system_error(errno, std::generic_category());
+			throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 		}
 	}
 
