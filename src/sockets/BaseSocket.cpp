@@ -2,7 +2,7 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
-#if defined (__unix__)
+#if defined (__unix__) || defined(__APPLE__)
 #include <sys/socket.h>
 #include <sys/select.h>
 #include <unistd.h>

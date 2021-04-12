@@ -12,7 +12,7 @@
 #include "DiscoveryManager.h"
 #include "sockets/Platform.h"
 
-#if defined (__unix__)
+#if defined (__unix__) || defined(__APPLE__)
 #define DISCOVERY_SOCKET_RECEIVE_END_ERROR_CODE (EIPSCANNER_SOCKET_ERROR(EAGAIN))
 #elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 #define DISCOVERY_SOCKET_RECEIVE_END_ERROR_CODE (EIPSCANNER_SOCKET_ERROR(ETIMEDOUT))
