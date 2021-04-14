@@ -1,3 +1,8 @@
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+#include <winsock2.h>
+#define OS_Windows (1)
+#endif
+
 #include "cip/Types.h"
 #include <functional>
 #include <sstream>
@@ -153,8 +158,17 @@ std::vector<uint8_t> readAssemblyObject(std::shared_ptr<eipScanner::SessionInfo>
 
 // Test to read and write assembly objects on the adapter
 int main() {
-
     Logger::setLogLevel(LogLevel::DEBUG);
+
+#if OS_Windows
+    WSADATA wsaData;
+    int winsockStart = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    if (winsockStart != 0) {
+      Logger(LogLevel::ERROR) << "Failed to start WinSock - error code: " << winsockStart;
+      return EXIT_FAILURE;
+    }
+#endif
+
     std::vector<uint8_t> data_read;
     bool success;
 
@@ -169,14 +183,26 @@ int main() {
     data_read = readAssemblyObject(si, YASKAWA_INPUT_ASSEMBLY_111);
     success = writeAssemblyObject(si, YASKAWA_INPUT_ASSEMBLY_111, data_write);
 
-    return 0;
+#if OS_Windows
+    WSACleanup();
+#endif
+
+    return EXIT_SUCCESS;
 }
 
 #if 0
 // Test to confirm you are connected to a Yaskawa Device
 int main() {
-
     Logger::setLogLevel(LogLevel::DEBUG);
+
+#if OS_Windows
+    WSADATA wsaData;
+    int winsockStart = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    if (winsockStart != 0) {
+      Logger(LogLevel::ERROR) << "Failed to start WinSock - error code: " << winsockStart;
+      return EXIT_FAILURE;
+    }
+#endif
 
     DiscoveryManager discoveryManager(YASKAWA_IP_ADDR, YASKAWA_PORT, std::chrono::seconds(1));
     auto devices = discoveryManager.discover();
@@ -190,8 +216,11 @@ int main() {
         }
     }
 
+#if OS_Windows
+    WSACleanup();
+#endif
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 #endif
 

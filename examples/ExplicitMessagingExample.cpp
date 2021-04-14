@@ -2,6 +2,11 @@
 // Created by Aleksey Timin on 11/16/19.
 //
 
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+#include <winsock2.h>
+#define OS_Windows (1)
+#endif
+
 #include <cstdlib>
 #include <sstream>
 #include <cip/connectionManager/NetworkConnectionParams.h>
@@ -22,50 +27,63 @@ using eipScanner::utils::Logger;
 using eipScanner::utils::LogLevel;
 
 int main() {
-	Logger::setLogLevel(LogLevel::DEBUG);
-	auto si = std::make_shared<SessionInfo>("127.0.0.1", 0xAF12, std::chrono::seconds(10));
-	auto messageRouter = std::make_shared<MessageRouter>();
+  Logger::setLogLevel(LogLevel::DEBUG);
 
-	// Read attribute
-	auto response = messageRouter->sendRequest(si, ServiceCodes::GET_ATTRIBUTE_SINGLE,
-											   EPath(0x01, 1, 1),
-											   {});
+#if OS_Windows
+  WSADATA wsaData;
+  int winsockStart = WSAStartup(MAKEWORD(2, 2), &wsaData);
+  if (winsockStart != 0) {
+    Logger(LogLevel::ERROR) << "Failed to start WinSock - error code: " << winsockStart;
+    return EXIT_FAILURE;
+  }
+#endif
 
-	if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
-		Buffer buffer(response.getData());
-		CipUint vendorId;
-		buffer >> vendorId;
+  auto si = std::make_shared<SessionInfo>("127.0.0.1", 0xAF12, std::chrono::seconds(10));
+  auto messageRouter = std::make_shared<MessageRouter>();
 
-		Logger(LogLevel::INFO) << "Vendor ID is " << vendorId;
-	} else {
-		Logger(LogLevel::ERROR) << "We got error=0x" << std::hex << response.getGeneralStatusCode();
-	}
+  // Read attribute
+  auto response = messageRouter->sendRequest(si, ServiceCodes::GET_ATTRIBUTE_SINGLE,
+                         EPath(0x01, 1, 1),
+                         {});
 
-	//Write attribute
-	// See OpenEr EDS 160 line
-	Buffer assembly151;
-	assembly151 << CipUsint(1)
-				<< CipUsint(2)
-				<< CipUsint(3)
-				<< CipUsint(4)
-				<< CipUsint(5)
-				<< CipUsint(6)
-				<< CipUsint(7)
-				<< CipUsint(8)
-				<< CipUsint(9)
-				<< CipUsint(10);
+  if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
+    Buffer buffer(response.getData());
+    CipUint vendorId;
+    buffer >> vendorId;
 
+    Logger(LogLevel::INFO) << "Vendor ID is " << vendorId;
+  } else {
+    Logger(LogLevel::ERROR) << "We got error=0x" << std::hex << response.getGeneralStatusCode();
+  }
 
-	response = messageRouter->sendRequest(si, ServiceCodes::SET_ATTRIBUTE_SINGLE,
-										  EPath(0x04, 151, 3),
-										  assembly151.data());
-
-	if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
-		Logger(LogLevel::INFO) << "Writing is successful";
-	} else {
-		Logger(LogLevel::ERROR) << "We got error=0x" << std::hex << response.getGeneralStatusCode();
-	}
+  //Write attribute
+  // See OpenEr EDS 160 line
+  Buffer assembly151;
+  assembly151 << CipUsint(1)
+        << CipUsint(2)
+        << CipUsint(3)
+        << CipUsint(4)
+        << CipUsint(5)
+        << CipUsint(6)
+        << CipUsint(7)
+        << CipUsint(8)
+        << CipUsint(9)
+        << CipUsint(10);
 
 
-	return 0;
+  response = messageRouter->sendRequest(si, ServiceCodes::SET_ATTRIBUTE_SINGLE,
+                      EPath(0x04, 151, 3),
+                      assembly151.data());
+
+  if (response.getGeneralStatusCode() == GeneralStatusCodes::SUCCESS) {
+    Logger(LogLevel::INFO) << "Writing is successful";
+  } else {
+    Logger(LogLevel::ERROR) << "We got error=0x" << std::hex << response.getGeneralStatusCode();
+  }
+
+#if OS_Windows
+  WSACleanup();
+#endif
+
+  return EXIT_SUCCESS;
 }
