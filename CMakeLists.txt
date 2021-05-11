@@ -78,14 +78,14 @@ set_target_properties(
         VERSION ${EIPSCANNER_FULL_VERSION}
         SOVERSION ${EIPSCANNER_MAJOR_VERSION})
 
-#install(TARGETS EIPScanner EIPScannerS
-#        LIBRARY
-#            DESTINATION lib
-#        ARCHIVE
-#            DESTINATION lib)
+install(TARGETS eip_scanner eip_scannerS
+       LIBRARY
+           DESTINATION lib
+       ARCHIVE
+           DESTINATION lib)
 #
-#install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/
-#        DESTINATION include/EIPScanner
-#        FILES_MATCHING PATTERN "*.h*")
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/
+       DESTINATION include/eip_scanner
+       FILES_MATCHING PATTERN "*.h*")
 
 
