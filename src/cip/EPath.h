@@ -19,7 +19,7 @@ namespace cip {
 		explicit EPath(CipUint classId);
 		EPath(CipUint classId, CipUint objectId);
 		EPath(CipUint classId, CipUint objectId, CipUint attributeId);
-		std::vector<uint8_t> packPaddedPath() const;
+		std::vector<uint8_t> packPaddedPath(bool use_8_bit_path_segments=false) const;
 		void expandPaddedPath(const std::vector<uint8_t>& data);
 
 		CipUint getClassId() const;

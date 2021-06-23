@@ -49,23 +49,45 @@ namespace cip {
 			, _size{3} {
 	}
 
-	std::vector<uint8_t> EPath::packPaddedPath() const {
-		Buffer buffer(_size*4);
+	std::vector<uint8_t> EPath::packPaddedPath(bool use_8_bit_path_segments) const {
+        if (use_8_bit_path_segments)
+        {
+            Buffer buffer(_size*2);
 
-		auto classSegment = static_cast<CipUint>(EPathSegmentTypes::CLASS_16_BITS);
-		buffer << classSegment << _classId;
+            auto classSegment = static_cast<CipUsint>(EPathSegmentTypes::CLASS_8_BITS);
+            buffer << classSegment << static_cast<CipUsint>(_classId);
 
-		if (_size > 1) {
-			auto instanceSegment = static_cast<CipUint>(EPathSegmentTypes::INSTANCE_16_BITS);
-			buffer << instanceSegment << _objectId;
+            if (_size > 1) {
+                auto instanceSegment = static_cast<CipUsint>(EPathSegmentTypes::INSTANCE_8_BITS);
+                buffer << instanceSegment << static_cast<CipUsint>(_objectId);
 
-			if (_size > 2) {
-				auto attributeSegment = static_cast<CipUint>(EPathSegmentTypes::ATTRIBUTE_16_BITS);
-				buffer << attributeSegment << _attributeId;
-			}
-		}
+                if (_size > 2) {
+                    auto attributeSegment = static_cast<CipUsint>(EPathSegmentTypes::ATTRIBUTE_8_BITS);
+                    buffer << attributeSegment << static_cast<CipUsint>(_attributeId);
+                }
+            }
 
-		return buffer.data();
+            return buffer.data();            
+        }
+        else
+        {
+            Buffer buffer(_size*4);
+
+            auto classSegment = static_cast<CipUint>(EPathSegmentTypes::CLASS_16_BITS);
+            buffer << classSegment << _classId;
+
+            if (_size > 1) {
+                auto instanceSegment = static_cast<CipUint>(EPathSegmentTypes::INSTANCE_16_BITS);
+                buffer << instanceSegment << _objectId;
+
+                if (_size > 2) {
+                    auto attributeSegment = static_cast<CipUint>(EPathSegmentTypes::ATTRIBUTE_16_BITS);
+                    buffer << attributeSegment << _attributeId;
+                }
+            }
+
+            return buffer.data();
+        }
 	}
 
 	CipUint EPath::getClassId() const {
