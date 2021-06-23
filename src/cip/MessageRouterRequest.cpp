@@ -23,7 +23,7 @@ namespace cip {
 	std::vector<uint8_t> MessageRouterRequest::pack() const {
 		Buffer buffer;
 		buffer << _serviceCode
-			<< _ePath.getSizeInWords()
+			<< _ePath.getSizeInWords(_use_8_bit_path_segments)
 			<< _ePath.packPaddedPath(_use_8_bit_path_segments)
 			<< _data;
 

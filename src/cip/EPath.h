@@ -25,7 +25,7 @@ namespace cip {
 		CipUint getClassId() const;
 		CipUint getObjectId() const;
 		CipUint getAttributeId() const;
-		CipUsint getSizeInWords() const;
+		CipUsint getSizeInWords(bool use_8_bit_path_segments=false) const;
 
 		std::string toString() const;
 		bool operator==(const EPath& other) const;

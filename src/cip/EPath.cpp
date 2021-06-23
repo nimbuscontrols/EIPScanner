@@ -102,7 +102,7 @@ namespace cip {
 		return _attributeId;
 	}
 
-	CipUsint EPath::getSizeInWords() const {
+	CipUsint EPath::getSizeInWords(bool use_8_bit_path_segments) const {
         if (use_8_bit_path_segments) {
             return _size;
         }
