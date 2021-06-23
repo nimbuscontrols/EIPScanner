@@ -103,7 +103,12 @@ namespace cip {
 	}
 
 	CipUsint EPath::getSizeInWords() const {
-		return _size*2;
+        if (use_8_bit_path_segments) {
+            return _size;
+        }
+        else {
+    		return _size*2;
+		}
 	}
 
 	std::string EPath::toString() const {
