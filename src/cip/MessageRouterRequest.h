@@ -15,7 +15,7 @@ namespace eipScanner {
 namespace cip {
 	class MessageRouterRequest {
 	public:
-		MessageRouterRequest(CipUsint serviceCode, const EPath& ePath, const std::vector<uint8_t> data);
+		MessageRouterRequest(CipUsint serviceCode, const EPath& ePath, const std::vector<uint8_t> data, bool use_8_bit_path_segments=false);
 		~MessageRouterRequest();
 
 		std::vector<uint8_t> pack() const;
@@ -23,6 +23,7 @@ namespace cip {
 		CipUsint _serviceCode;
 		EPath _ePath;
 		std::vector<uint8_t> _data;
+        bool _use_8_bit_path_segments;
 	};
 
 }
