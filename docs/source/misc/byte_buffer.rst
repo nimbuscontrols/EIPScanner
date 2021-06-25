@@ -5,7 +5,7 @@ Byte Buffer
 
 **EtherNet/IP** has a type system and specifies how the types must
 be sends over the network. So we have to decode and encode our C++ types.
-To make it easy, **EIPScanner** have class **utils::Buffer*.
+To make it easy, **EIPScanner** have class **utils::Buffer**.
 
 To decode the data that we've received from the network use operator >>:
 
