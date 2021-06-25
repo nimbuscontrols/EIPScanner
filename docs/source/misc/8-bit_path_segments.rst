@@ -8,8 +8,20 @@ upon construction:
 
 .. code-block:: cpp
 
-    MessageRouter::SPtr mr_ptr = std::make_shared<MessageRouter>(MessageRouter::USE_8_BIT_PATH_SEGMENTS);
-    ConnectionManager _connectionManager = ConnectionManager(mr_ptr);
+    #include "MessageRouter.h"
+    #include "ConnectionManager.h"
 
+    using eipScanner::ConnectionManager;
+    using eipScanner::MessageRouter;
+
+    int main()
+    {
+        MessageRouter::SPtr mr_ptr = std::make_shared<MessageRouter>(MessageRouter::USE_8_BIT_PATH_SEGMENTS);
+        ConnectionManager _connectionManager = ConnectionManager(mr_ptr);
+   
+        /* ConnectionManager now uses 8-bit path segments */
+   
+        return 0;
+    }
 
 
