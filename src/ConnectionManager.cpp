@@ -38,6 +38,11 @@ namespace eipScanner {
 		: ConnectionManager(std::make_shared<MessageRouter>()){
 	}
 
+	ConnectionManager::ConnectionManager(int bindPort) : ConnectionManager()
+	{
+		_bindPort = bindPort;
+	}
+
 	ConnectionManager::ConnectionManager(const MessageRouter::SPtr& messageRouter)
 		: _messageRouter(messageRouter)
 		, _connectionMap(){
@@ -88,7 +93,7 @@ namespace eipScanner {
 		}
 
 		Buffer buffer;
-		buffer << sockets::EndPoint("0.0.0.0", 2222);
+		buffer << sockets::EndPoint("0.0.0.0", _bindPort);
 		eip::CommonPacketItem addrItem(eip::CommonPacketItemIds::T2O_SOCKADDR_INFO, buffer.data());
 
 
@@ -156,7 +161,7 @@ namespace eipScanner {
 			Logger(LogLevel::INFO) << "Open UDP socket to send data to "
 					<< ioConnection->_socket->getRemoteEndPoint().toString();
 
-			findOrCreateSocket(sockets::EndPoint(si->getRemoteEndPoint().getHost(), 2222));
+			findOrCreateSocket(sockets::EndPoint(si->getRemoteEndPoint().getHost(), _bindPort));
 
 			auto result = _connectionMap
 					.insert(std::make_pair(response.getT2ONetworkConnectionId(), ioConnection));

@@ -26,6 +26,12 @@ namespace eipScanner {
 		 */
 		ConnectionManager();
 
+		 /**
+		 * @brief Construct a ConnectionManager using a non-default bind port.
+		 * This is usefull for testing if port 2222 is already in use by someone else.
+		 */
+		ConnectionManager(int bindPort);
+
 		/**
 		 * @note used fot testing
 		 * @param messageRouter
@@ -80,6 +86,7 @@ namespace eipScanner {
 
 		sockets::UDPBoundSocket::SPtr  findOrCreateSocket(const sockets::EndPoint& endPoint);
 		cip::CipUint _incarnationId;
+		int _bindPort = 2222;
 	};
 }
 
