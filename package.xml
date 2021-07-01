@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>EIPScanner</name>
+  <name>eip_scanner</name>
   <version>1.0.0</version>
   <description>Cellumation EIPScanner Fork</description>
 

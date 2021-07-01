@@ -5,7 +5,7 @@ set(EIPSCANNER_MINOR_VERSION 1)
 set(EIPSCANNER_PATCH_VERSION 0)
 set(EIPSCANNER_FULL_VERSION ${EIPSCANNER_MAJOR_VERSION}.${EIPSCANNER_MINOR_VERSION}.${EIPSCANNER_PATCH_VERSION})
 
-project(EIPScanner VERSION ${EIPSCANNER_FULL_VERSION})
+project(eip_scanner VERSION ${EIPSCANNER_FULL_VERSION})
 
 
 set(CMAKE_CXX_STANDARD 14)
@@ -64,16 +64,16 @@ set(SOURCE_FILES
 
 catkin_package(
         INCLUDE_DIRS src
-        LIBRARIES EIPScanner
+        LIBRARIES eip_scanner
 
   #      DEPENDS EIGEN3
 )
 
-add_library(EIPScanner SHARED ${SOURCE_FILES})
-add_library(EIPScannerS STATIC ${SOURCE_FILES})
+add_library(eip_scanner SHARED ${SOURCE_FILES})
+add_library(eip_scannerS STATIC ${SOURCE_FILES})
 
 set_target_properties(
-        EIPScanner
+        eip_scanner
         PROPERTIES
         VERSION ${EIPSCANNER_FULL_VERSION}
         SOVERSION ${EIPSCANNER_MAJOR_VERSION})
