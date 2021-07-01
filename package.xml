@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>EIPScanner</name>
+  <version>1.0.0</version>
+  <description>Cellumation EIPScanner Fork</description>
+
+  <maintainer email="a.boeckmann@cellumation.com">Arne</maintainer>
+  <license>GPLv3</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
+</package>
