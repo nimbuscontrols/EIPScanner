@@ -7,3 +7,4 @@ Miscellaneous
    
    byte_buffer
    logging
+   8-bit_path_segments
