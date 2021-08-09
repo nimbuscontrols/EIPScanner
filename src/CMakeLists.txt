@@ -7,6 +7,10 @@ set(SOURCE_FILES
         cip/connectionManager/ForwardOpenResponse.cpp
         cip/connectionManager/NetworkConnectionParametersBuilder.cpp
 
+        cip/segments/ANSISegment.cpp
+        cip/segments/DataSegment.cpp
+        cip/segments/ISegment.cpp
+
         cip/CipRevision.cpp
         cip/EPath.cpp
         cip/MessageRouterRequest.cpp

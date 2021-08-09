@@ -7,6 +7,7 @@
 
 namespace eipScanner {
 namespace cip {
+    using segments::ISegment;
 	using utils::Buffer;
 
 	enum class EPathSegmentTypes : CipUsint  {
@@ -49,7 +50,24 @@ namespace cip {
 			, _size{3} {
 	}
 
+    EPath::EPath(const std::vector<ISegment::SPtr> &segments)
+        : _segments(segments) {
+    }
+
 	std::vector<uint8_t> EPath::packPaddedPath(bool use_8_bit_path_segments) const {
+
+        if (!_segments.empty()) {
+
+            Buffer buffer;
+
+            // Append all encoded segment data together.
+            for (ISegment::SPtr segment : _segments) {
+                buffer << segment->encode();
+            }
+
+            return buffer.data();
+        }
+
         if (use_8_bit_path_segments)
         {
             Buffer buffer(_size*2);
@@ -103,6 +121,17 @@ namespace cip {
 	}
 
 	CipUsint EPath::getSizeInWords(bool use_8_bit_path_segments) const {
+
+        if (!_segments.empty()) {
+            CipUsint size = 0;
+
+            for (ISegment::SPtr segment : _segments) {
+                size += segment->getSize();
+            }
+
+            return size / 2;
+        }
+
         if (use_8_bit_path_segments) {
             return _size;
         }
