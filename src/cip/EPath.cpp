@@ -48,10 +48,12 @@ namespace cip {
 			, _objectId{objectId}
 			, _attributeId{attributeId}
 			, _size{3} {
+
 	}
 
     EPath::EPath(const std::vector<ISegment::SPtr> &segments)
-        : _segments(segments) {
+        : _segments{segments} {
+
     }
 
 	std::vector<uint8_t> EPath::packPaddedPath(bool use_8_bit_path_segments) const {

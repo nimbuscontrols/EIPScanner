@@ -19,7 +19,7 @@ namespace segments {
 
         /**
          * @brief The SubType enum indicates the possible data segment subtypes
-         * which encompass the 5 lower bits of the segment header,
+         * which encompass the 5 lower bits of the segment header
          */
         enum class SubType : CipUsint {
             SIMPLE_DATA_SEGMENT             = 0x00,

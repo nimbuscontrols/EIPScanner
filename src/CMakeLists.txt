@@ -10,6 +10,8 @@ set(SOURCE_FILES
         cip/segments/ANSISegment.cpp
         cip/segments/DataSegment.cpp
         cip/segments/ISegment.cpp
+        cip/segments/LogicalSegment.cpp
+        cip/segments/MemberIDSegment.cpp
 
         cip/CipRevision.cpp
         cip/EPath.cpp

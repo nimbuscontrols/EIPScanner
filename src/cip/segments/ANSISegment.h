@@ -25,7 +25,7 @@ namespace segments {
 
         /**
          * @brief Encodes the segment data with the header, symbol length and data
-         * with possible padding included.
+         * with possible padding included
          * @return The encoded segment data
          */
         std::vector<uint8_t> encode() const override;
