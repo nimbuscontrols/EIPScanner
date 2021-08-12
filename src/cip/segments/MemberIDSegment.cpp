@@ -2,6 +2,9 @@
 // Created by Johannes Kauffmann on 08/09/21.
 //
 
+#include <iomanip>
+#include <iostream>
+
 #include "MemberIDSegment.h"
 #include "utils/Buffer.h"
 
@@ -15,7 +18,7 @@ namespace segments {
         : LogicalSegment({}, LogicalFormat::FORMAT_16_BIT)
     {
         if (use_8_bits) {
-            _format = LogicalFormat::FORMAT_16_BIT;
+            _format = LogicalFormat::FORMAT_8_BIT;
         }
 
         // Convert MemberID to uint8_t or two bytes of uint16_t
@@ -35,13 +38,11 @@ namespace segments {
         Buffer buffer;
 
         // The segment header consists of the the segment type, logical type and logical format
-        CipUsint header = static_cast<CipUsint>(SegmentType::LOGICAL_SEGMENT)
-                        | static_cast<CipUsint>(LogicalType::MEMBER_ID)
-                        | static_cast<CipUsint>(_format);
+        CipUsint header = getSegmentHeader();
 
         buffer << header;
 
-        // Check for padding
+        // Check if padding is needed
         if (_format == LogicalFormat::FORMAT_16_BIT) {
             buffer << static_cast<CipUsint>(0x00);
         }
@@ -53,6 +54,8 @@ namespace segments {
 
     uint8_t MemberIDSegment::getSize() const
     {
+        // Size is data size plus header length (1)
+        // Constructor defines data size for the logical format used.
         uint8_t size = _data.size() + 1;
 
         // Check for padding
@@ -61,6 +64,35 @@ namespace segments {
         }
 
         return size;
+    }
+
+    uint8_t MemberIDSegment::getSegmentHeader() const
+    {
+        return static_cast<CipUsint>(SegmentType::LOGICAL_SEGMENT)
+             | static_cast<CipUsint>(LogicalType::MEMBER_ID)
+             | static_cast<CipUsint>(_format);
+    }
+
+    std::string MemberIDSegment::toString() const
+    {
+        // Format the hexadecimal value with 2 leading zero's
+        std::stringstream stream;
+        stream << "0x" << std::hex << std::setfill('0') << std::setw(2);
+
+        Buffer buffer(_data);
+
+        // Decode to either 8bit or 16bit
+        if (_format == LogicalFormat::FORMAT_8_BIT) {
+            CipUsint value;
+            buffer >> value;
+            stream << int(value);
+        } else {
+            CipUint value;
+            buffer >> value;
+            stream << int(value);
+        }
+
+        return stream.str();
     }
 
 }

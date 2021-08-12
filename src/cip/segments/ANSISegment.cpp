@@ -23,8 +23,7 @@ namespace segments {
         Buffer buffer;
 
         // Stitch header together from the segment type and segment subtype.
-        CipUsint header = static_cast<CipUsint>(SegmentType::DATA_SEGMENT)
-                        | static_cast<CipUsint>(SubType::ANSI_EXTENDED_SYMBOL_SEGMENT);
+        CipUsint header = getSegmentHeader();
 
         // Add the header, symbol size and data.
         buffer << header << static_cast<CipUsint>(_data.size()) << _data;
@@ -39,7 +38,7 @@ namespace segments {
 
     uint8_t ANSISegment::getSize() const
     {
-        // Size is amount of chars + header and symbol length.
+        // Size is data size, plus header and symbol length (1 each).
         uint8_t size = _data.size() + 2;
 
         // Check for padding.
@@ -48,6 +47,17 @@ namespace segments {
         }
 
         return size;
+    }
+
+    uint8_t ANSISegment::getSegmentHeader() const
+    {
+        return static_cast<CipUsint>(SegmentType::DATA_SEGMENT)
+             | static_cast<CipUsint>(SubType::ANSI_EXTENDED_SYMBOL_SEGMENT);
+    }
+
+    std::string ANSISegment::toString() const
+    {
+        return std::string( _data.begin(), _data.end() );
     }
 
 }

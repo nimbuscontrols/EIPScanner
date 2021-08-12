@@ -36,6 +36,21 @@ namespace segments {
          * @return The size of the segment in bytes
          */
         uint8_t getSize() const override;
+
+        /**
+         * @brief Calculates the segment header byte for this ANSI Extended Symbol
+         * Segment
+         * @return The segment header for this ANSI Extended Symbol Segment
+         */
+        uint8_t getSegmentHeader() const override;
+
+        /**
+         * @brief Constructs a string representation of the data value of this
+         * ANSI Extended Symbol Segment
+         * @return The string representation of the data of this segment
+         */
+        std::string toString() const override;
+
     };
 
 }

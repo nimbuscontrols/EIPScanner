@@ -37,6 +37,20 @@ namespace segments {
          * @return The size of the complete segment in bytes
          */
         uint8_t getSize() const override;
+
+        /**
+         * @brief Calculates the segment header byte for this Logical MemberID,
+         * given its Logical Format
+         * @return The segment header for this Logical MemberID
+         */
+        uint8_t getSegmentHeader() const override;
+
+        /**
+         * @brief Constructs a string representation of the Logical MemberID value
+         * in the format "0xVALU" with the value in hexadecimal format
+         * @return String with the MemberID as a hexadecimal value
+         */
+        std::string toString() const override;
     };
 
 }

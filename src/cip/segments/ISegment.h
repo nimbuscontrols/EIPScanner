@@ -31,6 +31,19 @@ namespace segments {
          */
         virtual uint8_t getSize() const = 0;
 
+        /**
+         * @brief Calculates the segment header byte for the specific segment
+         * @return The segment header byte
+         */
+        virtual uint8_t getSegmentHeader() const = 0;
+
+        /**
+         * @brief Constructs a string representation of the data value of this
+         * segment in a human-readable form
+         * @return The string representation of this segment
+         */
+        virtual std::string toString() const = 0;
+
     protected:
 
         /**
