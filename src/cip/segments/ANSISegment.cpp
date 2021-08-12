@@ -11,8 +11,8 @@ namespace eipScanner {
 namespace cip {
 namespace segments {
 
-    using eipScanner::cip::segments::DataSegment;
-    using eipScanner::utils::Buffer;
+    using segments::DataSegment;
+    using utils::Buffer;
 
     ANSISegment::ANSISegment(const std::vector<uint8_t>& data)
         : DataSegment(data) {
