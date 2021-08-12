@@ -178,7 +178,6 @@ namespace cip {
 	}
 
 	void EPath::expandPaddedPath(const std::vector<uint8_t> &data) {
-
         if (!_segments.empty()) {
             Logger(LogLevel::WARNING) << "EPath already contains a collection of segments!"
                                          "Not expanding data!";
