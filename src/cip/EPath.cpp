@@ -74,7 +74,7 @@ namespace cip {
 
             // Append all encoded segment data together.
             for (ISegment::SPtr segment : _segments) {
-                buffer << segment->encode();
+                buffer << segment->data();
             }
 
             return buffer.data();
@@ -137,7 +137,7 @@ namespace cip {
             CipUsint size = 0;
 
             for (ISegment::SPtr segment : _segments) {
-                size += segment->getSize();
+                size += segment->size();
             }
 
             return size / 2;

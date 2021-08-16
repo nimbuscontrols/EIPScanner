@@ -17,7 +17,8 @@ namespace segments {
     public:
 
         /**
-         * @brief Constructs a Logical Segment of Logical Type MemberID
+         * @brief Constructs a Logical Segment of Logical Type MemberID and encodes
+         * the given value with header and format information
          * @param memberId The logical value of the Member ID
          * @param use_8_bit_segment True if the segment format should be 8bit
          * format, false if format should be 16bit format
@@ -25,18 +26,17 @@ namespace segments {
         MemberIDSegment(CipUint memberId, bool use_8_bit_segment=false);
 
         /**
-         * @brief Encodes the MemberID Logical Segment with the correct segment
-         * header, possible padding and little endian encoded data
-         * @return Vector of bytes with the complete segment encoded
+         * @brief Gets the total encoded segment data
+         * @return The encoded segment data
          */
-        std::vector<uint8_t> encode() const override;
+        std::vector<uint8_t> data() const override;
 
         /**
-         * @brief Calculates the size of the complete MemberID Logical Segment in
+         * @brief Gets the total size of the encoded segment in bytes
          * bytes
-         * @return The size of the complete segment in bytes
+         * @return The size of the segment in bytes
          */
-        uint8_t getSize() const override;
+        uint8_t size() const override;
 
         /**
          * @brief Calculates the segment header byte for this Logical MemberID,

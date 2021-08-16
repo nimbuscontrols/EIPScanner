@@ -20,16 +20,16 @@ namespace segments {
         using SPtr = std::shared_ptr<ISegment>;
 
         /**
-         * @brief Encodes the segment data
+         * @brief Gets the total encoded segment data
          * @return The encoded segment data
          */
-        virtual std::vector<uint8_t> encode() const = 0;
+        virtual std::vector<uint8_t> data() const = 0;
 
         /**
-         * @brief Calculates the size of the segment in bytes
+         * @brief Gets the total size of the encoded segment in bytes
          * @return The size of the segment in bytes
          */
-        virtual uint8_t getSize() const = 0;
+        virtual uint8_t size() const = 0;
 
         /**
          * @brief Calculates the segment header byte for the specific segment
@@ -62,9 +62,20 @@ namespace segments {
         };
 
     protected:
+
+        /**
+         * @brief The constructor of a concrete segment should take in any
+         * segment specific data and encode it accordingly
+         * @param data The segment-specific encoded data
+         */
         ISegment(const std::vector<uint8_t> &data);
 
     protected:
+
+        /**
+         * @brief This member variable contains the encoded segment data
+         * (including header and padding details) at all times
+         */
         std::vector<uint8_t> _data;
     };
 

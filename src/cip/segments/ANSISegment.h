@@ -18,24 +18,23 @@ namespace segments {
     public:
 
         /**
-         * @brief Constructs a CIP DataSegment of type ANSI Extended Symbol Segment.
+         * @brief Constructs a CIP DataSegment of type ANSI Extended Symbol Segment
+         * and encodes the data with header, symbol length, data and possible padding
          * @param data The segment data, excluding details such as length or padding
          */
         ANSISegment(const std::vector<uint8_t>& data);
 
         /**
-         * @brief Encodes the segment data with the header, symbol length and data
-         * with possible padding included
+         * @brief Gets the total encoded segment data
          * @return The encoded segment data
          */
-        std::vector<uint8_t> encode() const override;
+        std::vector<uint8_t> data() const override;
 
         /**
-         * @brief Calculates the size of the segment in bytes, including the
-         * header, symbol length and possible padding
+         * @brief Gets the total size of the encoded segment in bytes
          * @return The size of the segment in bytes
          */
-        uint8_t getSize() const override;
+        uint8_t size() const override;
 
         /**
          * @brief Calculates the segment header byte for this ANSI Extended Symbol

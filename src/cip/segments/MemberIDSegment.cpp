@@ -17,24 +17,11 @@ namespace segments {
     MemberIDSegment::MemberIDSegment(CipUint memberId, bool use_8_bits)
         : LogicalSegment({}, LogicalFormat::FORMAT_16_BIT)
     {
+        // Store the correct format
         if (use_8_bits) {
             _format = LogicalFormat::FORMAT_8_BIT;
         }
 
-        // Convert MemberID to uint8_t or two bytes of uint16_t
-        Buffer buffer;
-
-        if (_format == LogicalFormat::FORMAT_8_BIT) {
-            buffer << static_cast<CipUsint>(memberId);
-        } else {
-            buffer << memberId;
-        }
-
-        _data = buffer.data();
-    }
-
-    std::vector<uint8_t> MemberIDSegment::encode() const
-    {
         Buffer buffer;
 
         // The segment header consists of the the segment type, logical type and logical format
@@ -42,28 +29,26 @@ namespace segments {
 
         buffer << header;
 
-        // Check if padding is needed
-        if (_format == LogicalFormat::FORMAT_16_BIT) {
+        // Convert MemberID to uint8_t or two bytes of uint16_t
+        if (_format == LogicalFormat::FORMAT_8_BIT) {
+            buffer << static_cast<CipUsint>(memberId);
+        } else {
+            // Add padding between header and data
             buffer << static_cast<CipUsint>(0x00);
+            buffer << memberId;
         }
 
-        buffer << _data;
-
-        return buffer.data();
+        _data = buffer.data();
     }
 
-    uint8_t MemberIDSegment::getSize() const
+    std::vector<uint8_t> MemberIDSegment::data() const
     {
-        // Size is data size plus header length (1)
-        // Constructor defines data size for the logical format used.
-        uint8_t size = _data.size() + 1;
+        return _data;
+    }
 
-        // Check for padding
-        if (_format == LogicalFormat::FORMAT_16_BIT) {
-            size++;
-        }
-
-        return size;
+    uint8_t MemberIDSegment::size() const
+    {
+        return _data.size();
     }
 
     uint8_t MemberIDSegment::getSegmentHeader() const
@@ -79,7 +64,13 @@ namespace segments {
         std::stringstream stream;
         stream << "0x" << std::hex << std::setfill('0') << std::setw(2);
 
-        Buffer buffer(_data);
+        int headerSize = 1;
+        if (_format == LogicalFormat::FORMAT_16_BIT) {
+            headerSize++;
+        }
+
+        // Create a buffer containing just the data, without the header
+        Buffer buffer({_data.begin() + headerSize, _data.end()});
 
         // Decode to either 8bit or 16bit
         if (_format == LogicalFormat::FORMAT_8_BIT) {

@@ -14,11 +14,7 @@ namespace segments {
     using segments::DataSegment;
     using utils::Buffer;
 
-    ANSISegment::ANSISegment(const std::vector<uint8_t>& data)
-        : DataSegment(data) {
-    }
-
-    std::vector<uint8_t> ANSISegment::encode() const
+    ANSISegment::ANSISegment(const std::vector<uint8_t>& data) : DataSegment({})
     {
         Buffer buffer;
 
@@ -26,27 +22,24 @@ namespace segments {
         CipUsint header = getSegmentHeader();
 
         // Add the header, symbol size and data.
-        buffer << header << static_cast<CipUsint>(_data.size()) << _data;
+        buffer << header << static_cast<CipUsint>(data.size()) << data;
 
         // Add optional padding if the size is of odd length.
-        if (_data.size() % 2 != 0) {
+        if (data.size() % 2 != 0) {
             buffer << static_cast<CipUsint>(0x00);
         }
 
-        return buffer.data();
+        _data = buffer.data();
     }
 
-    uint8_t ANSISegment::getSize() const
+    std::vector<uint8_t> ANSISegment::data() const
     {
-        // Size is data size, plus header and symbol length (1 each).
-        uint8_t size = _data.size() + 2;
+        return _data;
+    }
 
-        // Check for padding.
-        if (size % 2 != 0) {
-            size++;
-        }
-
-        return size;
+    uint8_t ANSISegment::size() const
+    {
+        return _data.size();
     }
 
     uint8_t ANSISegment::getSegmentHeader() const
@@ -57,7 +50,12 @@ namespace segments {
 
     std::string ANSISegment::toString() const
     {
-        return std::string( _data.begin(), _data.end() );
+        int paddingSize = 0;
+        if (_data.back() == 0x00) {
+            paddingSize++;
+        }
+        // Construct a string without the header and optional padding
+        return std::string( _data.begin() + 2, _data.end() - paddingSize);
     }
 
 }
