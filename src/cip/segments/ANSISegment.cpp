@@ -2,9 +2,11 @@
 // Created by Johannes Kauffmann on 08/06/21.
 //
 
+#include "ANSISegment.h"
+
+#include <cassert>
 #include <vector>
 
-#include "ANSISegment.h"
 #include "utils/Buffer.h"
 
 namespace eipScanner {
@@ -30,6 +32,8 @@ namespace segments {
         }
 
         _data = buffer.data();
+
+        assert(_data.size() >= 2);
     }
 
     std::vector<uint8_t> ANSISegment::data() const
@@ -50,10 +54,17 @@ namespace segments {
 
     std::string ANSISegment::toString() const
     {
+        // Check for empty segment data.
+        if (_data.size() == 2) {
+            return {};
+        }
+
+        // Check for possible padding.
         int paddingSize = 0;
         if (_data.back() == 0x00) {
             paddingSize++;
         }
+
         // Construct a string without the header and optional padding
         return std::string( _data.begin() + 2, _data.end() - paddingSize);
     }
