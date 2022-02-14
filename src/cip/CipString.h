@@ -18,10 +18,11 @@ namespace cip {
 		CipBaseString() = default;
 		explicit CipBaseString(const std::string& string) {
 			_length = string.size();
-			uint8_t buffer[_length];
-			std::memcpy(buffer, string.data(), _length);
 
-			_data = std::vector<uint8_t>(buffer, buffer + _length);
+			if (!string.empty()) {
+				_data.reserve(string.size());
+				std::memcpy(&_data.front(), &string.front(), _length);
+			}
 		}
 
 		CipBaseString(const std::vector<uint8_t>& data) {
@@ -32,10 +33,14 @@ namespace cip {
 		~CipBaseString() = default;
 
 		std::string toStdString() const {
-			char buffer[_length];
-			std::memcpy(buffer, _data.data(), _length);
+			std::string string;
 
-			return std::string(buffer, buffer + _length);
+			if (!_data.empty()) {
+				string.reserve(_data.size());
+				std::memcpy(&string.front(), &_data.front(), _length);
+			}
+
+			return string;
 		}
 
 		T getLength() const {
