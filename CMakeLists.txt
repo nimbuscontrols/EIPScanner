@@ -7,10 +7,15 @@ set(EIPSCANNER_FULL_VERSION ${EIPSCANNER_MAJOR_VERSION}.${EIPSCANNER_MINOR_VERSI
 
 project(EIPScanner VERSION ${EIPSCANNER_FULL_VERSION})
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 option(ENABLE_VENDOR_SRC "Enable vendor source" ON)
 option(TEST_ENABLED "Enable unit test" OFF)
 option(EXAMPLE_ENABLED "Build examples" OFF)
+
+# Prevent std::numeric_limits::max collision
+if (MSVC)
+	add_compile_definitions(NOMINMAX)
+endif()
 
 add_subdirectory(src)
 if (EXAMPLE_ENABLED)
