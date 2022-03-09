@@ -13,6 +13,9 @@ set(EIP_SOURCE_DIR ${CMAKE_SOURCE_DIR}/src)
 set(EIP_INCLUDE_DIR ${CATKIN_DEVEL_PREFIX}/include)
 file(MAKE_DIRECTORY ${EIP_INCLUDE_DIR})
 
+# on a clean build this folder does not yet exist. catkin_package fails if it doesn't exist. Thus we create it before catkin_package
+file(MAKE_DIRECTORY  ${EIP_INCLUDE_DIR}/eip_scanner)
+
 catkin_package(
     INCLUDE_DIRS ${EIP_INCLUDE_DIR} ${EIP_INCLUDE_DIR}/eip_scanner
     LIBRARIES ${PROJECT_NAME}
