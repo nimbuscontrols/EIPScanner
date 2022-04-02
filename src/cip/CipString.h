@@ -6,6 +6,7 @@
 #define EIPSCANNER_CIP_STRINGS_H
 
 #include <cstring>
+#include <iterator>
 #include <string>
 #include <vector>
 #include "Types.h"
