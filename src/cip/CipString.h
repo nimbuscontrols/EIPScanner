@@ -6,6 +6,7 @@
 #define EIPSCANNER_CIP_STRINGS_H
 
 #include <cstring>
+#include <iterator>
 #include <string>
 #include <vector>
 #include "Types.h"
@@ -18,11 +19,7 @@ namespace cip {
 		CipBaseString() = default;
 		explicit CipBaseString(const std::string& string) {
 			_length = string.size();
-
-			if (!string.empty()) {
-				_data.reserve(string.size());
-				std::memcpy(&_data.front(), &string.front(), _length);
-			}
+			std::copy(string.begin(), string.end(), std::back_inserter(_data));
 		}
 
 		CipBaseString(const std::vector<uint8_t>& data) {
@@ -33,14 +30,7 @@ namespace cip {
 		~CipBaseString() = default;
 
 		std::string toStdString() const {
-			std::string string;
-
-			if (!_data.empty()) {
-				string.reserve(_data.size());
-				std::memcpy(&string.front(), &_data.front(), _length);
-			}
-
-			return string;
+			return std::string(_data.begin(), _data.end());
 		}
 
 		T getLength() const {
