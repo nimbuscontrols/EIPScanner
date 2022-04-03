@@ -11,9 +11,11 @@ using eipScanner::cip::CipBaseString;
 using eipScanner::utils::Buffer;
 
 TEST(TestCipString, ShuoldConvertToStdString) {
-	CipBaseString<uint8_t> cipString("Hello!");
+	std::string std_string("Hello!");
 
-	EXPECT_EQ("Hello!", cipString.toStdString());
+	CipBaseString<uint8_t> cipString(std_string);
+
+	EXPECT_EQ(std_string, cipString.toStdString());
 }
 
 TEST(TestCipString, ShuoldDecodeAndEncodeByBuffer) {
