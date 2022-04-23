@@ -61,14 +61,14 @@ public:
 	TMockSocket::SPtr _mockSocket;
 };
 
-TEST_F(TestDiscoveryManager, ShouldSendBroadcastMesasageAndGetResponses) {
+TEST_F(TestDiscoveryManager, ShouldSendBroadcastMessageAndGetResponses) {
 	TDiscoveryManager manager(_mockSocket);
 
 	EXPECT_CALL(*_mockSocket, Send(LIST_IDENTITY_REQUEST)).Times(1);
 	EXPECT_CALL(*_mockSocket, Receive(504))
 		.WillOnce(::testing::Return(LIST_IDENTITY_RESPONSE))
 		.WillOnce(::testing::Return(LIST_IDENTITY_RESPONSE))
-		.WillOnce(::testing::Throw(std::system_error(11, std::system_category())));
+		.WillOnce(::testing::Throw(std::system_error(DISCOVERY_SOCKET_RECEIVE_END_ERROR_CODE, std::system_category())));
 
 	auto devices = manager.discover();
 
