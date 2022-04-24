@@ -12,9 +12,14 @@ option(ENABLE_VENDOR_SRC "Enable vendor source" ON)
 option(TEST_ENABLED "Enable unit test" OFF)
 option(EXAMPLE_ENABLED "Build examples" OFF)
 
-# Prevent std::numeric_limits::max collision
-if (MSVC)
-	add_compile_definitions(NOMINMAX)
+if (WIN32)
+	# Needed on MinGW with GCC 10 or lower
+	add_compile_definitions(_WIN32_WINNT=0x0600)
+
+	# Prevent std::numeric_limits::max collision
+	if (MSVC)
+		add_compile_definitions(NOMINMAX)
+	endif()
 endif()
 
 add_subdirectory(src)
