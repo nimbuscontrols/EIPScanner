@@ -114,42 +114,42 @@ namespace powerFlex525 {
 
 
 	static cip::CipLreal processVolts(uint16_t volts, int voltsParam) {
-		auto * parameterObject = new ParameterObject(voltsParam, true, 4);
+		ParameterObject parameterObject(voltsParam, true, 4);
 
-		parameterObject->setScalable(true);
-		parameterObject->setScalingMultiplier(1);
-		parameterObject->setScalingDivisor(1);
-		parameterObject->setScalingBase(1);
-		parameterObject->setScalingOffset(0);
-		parameterObject->setPrecision(0);
+		parameterObject.setScalable(true);
+		parameterObject.setScalingMultiplier(1);
+		parameterObject.setScalingDivisor(1);
+		parameterObject.setScalingBase(1);
+		parameterObject.setScalingOffset(0);
+		parameterObject.setPrecision(0);
 
-		return parameterObject->actualToEngValue(volts);
+		return parameterObject.actualToEngValue(volts);
 	}
 
 	static cip::CipLreal processCurrent(uint16_t current, int currentParam) {
-		auto * parameterObject = new ParameterObject(currentParam, true, 4);
+		ParameterObject parameterObject(currentParam, true, 4);
 
-		parameterObject->setScalable(true);
-		parameterObject->setScalingMultiplier(1);
-		parameterObject->setScalingDivisor(1);
-		parameterObject->setScalingBase(1);
-		parameterObject->setScalingOffset(0);
-		parameterObject->setPrecision(2);
+		parameterObject.setScalable(true);
+		parameterObject.setScalingMultiplier(1);
+		parameterObject.setScalingDivisor(1);
+		parameterObject.setScalingBase(1);
+		parameterObject.setScalingOffset(0);
+		parameterObject.setPrecision(2);
 
-		return parameterObject->actualToEngValue(current);
+		return parameterObject.actualToEngValue(current);
 	}
 
 	static cip::CipLreal processFrequency(uint16_t frequency, int frequencyParam) {
-		auto * parameterObject = new ParameterObject(frequencyParam, true, 4);
+		ParameterObject parameterObject(frequencyParam, true, 4);
 
-		parameterObject->setScalable(true);
-		parameterObject->setScalingMultiplier(1);
-		parameterObject->setScalingDivisor(1);
-		parameterObject->setScalingBase(1);
-		parameterObject->setScalingOffset(0);
-		parameterObject->setPrecision(2);
+		parameterObject.setScalable(true);
+		parameterObject.setScalingMultiplier(1);
+		parameterObject.setScalingDivisor(1);
+		parameterObject.setScalingBase(1);
+		parameterObject.setScalingOffset(0);
+		parameterObject.setPrecision(2);
 
-		return parameterObject->actualToEngValue(frequency);
+		return parameterObject.actualToEngValue(frequency);
 	}
 
 
