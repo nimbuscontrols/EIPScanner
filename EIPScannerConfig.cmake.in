@@ -1,0 +1,16 @@
+# - Config file for the EIPScanner package
+# It defines the following variables
+#  EIPSCANNER_INCLUDE_DIRS - include directories for EIPScanner
+#  EIPSCANNER_LIBRARIES    - libraries to link against
+#  EIPSCANNER_EXECUTABLE   - the bar executable
+
+# Compute paths
+get_filename_component(EIPSCANNER_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+set(EIPSCANNER_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+# include("${EIPSCANNER_CMAKE_DIR}/EIPScannerTargets.cmake")
+
+# These are IMPORTED targets created by FooBarTargets.cmake
+set(EIPSCANNER_LIBRARIES EIPScanner)
+set(EIPSCANNER_LIBRARY_DIR "@INSTALL_LIB_DIR@")
