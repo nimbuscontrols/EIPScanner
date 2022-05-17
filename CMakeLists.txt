@@ -22,15 +22,6 @@ if (WIN32)
 	endif()
 endif()
 
-add_subdirectory(src)
-if (EXAMPLE_ENABLED)
-    add_subdirectory(examples)
-endif()
-
-if (TEST_ENABLED)
-    add_subdirectory(test)
-endif()
-
 set(INSTALL_CMAKE_DIR share/EIPScanner/cmake CACHE PATH
     "Installation directory for CMake files")
 # ... for the build tree
@@ -65,3 +56,12 @@ install(FILES
   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/EIPScannerConfig.cmake"
   "${PROJECT_BINARY_DIR}/EIPScannerConfigVersion.cmake"
   DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
+
+add_subdirectory(src)
+if (EXAMPLE_ENABLED)
+    add_subdirectory(examples)
+endif()
+
+if (TEST_ENABLED)
+    add_subdirectory(test)
+endif()
