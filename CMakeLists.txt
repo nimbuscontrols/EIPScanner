@@ -45,7 +45,7 @@ set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
 configure_file(EIPScannerConfig.cmake.in
   "${PROJECT_BINARY_DIR}/EIPScannerConfig.cmake" @ONLY)
 # ... for the install tree
-set(CONF_INCLUDE_DIRS "\${EIPSCANNER_CMAKE_DIR}/${REL_INCLUDE_DIR}")
+set(CONF_INCLUDE_DIRS "\${EIPScanner_CMAKE_DIR}/${REL_INCLUDE_DIR}")
 configure_file(EIPScannerConfig.cmake.in
   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/EIPScannerConfig.cmake" @ONLY)
 # ... for both
