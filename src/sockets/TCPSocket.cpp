@@ -53,7 +53,7 @@ namespace eipScanner {
 
 			Logger(LogLevel::DEBUG) << "Connecting to " << _remoteEndPoint.toString();
 			try {
-				auto addr = _remoteEndPoint.getAddr();
+				const auto& addr = _remoteEndPoint.getAddr();
 				auto res = connect(_sockedFd, (struct sockaddr *) &addr, sizeof(addr));
 				if (res < 0) {
 					if (BaseSocket::getLastError() == EIPSCANNER_SOCKET_ERROR(EINPROGRESS)) {
