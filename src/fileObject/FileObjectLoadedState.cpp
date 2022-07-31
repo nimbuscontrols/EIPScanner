@@ -39,7 +39,7 @@ namespace fileObject {
 		}
 	}
 
-	bool FileObjectLoadedState::transfer(SessionInfoIf::SPtr si) {
+	bool FileObjectLoadedState::transfer(SessionInfoIf::SPtr) {
 		return false;
 	}
 }

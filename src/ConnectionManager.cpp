@@ -196,8 +196,7 @@ namespace eipScanner {
 					<< ". But the connection is removed from ConnectionManager anyway";
 			}
 
-			auto rc = _connectionMap.erase(ptr->_t2oNetworkConnectionId);
-			(void) rc;
+			[[maybe_unused]] auto rc = _connectionMap.erase(ptr->_t2oNetworkConnectionId);
 			assert(rc);
 		} else {
 			Logger(LogLevel::WARNING) << "Attempt to close an already closed connection";
@@ -207,8 +206,6 @@ namespace eipScanner {
 	void ConnectionManager::handleConnections(std::chrono::milliseconds timeout) {
 		std::vector<BaseSocket::SPtr > sockets;
 		std::transform(_socketMap.begin(), _socketMap.end(), std::back_inserter(sockets), [](auto entry) {
-			auto fd = entry.second->getSocketFd();
-			(void) fd;
 			return entry.second;
 		});
 
@@ -231,8 +228,7 @@ namespace eipScanner {
 		if (socket == _socketMap.end()) {
 			auto newSocket = std::make_shared<UDPBoundSocket>(endPoint);
 			_socketMap[endPoint] = newSocket;
-			newSocket->setBeginReceiveHandler([](sockets::BaseSocket& sock) {
-			  (void) sock;
+			newSocket->setBeginReceiveHandler([](sockets::BaseSocket&) {
 				Logger(LogLevel::DEBUG) << "Received something";
 			});
 
