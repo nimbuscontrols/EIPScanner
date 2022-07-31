@@ -24,7 +24,7 @@ namespace eipScanner {
 
 	MessageRouter::MessageRouter(bool use_8_bit_path_segments) 
     : _use_8_bit_path_segments(use_8_bit_path_segments)
-    {};
+    {}
 
 	MessageRouter::~MessageRouter() = default;
 
