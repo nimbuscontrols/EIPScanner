@@ -79,7 +79,7 @@ namespace sockets {
 		_recvTimeout = recvTimeout;
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
-                uint32_t ms = recvTimeout.count();
+                auto ms = uint32_t(recvTimeout.count());
                 setsockopt(_sockedFd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&ms, sizeof ms);
 #else
                 timeval tv = makePortableInterval(recvTimeout);
