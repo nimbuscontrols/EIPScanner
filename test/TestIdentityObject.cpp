@@ -3,6 +3,7 @@
 //
 
 #include <gtest/gtest.h>
+
 #include "Mocks.h"
 #include "IdentityObject.h"
 

@@ -29,5 +29,4 @@ namespace cip {
 }
 }
 
-
 #endif  // EIPSCANNER_CIP_MESSAGEROUTERREQUEST_H

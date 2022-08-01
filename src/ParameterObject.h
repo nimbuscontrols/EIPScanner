@@ -7,6 +7,7 @@
 
 #include <cmath>
 #include <stdexcept>
+
 #include "MessageRouter.h"
 #include "utils/Buffer.h"
 #include "BaseObject.h"
@@ -382,4 +383,5 @@ private:
 };
 
 }
+
 #endif  // EIPSCANNER_PARAMETEROBJECT_H

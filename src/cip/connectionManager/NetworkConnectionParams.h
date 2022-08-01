@@ -46,4 +46,5 @@ namespace connectionManager {
 }
 }
 }
+
 #endif //EIPSCANNER_CIP_CONNECTIONMANAGER_NETWORKCONNECTIONPARAMS_H

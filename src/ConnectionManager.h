@@ -6,6 +6,7 @@
 #define EIPSCANNER_CONNECTIONMANAGER_H
 
 #include <map>
+
 #include "MessageRouter.h"
 #include "IOConnection.h"
 #include "cip/connectionManager/ConnectionParameters.h"

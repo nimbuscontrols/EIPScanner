@@ -85,7 +85,6 @@ namespace sockets {
                 timeval tv = makePortableInterval(recvTimeout);
                 setsockopt(_sockedFd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
 #endif
-
 	}
 
 	timeval BaseSocket::makePortableInterval(const std::chrono::milliseconds &recvTimeout) {

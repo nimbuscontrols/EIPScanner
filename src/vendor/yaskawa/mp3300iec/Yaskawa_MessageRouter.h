@@ -2,6 +2,7 @@
 #define EIPSCANNER_YASKAWA_MESSAGEROUTER_H
 
 #include <memory>
+
 #include "Yaskawa_EPath.h"
 #include "cip/Services.h"
 #include "cip/MessageRouterResponse.h"

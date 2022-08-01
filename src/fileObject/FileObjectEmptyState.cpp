@@ -3,6 +3,7 @@
 //
 
 #include "FileObjectEmptyState.h"
+
 namespace eipScanner {
 namespace fileObject {
 	using utils::LogLevel;

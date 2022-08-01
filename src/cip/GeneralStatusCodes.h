@@ -168,4 +168,5 @@ namespace cip {
 
 }
 }
+
 #endif //EIPSCANNER_CIP_GENERALSTATUSCODES_H

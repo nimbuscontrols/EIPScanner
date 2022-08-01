@@ -5,9 +5,10 @@
 #ifndef EIPSCANNER_SOCKETS_UDPSOCKET_H
 #define EIPSCANNER_SOCKETS_UDPSOCKET_H
 
-#include <vector>
 #include <chrono>
 #include <memory>
+#include <vector>
+
 #include "BaseSocket.h"
 
 namespace eipScanner {
@@ -31,4 +32,3 @@ namespace sockets {
 }
 
 #endif  // EIPSCANNER_SOCKETS_UDPSOCKET_H
-

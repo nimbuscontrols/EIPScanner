@@ -5,10 +5,10 @@
 #ifndef EIPSCANNER_SOCKETS_UDPSBOUNDOCKET_H
 #define EIPSCANNER_SOCKETS_UDPSBOUNDOCKET_H
 
-#include <vector>
 #include <chrono>
 #include <memory>
-//#include <netinet/in.h>
+#include <vector>
+
 #include "UDPSocket.h"
 
 namespace eipScanner {

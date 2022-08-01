@@ -6,6 +6,7 @@
 #define EIPSCANNER_FILEOBJECT_FILEOBJECTSTATE_H
 
 #include <memory>
+
 #include "SessionInfo.h"
 #include "MessageRouter.h"
 #include "FileObject.h"

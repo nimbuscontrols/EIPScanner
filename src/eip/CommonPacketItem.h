@@ -5,8 +5,8 @@
 #ifndef EIPSCANNER_EIP_COMMONPACKETITEM_H
 #define EIPSCANNER_EIP_COMMONPACKETITEM_H
 
-#include <vector>
 #include <cstdint>
+#include <vector>
 
 #include "cip/Types.h"
 
@@ -49,6 +49,5 @@ namespace eip {
 
 }
 }
-
 
 #endif  // EIPSCANNER_EIP_COMMONPACKETITEM_H

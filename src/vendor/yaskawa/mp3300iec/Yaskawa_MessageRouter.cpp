@@ -1,5 +1,6 @@
 
 #include <cassert>
+
 #include "eip/EncapsPacketFactory.h"
 #include "utils/Buffer.h"
 #include "Yaskawa_MessageRouter.h"

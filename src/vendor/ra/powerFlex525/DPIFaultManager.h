@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <functional>
+
 #include "DPIFaultObject.h"
 #include "SessionInfoIf.h"
 #include "DPIFaultParameter.h"

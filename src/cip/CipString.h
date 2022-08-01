@@ -9,6 +9,7 @@
 #include <iterator>
 #include <string>
 #include <vector>
+
 #include "Types.h"
 
 namespace eipScanner {

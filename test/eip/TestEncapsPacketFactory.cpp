@@ -1,7 +1,9 @@
 //
 // Created by Aleksey Timin on 11/16/19.
 //
+
 #include <gtest/gtest.h>
+
 #include "eip/EncapsPacketFactory.h"
 #include "eip/EncapsPacket.h"
 

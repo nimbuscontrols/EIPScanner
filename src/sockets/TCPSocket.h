@@ -5,8 +5,9 @@
 #ifndef EIPSCANNER_SOCKETS_TCPSOCKET_H
 #define EIPSCANNER_SOCKETS_TCPSOCKET_H
 
-#include <vector>
 #include <chrono>
+#include <vector>
+
 #include "BaseSocket.h"
 
 namespace eipScanner {

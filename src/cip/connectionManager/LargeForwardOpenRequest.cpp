@@ -2,10 +2,10 @@
 // Created by Vincent Prince on 05/22/20.
 //
 
-#include "LargeForwardOpenRequest.h"
-
+#include <cassert>
 #include <utility>
-#include <assert.h>
+
+#include "LargeForwardOpenRequest.h"
 #include "utils/Buffer.h"
 
 namespace eipScanner {

@@ -31,4 +31,5 @@ namespace fileObject {
 
 }
 }
+
 #endif  // EIPSCANNER_FILEOBJECT_FILEOBJECTUPLOADINPROGRESSSTATE_H

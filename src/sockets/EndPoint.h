@@ -10,6 +10,7 @@
 #elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 #include <winsock2.h>
 #endif
+
 #include <string>
 
 #define EIP_DEFAULT_EXPLICIT_PORT (uint16_t)(44818)

@@ -6,6 +6,7 @@
 #define EIPSCANNER_SESSIONINFOIF_H
 
 #include <memory>
+
 #include "eip/EncapsPacket.h"
 #include "sockets/EndPoint.h"
 
@@ -39,4 +40,5 @@ namespace eipScanner {
 		virtual sockets::EndPoint getRemoteEndPoint() const = 0;
 	};
 }
+
 #endif //EIPSCANNER_SESSIONINFOIF_H

@@ -3,6 +3,7 @@
 //
 
 #include <cassert>
+
 #include "eip/EncapsPacketFactory.h"
 #include "utils/Buffer.h"
 #include "MessageRouter.h"

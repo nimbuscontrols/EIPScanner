@@ -6,6 +6,7 @@
 #define EIPSCANNER_EIP_COMMONPACKETITEMFACTORY_H
 
 #include <vector>
+
 #include "CommonPacketItem.h"
 #include "cip/Types.h"
 
@@ -20,4 +21,5 @@ namespace eip {
 	};
 }
 }
+
 #endif  // EIPSCANNER_EIP_COMMONPACKETITEMFACTORY_H

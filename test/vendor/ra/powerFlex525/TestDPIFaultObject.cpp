@@ -4,6 +4,7 @@
 
 
 #include <gtest/gtest.h>
+
 #include "Mocks.h"
 #include "vendor/ra/powerFlex525/DPIFaultObject.h"
 

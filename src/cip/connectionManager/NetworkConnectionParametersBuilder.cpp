@@ -2,10 +2,10 @@
 // Created by Vincent Prince on 05/22/20.
 //
 
-#include "NetworkConnectionParametersBuilder.h"
-
+#include <cassert>
 #include <utility>
-#include <assert.h>
+
+#include "NetworkConnectionParametersBuilder.h"
 #include "utils/Buffer.h"
 
 namespace eipScanner {

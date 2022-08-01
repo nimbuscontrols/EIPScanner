@@ -67,4 +67,5 @@ namespace cip {
 	};
 }
 }
+
 #endif //EIPSCANNER_CIP_TYPES_H

@@ -2,10 +2,10 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
-#include "ForwardOpenRequest.h"
-
+#include <cassert>
 #include <utility>
-#include <assert.h>
+
+#include "ForwardOpenRequest.h"
 #include "utils/Buffer.h"
 
 namespace eipScanner {

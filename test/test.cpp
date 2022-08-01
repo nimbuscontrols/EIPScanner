@@ -3,6 +3,7 @@
 //
 
 #include <gtest/gtest.h>
+
 #include "utils/Logger.h"
 
 int main(int argc, char **argv) {

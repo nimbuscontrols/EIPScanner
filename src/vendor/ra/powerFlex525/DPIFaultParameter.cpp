@@ -2,11 +2,9 @@
 // Created by James Roth on 12/19/19.
 //
 
-#include "DPIFaultParameter.h"
-
 #include <utility>
 
-
+#include "DPIFaultParameter.h"
 #include "utils/Buffer.h"
 
 namespace eipScanner {

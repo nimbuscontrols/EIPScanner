@@ -3,6 +3,7 @@
 //
 
 #include <gtest/gtest.h>
+
 #include "cip/CipRevision.h"
 
 using eipScanner::cip::CipRevision;

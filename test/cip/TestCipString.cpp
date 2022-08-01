@@ -4,6 +4,7 @@
 //
 
 #include <gtest/gtest.h>
+
 #include "cip/CipString.h"
 #include "utils/Buffer.h"
 

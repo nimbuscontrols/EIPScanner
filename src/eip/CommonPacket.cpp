@@ -1,7 +1,9 @@
 //
 // Created by Aleksey Timin on 11/16/19.
 //
+
 #include <stdexcept>
+
 #include "CommonPacket.h"
 #include "utils/Buffer.h"
 #include "cip/Types.h"
