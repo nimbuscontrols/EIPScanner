@@ -113,7 +113,7 @@ namespace utils {
 		size_t size() const { return _buffer.size(); }
 		size_t pos() const { return _position; }
 		bool isValid() const { return _position <= _buffer.size(); }
-		bool empty() const  { return  _position >= _buffer.size(); }
+		bool empty() const { return _position >= _buffer.size(); }
 	private:
 		std::vector<uint8_t> _buffer;
 		size_t _position;

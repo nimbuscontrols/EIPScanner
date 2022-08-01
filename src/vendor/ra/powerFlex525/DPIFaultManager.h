@@ -32,7 +32,7 @@ namespace powerFlex525 {
 	 *
 	 * @brief Implements a manager to retrieve new faults and clean its queue
 	 *
-	 * It use PrarameterObejcts instead of FaultObject because it doesn't contain the needed information
+	 * It use ParameterObjects instead of FaultObject because it doesn't contain the needed information
 	 *
 	 */
 	class DPIFaultManager {
@@ -45,7 +45,7 @@ namespace powerFlex525 {
 		 * @brief Default constructor (clearFaults = true, resetDevice = false, getFaultDetails = false)
 		 */
 		DPIFaultManager();
-  
+
 		/**
 		 * @brief Constructor
 		 * @param clearFaults if true the manager clears the queue after it has retrieved a new fault

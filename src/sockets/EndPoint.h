@@ -21,7 +21,7 @@ namespace sockets {
 
 	class EndPoint {
 	public:
-		EndPoint(std::string  host, int port);
+		EndPoint(std::string host, int port);
 		EndPoint(struct sockaddr_in& addr);
 
 		const std::string &getHost() const;

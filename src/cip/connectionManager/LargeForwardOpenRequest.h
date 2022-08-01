@@ -14,7 +14,7 @@ namespace cip {
 namespace connectionManager {
 	class LargeForwardOpenRequest {
 	public:
-		LargeForwardOpenRequest(ConnectionParameters  params);
+		LargeForwardOpenRequest(ConnectionParameters params);
 		~LargeForwardOpenRequest();
 		std::vector<uint8_t> pack() const;
 

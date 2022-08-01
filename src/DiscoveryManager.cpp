@@ -88,7 +88,7 @@ namespace eipScanner {
 	}
 
 	sockets::BaseSocket::SPtr DiscoveryManager::makeSocket() const {
-		auto socket =  std::make_shared<UDPSocket>(_broadCastAddress);
+		auto socket = std::make_shared<UDPSocket>(_broadCastAddress);
 		socket->setRecvTimeout(_receiveTimout);
 
 		int broadcast = 1;

@@ -125,7 +125,7 @@ Buffer &Buffer::operator<<(float val) {
 		return *this << reinterpret_cast<uint32_t&>(val);
 	}
 
-	Buffer &Buffer::operator>>(float &val)  {
+	Buffer &Buffer::operator>>(float &val) {
 		return *this >> reinterpret_cast<uint32_t&>(val);
 	}
 
@@ -194,7 +194,7 @@ Buffer &Buffer::operator<<(float val) {
 			 >> (uint32_t&)addr.sin_addr.s_addr
 			 >> zeros;
 
-		addr.sin_family =  htons(addr.sin_family);
+		addr.sin_family = htons(addr.sin_family);
 		val = sockets::EndPoint(addr);
 		return *this;
 	}

@@ -11,7 +11,7 @@ namespace eipScanner {
 namespace cip {
 	using utils::Buffer;
 
-	enum class EPathSegmentTypes : CipUsint  {
+	enum class EPathSegmentTypes : CipUsint {
 		CLASS_8_BITS = 0x20,
 		CLASS_16_BITS = 0x21,
 		INSTANCE_8_BITS = 0x24,

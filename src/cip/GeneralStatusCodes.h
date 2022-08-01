@@ -17,7 +17,7 @@ namespace cip {
 		//! A connection related service failed along the connection path.
 		CONNECTION_FAILURE = 0x01,
 
-		//! Resources needed for the object to perform the  requested service
+		//! Resources needed for the object to perform the requested service
 		//! were unavailable.
 		RESOURCE_UNAVAILABLE = 0x02,
 
