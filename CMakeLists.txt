@@ -28,6 +28,6 @@ if (EXAMPLE_ENABLED)
 endif()
 
 if (TEST_ENABLED)
+    enable_testing()
     add_subdirectory(test)
 endif()
-
