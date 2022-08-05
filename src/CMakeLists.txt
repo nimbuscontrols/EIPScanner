@@ -50,12 +50,10 @@ if(ENABLE_VENDOR_SRC)
 	add_subdirectory(vendor)
 endif()
 
-add_library(EIPScanner SHARED ${SOURCE_FILES} ${VENDOR_FILES})
-add_library(EIPScannerS STATIC ${SOURCE_FILES} ${VENDOR_FILES})
+add_library(EIPScanner ${SOURCE_FILES} ${VENDOR_FILES})
 
 if(WIN32)
 	target_link_libraries(EIPScanner ws2_32)
-	target_link_libraries(EIPScannerS ws2_32)
 endif()
 
 set_target_properties(
@@ -64,7 +62,7 @@ set_target_properties(
         VERSION ${EIPSCANNER_FULL_VERSION}
         SOVERSION ${EIPSCANNER_MAJOR_VERSION})
 
-install(TARGETS EIPScanner EIPScannerS
+install(TARGETS EIPScanner
         LIBRARY
             DESTINATION lib
         ARCHIVE
