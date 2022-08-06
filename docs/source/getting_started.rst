@@ -9,7 +9,7 @@ requirements:
 
 * Linux or MacOS operation system
 * CMake 3.5 or higher 
-* C++ compiler supporting C+14 standard. (We test our code with clang-7 and gcc-7.4)
+* C++ compiler supporting C++20 standard
 * Gtest 1.8.0 or higher (optional)
 
 

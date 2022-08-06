@@ -26,7 +26,7 @@ Vendor specific objects:
 ## Requirements
 
 * CMake 3.5 and higher
-* C++14 compiler (tested with GCC and MinGW)
+* C++20 compiler (tested with GCC and MinGW)
 * Linux, MacOS, and Windows
 
 ## Installing
