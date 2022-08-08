@@ -52,51 +52,57 @@ namespace eipScanner {
 			Logger(LogLevel::DEBUG) << "Opened TCP socket fd=" << _sockedFd;
 
 			Logger(LogLevel::DEBUG) << "Connecting to " << _remoteEndPoint.toString();
-			auto addr = _remoteEndPoint.getAddr();
-			auto res = connect(_sockedFd, (struct sockaddr *) &addr, sizeof(addr));
-			if (res < 0) {
-				if (BaseSocket::getLastError() == EIPSCANNER_SOCKET_ERROR(EINPROGRESS)) {
-					do {
-						fd_set myset;
-						auto tv = makePortableInterval(connTimeout);
+			try {
+				auto addr = _remoteEndPoint.getAddr();
+				auto res = connect(_sockedFd, (struct sockaddr *) &addr, sizeof(addr));
+				if (res < 0) {
+					if (BaseSocket::getLastError() == EIPSCANNER_SOCKET_ERROR(EINPROGRESS)) {
+						do {
+							fd_set myset;
+							auto tv = makePortableInterval(connTimeout);
 
-						FD_ZERO(&myset);
-						FD_SET(_sockedFd, &myset);
-						res = ::select(_sockedFd + 1, NULL, &myset, NULL, &tv);
+							FD_ZERO(&myset);
+							FD_SET(_sockedFd, &myset);
+							res = ::select(_sockedFd + 1, NULL, &myset, NULL, &tv);
 
-						if (res < 0 && BaseSocket::getLastError() != EIPSCANNER_SOCKET_ERROR(EINTR)) {
-							throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
-						} else if (res > 0) {
-							// Socket selected for write
-							int err;
-							socklen_t lon = sizeof(int);
-							if (getsockopt(_sockedFd, SOL_SOCKET, SO_ERROR, (char *) (&err), &lon) < 0) {
+							if (res < 0 && BaseSocket::getLastError() != EIPSCANNER_SOCKET_ERROR(EINTR)) {
 								throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
+							} else if (res > 0) {
+								// Socket selected for write
+								int err;
+								socklen_t lon = sizeof(int);
+								if (getsockopt(_sockedFd, SOL_SOCKET, SO_ERROR, (char *) (&err), &lon) < 0) {
+									throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
+								}
+								// Check the value returned...
+								if (err) {
+									throw std::system_error(err, BaseSocket::getErrorCategory());
+								}
+								break;
+							} else {
+								throw std::system_error(EIPSCANNER_SOCKET_ERROR(ETIMEDOUT), BaseSocket::getErrorCategory());
 							}
-							// Check the value returned...
-							if (err) {
-								throw std::system_error(err, BaseSocket::getErrorCategory());
-							}
-							break;
-						} else {
-							throw std::system_error(EIPSCANNER_SOCKET_ERROR(ETIMEDOUT), BaseSocket::getErrorCategory());
-						}
-					} while (1);
-				} else {
-					throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
+						} while (1);
+					} else {
+						throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
+					}
 				}
-			}
 
 #if defined(__unix__) || defined(__APPLE__)
-			// Set to blocking mode again...
-			if ((arg = fcntl(_sockedFd, F_GETFL, NULL)) < 0) {
-				throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
-			}
-			arg &= (~O_NONBLOCK);
-			if (fcntl(_sockedFd, F_SETFL, arg) < 0) {
-				throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
-			}
+				// Set to blocking mode again...
+				if ((arg = fcntl(_sockedFd, F_GETFL, NULL)) < 0) {
+					throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
+				}
+				arg &= (~O_NONBLOCK);
+				if (fcntl(_sockedFd, F_SETFL, arg) < 0) {
+					throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
+				}
 #endif
+			} catch (...) {
+				Close();
+				throw;
+			}
+
 		}
 
 
