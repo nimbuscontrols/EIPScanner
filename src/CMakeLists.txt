@@ -1,4 +1,4 @@
-include_directories(${CMAKE_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 set(SOURCE_FILES
         cip/connectionManager/ForwardCloseRequest.cpp
@@ -70,6 +70,6 @@ install(TARGETS EIPScanner EIPScannerS
         ARCHIVE
             DESTINATION lib)
 
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/
         DESTINATION include/EIPScanner
         FILES_MATCHING PATTERN "*.h*")
