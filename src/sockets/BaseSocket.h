@@ -59,5 +59,4 @@ namespace sockets {
 }
 }
 
-
 #endif  // EIPSCANNER_SOCKETS_BASESOCKET_H

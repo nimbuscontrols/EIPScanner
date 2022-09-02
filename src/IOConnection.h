@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <vector>
+
 #include <functional>
 #include "cip/Types.h"
 #include "sockets/UDPSocket.h"
@@ -91,9 +92,9 @@ namespace eipScanner {
 		cip::CipUdint _serialNumber;
 
 		cip::CipUsint _transportTypeTrigger;
-		cip::CipBool  _o2tRealTimeFormat;
-		cip::CipBool  _t2oRealTimeFormat;
-		cip::CipUint  _sequenceValueCount;
+		cip::CipBool _o2tRealTimeFormat;
+		cip::CipBool _t2oRealTimeFormat;
+		cip::CipUint _sequenceValueCount;
 		std::vector<uint8_t> _connectionPath;
 		cip::CipUint _originatorVendorId;
 		cip::CipUdint _originatorSerialNumber;

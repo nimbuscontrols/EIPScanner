@@ -6,6 +6,7 @@
 #define EIPSCANNER_CIP_CONNECTIONMANAGER_FORWARDCLOSEREQUEST_H
 
 #include <vector>
+
 #include "ConnectionParameters.h"
 
 namespace eipScanner {
@@ -31,4 +32,5 @@ namespace connectionManager {
 }
 }
 }
+
 #endif  // EIPSCANNER_CIP_CONNECTIONMANAGER_FORWARDOPENREQUEST_H

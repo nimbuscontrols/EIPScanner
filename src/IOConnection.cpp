@@ -126,7 +126,7 @@ namespace eipScanner {
 
 			_o2tTimer = 0;
 			_sendDataHandle(_outputData);
-			if (_o2tFixedSize && _outputData.size() != _o2tDataSize)  {
+			if (_o2tFixedSize && _outputData.size() != _o2tDataSize) {
 				Logger(LogLevel::WARNING) << "Connection O2T_ID=" << _o2tNetworkConnectionId
 										  << " has fixed size " << _o2tDataSize << " bytes but " << _outputData.size()
 										  << " bytes are to send. Don't send this data.";

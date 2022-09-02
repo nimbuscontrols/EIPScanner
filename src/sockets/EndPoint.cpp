@@ -2,10 +2,6 @@
 // Created by Aleksey Timin on 12/10/19.
 //
 
-#include "EndPoint.h"
-#include "BaseSocket.h"
-#include "Platform.h"
-
 #if defined(__unix__) || defined(__APPLE__)
 #include <arpa/inet.h>
 #elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
@@ -15,6 +11,10 @@
 
 #include <system_error>
 #include <utility>
+
+#include "EndPoint.h"
+#include "BaseSocket.h"
+#include "Platform.h"
 
 namespace eipScanner {
 namespace sockets {

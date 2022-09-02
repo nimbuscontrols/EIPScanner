@@ -13,15 +13,12 @@ namespace fileObject {
 			: FileObjectState(FileObjectStateCodes::NONEXISTENT, owner, objectId, messageRouter) {
 	}
 
-	void FileObjectNonExistentState::initiateUpload(SessionInfoIf::SPtr si, EndUploadHandler handle) {
-    (void) si;
-    (void) handle;
+	void FileObjectNonExistentState::initiateUpload(SessionInfoIf::SPtr, EndUploadHandler) {
 		logWithStateName(LogLevel::WARNING,
 						 "File cannot be uploaded");
 	}
 
-	bool FileObjectNonExistentState::transfer(SessionInfoIf::SPtr si) {
-    (void) si;
+	bool FileObjectNonExistentState::transfer(SessionInfoIf::SPtr) {
 		logWithStateName(LogLevel::WARNING,
 						 "Nothing to transfer");
 		return false;

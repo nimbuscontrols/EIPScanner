@@ -6,6 +6,7 @@
 #define EIPSCANNER_MESSAGEROUTER_H
 
 #include <memory>
+
 #include "cip/EPath.h"
 #include "cip/Services.h"
 #include "cip/MessageRouterResponse.h"

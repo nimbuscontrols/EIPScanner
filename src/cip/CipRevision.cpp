@@ -3,6 +3,7 @@
 //
 
 #include "CipRevision.h"
+
 namespace eipScanner {
 namespace cip {
 

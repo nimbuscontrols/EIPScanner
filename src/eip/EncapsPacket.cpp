@@ -2,8 +2,9 @@
 // Created by flipback on 11/16/19.
 //
 
-#include <string>
 #include <stdexcept>
+#include <string>
+
 #include "EncapsPacket.h"
 #include "utils/Buffer.h"
 
@@ -38,7 +39,7 @@ namespace eip {
 
 		auto dataSize = data.size() - HEADER_SIZE;
 		if (dataSize != _length) {
-			throw std::runtime_error("EncapsPacket data must be "  + std::to_string(_length)
+			throw std::runtime_error("EncapsPacket data must be " + std::to_string(_length)
 				+ " but we have only " + std::to_string(dataSize) + " bytes");
 		}
 

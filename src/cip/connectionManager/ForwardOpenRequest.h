@@ -6,6 +6,7 @@
 #define EIPSCANNER_CIP_CONNECTIONMANAGER_FORWARDOPENREQUEST_H
 
 #include <vector>
+
 #include "ConnectionParameters.h"
 
 namespace eipScanner {
@@ -13,7 +14,7 @@ namespace cip {
 namespace connectionManager {
 	class ForwardOpenRequest {
 	public:
-		ForwardOpenRequest(ConnectionParameters  params);
+		ForwardOpenRequest(ConnectionParameters params);
 		~ForwardOpenRequest();
 		std::vector<uint8_t> pack() const;
 
@@ -23,4 +24,5 @@ namespace connectionManager {
 }
 }
 }
+
 #endif  // EIPSCANNER_CIP_CONNECTIONMANAGER_FORWARDOPENREQUEST_H

@@ -24,9 +24,7 @@ namespace fileObject {
 	}
 
 	void
-	FileObjectUploadInProgressState::initiateUpload(SessionInfoIf::SPtr si, EndUploadHandler handle) {
-    (void) si;
-    (void) handle;
+	FileObjectUploadInProgressState::initiateUpload(SessionInfoIf::SPtr, EndUploadHandler) {
 		logWithStateName(LogLevel::INFO, "Initiate upload of file again");
 		//TODO: Implement
 	}

@@ -20,4 +20,5 @@ namespace fileObject {
 
 }
 }
+
 #endif  // EIPSCANNER_FILEOBJECTNONEXISTENTSTATE_H

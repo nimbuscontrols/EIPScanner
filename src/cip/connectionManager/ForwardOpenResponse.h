@@ -6,6 +6,7 @@
 #define EIPSCANNER_CIP_CONNECTIONMANAGER_FORWARDOPENRESPONSE_H
 
 #include <vector>
+
 #include "cip/Types.h"
 
 namespace eipScanner {

@@ -69,7 +69,7 @@ namespace eipScanner {
 		 * @brief Gets the current state of the file
 		 * @return
 		 */
-		std::unique_ptr<fileObject::FileObjectState>&  getState();
+		std::unique_ptr<fileObject::FileObjectState>& getState();
 
 		/**
 		 * @brief Initiates uploading the file from the EIP adapter

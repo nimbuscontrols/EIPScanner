@@ -21,6 +21,4 @@ namespace eip {
 }
 }
 
-
-
 #endif  // EIPSCANNER_ENCAPSPACKETFACTORY_H

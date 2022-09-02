@@ -6,6 +6,7 @@
 #define EIPSCANNER_MOCKS_H
 
 #include <gmock/gmock.h>
+
 #include "MessageRouter.h"
 
 class TMockMessageRouter : public eipScanner::MessageRouter {

@@ -33,4 +33,5 @@ namespace connectionManager {
 }
 }
 }
+
 #endif //EIPSCANNER_CIP_CONNECTIONPARAMETERS_H

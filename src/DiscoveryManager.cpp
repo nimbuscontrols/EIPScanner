@@ -1,6 +1,7 @@
 //
 // Created by Aleksey Timin on 12/17/19.
 //
+
 #include <system_error>
 
 #include "eip/EncapsPacketFactory.h"
@@ -48,7 +49,7 @@ namespace eipScanner {
 				CommonPacket commonPacket;
 				commonPacket.expand(std::vector<uint8_t>(data.begin()+EncapsPacket::HEADER_SIZE, data.end()));
 
-				for (int i=0; i < commonPacket.getItems().size(); ++i) {
+				for (size_t i = 0; i < commonPacket.getItems().size(); ++i) {
 					Buffer buffer(commonPacket.getItems()[i].getData());
 					CipUint ignore;
 					sockets::EndPoint socketAddr("", 0);
@@ -65,7 +66,7 @@ namespace eipScanner {
 						   >> revision >> status
 						   >> serialNumber >> productName;
 
-					IdentityObject identityObject(i);
+					IdentityObject identityObject(static_cast<cip::CipUint>(i));
 					identityObject.setVendorId(vendorId);
 					identityObject.setDeviceType(deviceType);
 					identityObject.setProductCode(productCode);
@@ -87,7 +88,7 @@ namespace eipScanner {
 	}
 
 	sockets::BaseSocket::SPtr DiscoveryManager::makeSocket() const {
-		auto socket =  std::make_shared<UDPSocket>(_broadCastAddress);
+		auto socket = std::make_shared<UDPSocket>(_broadCastAddress);
 		socket->setRecvTimeout(_receiveTimout);
 
 		int broadcast = 1;

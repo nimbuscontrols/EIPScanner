@@ -6,6 +6,7 @@
 #define EIPSCANNER_TEST_FILEOBJECT_MOCKS_H
 
 #include "../Mocks.h"
+
 #include "MessageRouter.h"
 #include "FileObject.h"
 #include "fileObject/FileObjectState.h"
@@ -36,4 +37,5 @@ namespace fileObject {
 
 }
 }
+
 #endif //EIPSCANNER_TEST_FILEOBJECT_MOCKS_H

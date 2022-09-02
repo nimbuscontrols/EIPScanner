@@ -79,13 +79,12 @@ namespace sockets {
 		_recvTimeout = recvTimeout;
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
-                uint32_t ms = recvTimeout.count();
+                auto ms = uint32_t(recvTimeout.count());
                 setsockopt(_sockedFd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&ms, sizeof ms);
 #else
                 timeval tv = makePortableInterval(recvTimeout);
                 setsockopt(_sockedFd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
 #endif
-
 	}
 
 	timeval BaseSocket::makePortableInterval(const std::chrono::milliseconds &recvTimeout) {
@@ -93,13 +92,13 @@ namespace sockets {
 
 #ifdef __APPLE__
 		.tv_sec = static_cast<__darwin_suseconds_t>(recvTimeout.count()/1000),
-		.tv_usec =  static_cast<__darwin_suseconds_t>((recvTimeout.count()%1000)*1000)
+		.tv_usec = static_cast<__darwin_suseconds_t>((recvTimeout.count()%1000)*1000)
 #elif __unix__
 		.tv_sec = static_cast<__time_t>(recvTimeout.count()/1000),
-		.tv_usec =  static_cast<__time_t>((recvTimeout.count()%1000)*1000)
+		.tv_usec = static_cast<__time_t>((recvTimeout.count()%1000)*1000)
 #elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 		.tv_sec = static_cast<long int>(recvTimeout.count()/1000),
-		.tv_usec =  static_cast<long int>((recvTimeout.count()%1000)*1000)
+		.tv_usec = static_cast<long int>((recvTimeout.count()%1000)*1000)
 #endif
 
 		};

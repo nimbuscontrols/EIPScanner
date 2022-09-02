@@ -5,9 +5,9 @@
 #ifndef EIPSCANNER_CIP_EPATH_H
 #define EIPSCANNER_CIP_EPATH_H
 
-#include <vector>
-#include <string>
 #include <cstdint>
+#include <string>
+#include <vector>
 
 #include "Types.h"
 
@@ -38,4 +38,5 @@ namespace cip {
 	};
 }
 }
+
 #endif  // EIPSCANNER_CIP_EPATH_H

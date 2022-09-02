@@ -10,6 +10,7 @@
 #elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 #include <winsock2.h>
 #endif
+
 #include <string>
 
 #define EIP_DEFAULT_EXPLICIT_PORT (uint16_t)(44818)
@@ -20,7 +21,7 @@ namespace sockets {
 
 	class EndPoint {
 	public:
-		EndPoint(std::string  host, int port);
+		EndPoint(std::string host, int port);
 		EndPoint(struct sockaddr_in& addr);
 
 		const std::string &getHost() const;

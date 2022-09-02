@@ -1,7 +1,9 @@
 //
 // Created by Aleksey Timin on 11/16/19.
 //
+
 #include <stdexcept>
+
 #include "utils/Buffer.h"
 #include "EPath.h"
 
@@ -9,7 +11,7 @@ namespace eipScanner {
 namespace cip {
 	using utils::Buffer;
 
-	enum class EPathSegmentTypes : CipUsint  {
+	enum class EPathSegmentTypes : CipUsint {
 		CLASS_8_BITS = 0x20,
 		CLASS_16_BITS = 0x21,
 		INSTANCE_8_BITS = 0x24,
@@ -132,7 +134,7 @@ namespace cip {
 		_attributeId = 0;
 		_size = 0;
 
-		for (int i = 0; i < data.size() && !buffer.empty(); ++i) {
+		for (size_t i = 0; i < data.size() && !buffer.empty(); ++i) {
 			EPathSegmentTypes segmentType;
 			CipUsint ignore = 0;
 			CipUsint byte;
