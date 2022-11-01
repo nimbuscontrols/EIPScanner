@@ -65,3 +65,7 @@ endif()
 if (TEST_ENABLED)
     add_subdirectory(test)
 endif()
+
+include(GNUInstallDirs)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/package.xml
+	DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME})
