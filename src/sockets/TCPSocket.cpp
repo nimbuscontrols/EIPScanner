@@ -120,7 +120,12 @@ namespace eipScanner {
 		void TCPSocket::Send(const std::vector<uint8_t> &data) const {
 			Logger(LogLevel::TRACE) << "Send " << data.size() << " bytes from TCP socket #" << _sockedFd << ".";
 
-			int count = send(_sockedFd, (char*)data.data(), data.size(), 0);
+			int flags = 0;
+#ifdef MSG_NOSIGNAL
+			// Do not generate SIGPIPE when calling send() on closed socket
+			flags |= MSG_NOSIGNAL;
+#endif
+			int count = send(_sockedFd, (char*)data.data(), data.size(), flags);
 			if (count < data.size()) {
 				throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 			}
