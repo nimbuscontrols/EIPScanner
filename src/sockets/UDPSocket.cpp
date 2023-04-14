@@ -34,6 +34,13 @@ namespace sockets {
 			throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 		}
 
+#ifdef SO_NOSIGPIPE
+		// Do not generate SIGPIPE for this socket
+		if (setsockopt(_sockedFd, SOL_SOCKET, SO_NOSIGPIPE, &(int){ 1 }, sizeof(int)) < 0) {
+			throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
+		}
+#endif
+
 		Logger(LogLevel::DEBUG) << "Opened UDP socket fd=" << _sockedFd;
 	}
 

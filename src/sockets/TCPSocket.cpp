@@ -36,6 +36,13 @@ namespace eipScanner {
 				throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 			}
 
+#ifdef SO_NOSIGPIPE
+			// Do not generate SIGPIPE for this socket
+			if (setsockopt(_sockedFd, SOL_SOCKET, SO_NOSIGPIPE, &(int){ 1 }, sizeof(int)) < 0) {
+				throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
+			}
+#endif
+
 			// Set non-blocking
 #if defined(__unix__) || defined(__APPLE__)
 			auto arg = fcntl(_sockedFd, F_GETFL, NULL);
