@@ -34,6 +34,13 @@ namespace sockets {
 			throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
 		}
 
+#ifdef SO_NOSIGPIPE
+		// Do not generate SIGPIPE for this socket
+		if (setsockopt(_sockedFd, SOL_SOCKET, SO_NOSIGPIPE, &(int){ 1 }, sizeof(int)) < 0) {
+			throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
+		}
+#endif
+
 		Logger(LogLevel::DEBUG) << "Opened UDP socket fd=" << _sockedFd;
 	}
 
@@ -46,8 +53,13 @@ namespace sockets {
 	void UDPSocket::Send(const std::vector <uint8_t> &data) const {
 		Logger(LogLevel::TRACE) << "Send " << data.size() << " bytes from UDP socket #" << _sockedFd << ".";
 
+		int flags = 0;
+#ifdef MSG_NOSIGNAL
+		// Do not generate SIGPIPE when calling send() on closed socket
+		flags |= MSG_NOSIGNAL;
+#endif
 		auto addr = _remoteEndPoint.getAddr();
-		int count = sendto(_sockedFd, (char*)data.data(), data.size(), 0,
+		int count = sendto(_sockedFd, (char*)data.data(), data.size(), flags,
 				(struct sockaddr *)&addr, sizeof(addr));
 		if (count < data.size()) {
 			throw std::system_error(BaseSocket::getLastError(), BaseSocket::getErrorCategory());
