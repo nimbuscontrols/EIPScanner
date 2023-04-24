@@ -66,10 +66,10 @@ set_target_properties(
 
 install(TARGETS EIPScanner EIPScannerS
         LIBRARY
-            DESTINATION lib
+            DESTINATION "${INSTALL_LIB_DIR}"
         ARCHIVE
-            DESTINATION lib)
+            DESTINATION "${INSTALL_LIB_DIR}")
 
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/
-        DESTINATION include/EIPScanner
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/src/"
+        DESTINATION "${INSTALL_INCLUDE_DIR}"
         FILES_MATCHING PATTERN "*.h*")

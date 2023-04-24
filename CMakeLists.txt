@@ -22,6 +22,41 @@ if (WIN32)
 	endif()
 endif()
 
+set(INSTALL_CMAKE_DIR share/EIPScanner/cmake CACHE PATH
+    "Installation directory for CMake files")
+# ... for the build tree
+set(INSTALL_INCLUDE_DIR include/EIPScanner CACHE PATH
+      "Installation directory for header files")
+# ... for the build tree
+set(INSTALL_LIB_DIR lib CACHE PATH
+      "Installation directory for header files")
+# Make relative paths absolute (needed later on)
+# foreach(p LIB BIN INCLUDE CMAKE)
+foreach(p LIB INCLUDE CMAKE)
+  set(var INSTALL_${p}_DIR)
+  if(NOT IS_ABSOLUTE "${${var}}")
+    set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
+  endif()
+endforeach()
+
+file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}"
+       "${INSTALL_INCLUDE_DIR}")
+set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
+configure_file(EIPScannerConfig.cmake.in
+  "${PROJECT_BINARY_DIR}/EIPScannerConfig.cmake" @ONLY)
+# ... for the install tree
+set(CONF_INCLUDE_DIRS "\${EIPScanner_CMAKE_DIR}/${REL_INCLUDE_DIR}")
+configure_file(EIPScannerConfig.cmake.in
+  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/EIPScannerConfig.cmake" @ONLY)
+# ... for both
+configure_file(EIPScannerConfigVersion.cmake.in
+  "${PROJECT_BINARY_DIR}/EIPScannerConfigVersion.cmake" @ONLY)
+# Install the EIPScannerConfig.cmake and EIPScannerConfigVersion.cmake
+install(FILES
+  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/EIPScannerConfig.cmake"
+  "${PROJECT_BINARY_DIR}/EIPScannerConfigVersion.cmake"
+  DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
+
 add_subdirectory(src)
 if (EXAMPLE_ENABLED)
     add_subdirectory(examples)
@@ -31,3 +66,6 @@ if (TEST_ENABLED)
     add_subdirectory(test)
 endif()
 
+include(GNUInstallDirs)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/package.xml
+	DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME})

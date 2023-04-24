@@ -1,0 +1,36 @@
+# - Config file for the EIPScanner package
+# It defines the following variables
+#  EIPScanner_INCLUDE_DIRS - include directories for EIPScanner
+#  EIPscanner_LIBRARIES    - libraries to link against
+#  EIPScanner_EXECUTABLE   - the executable
+
+# Compute paths
+get_filename_component(EIPScanner_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+
+set(_include_directories "@CONF_INCLUDE_DIRS@")
+if(NOT _include_directories STREQUAL "")
+  foreach(_include_dir ${_include_directories})
+    if(NOT IS_DIRECTORY "${_include_dir}")
+      message(WARNING "Package '@PROJECT_NAME@' exports the
+              include directory '${_include_dir}' which doesn't exist")
+    endif()
+    list(APPEND @PROJECT_NAME@_INCLUDE_DIRS "${_include_dir}")
+  endforeach()
+endif()
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+# include("${EIPSCANNER_CMAKE_DIR}/EIPScannerTargets.cmake")
+
+# These are IMPORTED targets created by FooBarTargets.cmake
+set(EIPScanner_LIBRARIES EIPScanner)
+
+set(_lib_dirs "@INSTALL_LIB_DIR@")
+if(NOT _lib_dirs STREQUAL "")
+  foreach(_lib_dir ${_lib_dirs})
+    if(NOT IS_DIRECTORY "${_lib_dir}")
+      message(WARNING "Package '@PROJECT_NAME@' exports the
+              include directory '${_lib_dir}' which doesn't exist")
+    endif()
+    list(APPEND @PROJECT_NAME@_LIBRARY_DIRS "${_lib_dir}")
+  endforeach()
+endif()
