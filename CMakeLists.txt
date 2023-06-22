@@ -5,7 +5,11 @@ set(EIPSCANNER_MINOR_VERSION 1)
 set(EIPSCANNER_PATCH_VERSION 0)
 set(EIPSCANNER_FULL_VERSION ${EIPSCANNER_MAJOR_VERSION}.${EIPSCANNER_MINOR_VERSION}.${EIPSCANNER_PATCH_VERSION})
 
-project(EIPScanner VERSION ${EIPSCANNER_FULL_VERSION})
+project(EIPScanner
+    VERSION ${EIPSCANNER_FULL_VERSION}
+    DESCRIPTION "Free implementation of EtherNet/IP in C++"
+    HOMEPAGE_URL "https://github.com/nimbuscontrols/EIPScanner"
+    )
 
 set(CMAKE_CXX_STANDARD 20)
 option(ENABLE_VENDOR_SRC "Enable vendor source" ON)
@@ -31,3 +35,8 @@ if (TEST_ENABLED)
     add_subdirectory(test)
 endif()
 
+
+configure_file(EIPScanner.pc.in EIPScanner.pc @ONLY)
+
+install(FILES ${CMAKE_BINARY_DIR}/EIPScanner.pc
+        DESTINATION lib/pkgconfig)
