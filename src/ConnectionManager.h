@@ -24,7 +24,7 @@ namespace eipScanner {
 		/**
 		 * @brief Default constructor
 		 */
-		ConnectionManager();
+		ConnectionManager(bool use_8_bit_path_segments=false);
 
 		/**
 		 * @note used fot testing

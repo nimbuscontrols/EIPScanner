@@ -34,8 +34,8 @@ namespace eipScanner {
 		FORWARD_CLOSE = 0x4E
 	};
 
-	ConnectionManager::ConnectionManager()
-		: ConnectionManager(std::make_shared<MessageRouter>()){
+	ConnectionManager::ConnectionManager(bool use_8_bit_path_segments)
+		: ConnectionManager(std::make_shared<MessageRouter>(use_8_bit_path_segments)){
 	}
 
 	ConnectionManager::ConnectionManager(const MessageRouter::SPtr& messageRouter)
