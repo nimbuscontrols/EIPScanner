@@ -1,13 +1,17 @@
 //
 // Created by Aleksey Timin on 11/16/19.
 //
-#include <stdexcept>
+
 #include "utils/Buffer.h"
+#include "utils/Logger.h"
 #include "EPath.h"
 
 namespace eipScanner {
 namespace cip {
+    using segments::ISegment;
 	using utils::Buffer;
+    using utils::Logger;
+    using utils::LogLevel;
 
 	enum class EPathSegmentTypes : CipUsint  {
 		CLASS_8_BITS = 0x20,
@@ -22,7 +26,8 @@ namespace cip {
 			: _classId{0}
 			, _objectId{0}
 			, _attributeId{0}
-			, _size{0}{
+			, _size{0}
+			, _segments{} {
 
 	}
 
@@ -30,7 +35,8 @@ namespace cip {
 		: _classId{classId}
 		, _objectId{0}
 		, _attributeId{0}
-		, _size{1} {
+		, _size{1}
+		, _segments{} {
 
 	}
 
@@ -38,7 +44,8 @@ namespace cip {
 			: _classId{classId}
 			, _objectId{objectId}
 			, _attributeId{0}
-			, _size{2} {
+			, _size{2}
+			, _segments{} {
 
 	}
 
@@ -46,10 +53,33 @@ namespace cip {
 			: _classId{classId}
 			, _objectId{objectId}
 			, _attributeId{attributeId}
-			, _size{3} {
+			, _size{3}
+			, _segments{} {
+
 	}
 
+    EPath::EPath(const std::vector<ISegment::SPtr> &segments)
+        : _classId{0}
+		, _objectId{0}
+		, _attributeId{0}
+		, _size{0}
+		, _segments{segments} {
+
+    }
+
 	std::vector<uint8_t> EPath::packPaddedPath(bool use_8_bit_path_segments) const {
+        if (!_segments.empty()) {
+
+            Buffer buffer;
+
+            // Append all encoded segment data together.
+            for (ISegment::SPtr segment : _segments) {
+                buffer << segment->data();
+            }
+
+            return buffer.data();
+        }
+
         if (use_8_bit_path_segments)
         {
             Buffer buffer(_size*2);
@@ -103,6 +133,16 @@ namespace cip {
 	}
 
 	CipUsint EPath::getSizeInWords(bool use_8_bit_path_segments) const {
+        if (!_segments.empty()) {
+            CipUsint size = 0;
+
+            for (ISegment::SPtr segment : _segments) {
+                size += segment->size();
+            }
+
+            return size / 2;
+        }
+
         if (use_8_bit_path_segments) {
             return _size;
         }
@@ -112,6 +152,19 @@ namespace cip {
 	}
 
 	std::string EPath::toString() const {
+        if (!_segments.empty()) {
+            std::stringstream stream;
+            stream << "[ ";
+
+            for (ISegment::SPtr segment : _segments) {
+                stream << "[header=0x" << std::hex << int(segment->getSegmentHeader()) << std::dec;
+                stream << ";value=" << segment->toString() << "]";
+            }
+
+            stream << " ]";
+            return stream.str();
+        }
+
 		std::string msg = "[classId=" + std::to_string(_classId);
 		if (_size > 1) {
 			msg += " objectId=" + std::to_string(_objectId);
@@ -125,6 +178,12 @@ namespace cip {
 	}
 
 	void EPath::expandPaddedPath(const std::vector<uint8_t> &data) {
+        if (!_segments.empty()) {
+            Logger(LogLevel::WARNING) << "EPath already contains a collection of segments!"
+                                         "Not expanding data!";
+            return;
+        }
+
 		Buffer buffer(data);
 
 		_classId = 0;
