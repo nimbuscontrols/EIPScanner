@@ -22,6 +22,13 @@ In order to compile and install the library, type from the project's root direct
    cmake ..
    cmake --build . --target install
 
+By default, this will build a static library. If a shared library is desired, add the following CMake option:
+
+::
+
+   cmake -DEIPScanner_SHARED_LIBS=ON ..
+
+
 Optionally, you can build the usage examples and the unit tests by adding the following CMake options:
 
 ::
@@ -56,7 +63,7 @@ First of all, we should create *CMakeLists.txt* with the following content:
 Pay attention to the last two lines. Currently, **EIPScanner** doesn't provide a cmake module to help to find
 the library on your machine and we have to do all manually. First, we point on the include directory whose path
 should be `path/were/eipscanner/is/installed/` + `EIPScanner`. Second, we link our executable file with the library 
-`EIPScanner`. If you'd like to use the static library instead, use `EIPScannerS` name.
+`EIPScanner`.
 
 Okay, we have *CMakeLists.txt*. Now we should create *main.cpp* and place there this code:
 
