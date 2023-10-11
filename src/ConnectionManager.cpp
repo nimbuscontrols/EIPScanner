@@ -138,14 +138,14 @@ namespace eipScanner {
 				sockAddrBuffer >> endPoint;
 
 				if (endPoint.getHost() == "0.0.0.0") {
-					ioConnection->_socket = std::make_unique<UDPSocket>(
+					ioConnection->_socket = std::make_unique<UDPBoundSocket>(
 							si->getRemoteEndPoint().getHost(), endPoint.getPort());
 				} else {
-					ioConnection->_socket = std::make_unique<UDPSocket>(endPoint);
+					ioConnection->_socket = std::make_unique<UDPBoundSocket>(endPoint);
 				}
 
 			} else {
-				ioConnection->_socket = std::make_unique<UDPSocket>(si->getRemoteEndPoint().getHost(), EIP_DEFAULT_IMPLICIT_PORT);
+				ioConnection->_socket = std::make_unique<UDPBoundSocket>(si->getRemoteEndPoint().getHost(), EIP_DEFAULT_IMPLICIT_PORT);
 			}
 
 			Logger(LogLevel::INFO) << "Open UDP socket to send data to "
