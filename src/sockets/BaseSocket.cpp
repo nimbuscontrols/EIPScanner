@@ -95,8 +95,8 @@ namespace sockets {
 		.tv_sec = static_cast<__darwin_suseconds_t>(recvTimeout.count()/1000),
 		.tv_usec =  static_cast<__darwin_suseconds_t>((recvTimeout.count()%1000)*1000)
 #elif __unix__
-		.tv_sec = static_cast<__time_t>(recvTimeout.count()/1000),
-		.tv_usec =  static_cast<__time_t>((recvTimeout.count()%1000)*1000)
+		.tv_sec = static_cast<time_t>(recvTimeout.count()/1000),
+		.tv_usec =  static_cast<time_t>((recvTimeout.count()%1000)*1000)
 #elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 		.tv_sec = static_cast<long int>(recvTimeout.count()/1000),
 		.tv_usec =  static_cast<long int>((recvTimeout.count()%1000)*1000)
