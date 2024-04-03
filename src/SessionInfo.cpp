@@ -8,6 +8,11 @@
 #include "utils/Logger.h"
 #include "eip/EncapsPacket.h"
 #include "eip/EncapsPacketFactory.h"
+#if defined (__unix__) || defined(__APPLE__)
+#include <unistd.h>
+#elif defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+#include <winsock2.h>
+#endif
 
 namespace eipScanner {
 
@@ -17,7 +22,7 @@ namespace eipScanner {
 	using eip::EncapsPacketFactory;
 	using eip::EncapsStatusCodes;
 
-	SessionInfo::SessionInfo(const std::string &host, int port, const std::chrono::milliseconds &timeout)
+	SessionInfo::SessionInfo(const std::string &host, int port, const std::chrono::milliseconds &timeout) try
 			: _socket{sockets::EndPoint(host, port), timeout}
 			, _sessionHandle{0} {
 		_socket.setRecvTimeout(timeout);
@@ -32,6 +37,20 @@ namespace eipScanner {
 
 		_sessionHandle = packet.getSessionHandle();
 		Logger(LogLevel::INFO) << "Registered session " << _sessionHandle;
+	}
+	catch (std::exception& e) {
+		int sockedFd = this->_socket.getSocketFd();
+		if (sockedFd > 0)
+		{
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
+			shutdown(sockedFd, SD_BOTH);
+			closesocket(sockedFd);
+#else
+			shutdown(sockedFd, SHUT_RDWR);
+			close(sockedFd);
+#endif
+		}
+		throw e;
 	}
 
 	SessionInfo::SessionInfo(const std::string &host, int port)
