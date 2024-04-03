@@ -17,9 +17,18 @@ namespace eipScanner {
 	using eip::EncapsPacketFactory;
 	using eip::EncapsStatusCodes;
 
+	SessionInfo::SessionInfo(const std::string &host, int port, const std::chrono::milliseconds &timeout, bool use_8_bit_path_segments) : SessionInfo(host, port, timeout) {
+		_use_8_bit_path_segments = use_8_bit_path_segments;
+	}
+
+	SessionInfo::SessionInfo(const std::string &host, int port, bool use_8_bit_path_segments) : SessionInfo(host, port, std::chrono::milliseconds(1000)) {
+		_use_8_bit_path_segments = use_8_bit_path_segments;
+	}
+
 	SessionInfo::SessionInfo(const std::string &host, int port, const std::chrono::milliseconds &timeout)
 			: _socket{sockets::EndPoint(host, port), timeout}
-			, _sessionHandle{0} {
+			, _sessionHandle{0}
+			, _use_8_bit_path_segments{false} {
 		_socket.setRecvTimeout(timeout);
 
 		EncapsPacket packet = EncapsPacketFactory().createRegisterSessionPacket();
@@ -35,7 +44,7 @@ namespace eipScanner {
 	}
 
 	SessionInfo::SessionInfo(const std::string &host, int port)
-			: SessionInfo(host, port, std::chrono::milliseconds(1000)) {
+			: SessionInfo(host, port, std::chrono::milliseconds(1000), false) {
 	}
 
 	SessionInfo::~SessionInfo() {
@@ -74,6 +83,10 @@ namespace eipScanner {
 
 	sockets::EndPoint SessionInfo::getRemoteEndPoint() const {
 		return _socket.getRemoteEndPoint();
+	}
+
+	bool SessionInfo::getUse8BitPathSegments() const {
+		return _use_8_bit_path_segments;
 	}
 
 }

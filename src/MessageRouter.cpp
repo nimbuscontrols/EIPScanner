@@ -22,9 +22,7 @@ namespace eipScanner {
 	using eip::EncapsPacket;
 	using eip::EncapsPacketFactory;
 
-	MessageRouter::MessageRouter(bool use_8_bit_path_segments) 
-    : _use_8_bit_path_segments(use_8_bit_path_segments)
-    {};
+	MessageRouter::MessageRouter() {};
 
 	MessageRouter::~MessageRouter() = default;
 
@@ -43,7 +41,7 @@ namespace eipScanner {
 		Logger(LogLevel::INFO) << "Send request: service=0x" << std::hex << static_cast<int>(service)
 							   << " epath=" << path.toString();
 
-		MessageRouterRequest request{service, path, data, _use_8_bit_path_segments};
+		MessageRouterRequest request{service, path, data, si->getUse8BitPathSegments()};
 
 		CommonPacketItemFactory commonPacketItemFactory;
 		CommonPacket commonPacket;

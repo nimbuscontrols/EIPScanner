@@ -21,13 +21,10 @@ namespace eipScanner {
 	class MessageRouter {
 	public:
 		using SPtr = std::shared_ptr<MessageRouter>;
-
-        static constexpr bool USE_8_BIT_PATH_SEGMENTS = true;
-
 		/**
 		 * @brief Default constructor
 		 */
-		MessageRouter(bool use_8_bit_path_segments=false);
+		MessageRouter();
 
 		/**
 		 * @brief Default destructor
@@ -73,9 +70,6 @@ namespace eipScanner {
 		 */
 		virtual cip::MessageRouterResponse sendRequest(SessionInfoIf::SPtr si, cip::CipUsint service,
 													   const cip::EPath& path) const;
-
-    private:
-        bool _use_8_bit_path_segments;
 	};
 }
 
