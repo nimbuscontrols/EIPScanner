@@ -43,6 +43,29 @@ namespace eipScanner {
 			}
 #endif
 
+			//once _sockedFd turns out to be a value not less than zero then
+			//we have to free it via a shutdown/close pair.  Normally the destructor
+			//for the TCPSocket object would do that; however if a throw happens in this
+			//constructor then the destructor isn't called. Therefore we need to cause
+			//cleanup to happen ourselves in that case.
+			class socket_scope_cleanup {
+			private:
+				bool should_cleanup = true;
+				TCPSocket* socket_;
+			public:
+				socket_scope_cleanup(TCPSocket* socket):socket_(socket){}
+				~socket_scope_cleanup() {
+					if(should_cleanup) {
+						Logger(LogLevel::DEBUG) << "Close TCP socket fd=" << _sockedFd;
+						socket_->Shutdown();
+						socket_->Close();
+					}
+				}
+				void do_not_cleanup() {
+					should_cleanup = false;
+				}
+			} socket_scope_cleanup_instance{this};
+
 			// Set non-blocking
 #if defined(__unix__) || defined(__APPLE__)
 			auto arg = fcntl(_sockedFd, F_GETFL, NULL);
