@@ -5,7 +5,7 @@
 #ifndef EIPSCANNER_CIP_SERVICES_H
 #define EIPSCANNER_CIP_SERVICES_H
 
-#include "Types.h"
+#include "src/cip/Types.h"
 
 namespace eipScanner {
 namespace cip {

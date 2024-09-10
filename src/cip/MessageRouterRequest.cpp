@@ -3,8 +3,9 @@
 //
 
 #include <utils/Buffer.h>
-#include "MessageRouterRequest.h"
-#include "EPath.h"
+
+#include "src/MessageRouterRequest.h"
+#include "src/EPath.h"
 
 namespace eipScanner {
 namespace cip {

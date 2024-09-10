@@ -8,9 +8,10 @@
 #include <cstdint>
 #include <vector>
 
-#include "GeneralStatusCodes.h"
-#include "Services.h"
-#include "eip/CommonPacketItem.h"
+#include "src/cip/GeneralStatusCodes.h"
+
+#include "src/Services.h"
+#include "src/eip/CommonPacketItem.h"
 
 namespace eipScanner {
 namespace cip {

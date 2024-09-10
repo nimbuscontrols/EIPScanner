@@ -36,7 +36,7 @@ if (TEST_ENABLED)
 endif()
 
 
-configure_file(EIPScanner.pc.in EIPScanner.pc @ONLY)
+# configure_file(EIPScanner.pc.in EIPScanner.pc @ONLY)
 
-install(FILES ${CMAKE_BINARY_DIR}/EIPScanner.pc
-        DESTINATION lib/pkgconfig)
+# install(FILES ${CMAKE_BINARY_DIR}/EIPScanner.pc
+#           DESTINATION lib/pkgconfig)

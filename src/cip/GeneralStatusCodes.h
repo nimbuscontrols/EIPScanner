@@ -5,7 +5,7 @@
 #ifndef EIPSCANNER_CIP_GENERALSTATUSCODES_H
 #define EIPSCANNER_CIP_GENERALSTATUSCODES_H
 
-#include "Types.h"
+#include "src/cip/Types.h"
 
 namespace eipScanner {
 namespace cip {

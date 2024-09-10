@@ -3,13 +3,14 @@
 #define OS_Windows (1)
 #endif
 
-#include "cip/Types.h"
 #include <functional>
 #include <sstream>
 #include <fstream>
 #include <cip/connectionManager/NetworkConnectionParams.h>
 #include "ConnectionManager.h"
 #include <DiscoveryManager.h>
+
+#include <EIPScanner/cip/Types.h>
 #include "FileObject.h"
 #include "fileObject/FileObjectState.h"
 #include "IdentityObject.h"

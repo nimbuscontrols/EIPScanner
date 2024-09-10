@@ -1,4 +1,7 @@
-include_directories("${PROJECT_SOURCE_DIR}/src")
+# include_directories("${PROJECT_SOURCE_DIR}/src")
+
+include_directories(/usr/local/include/EIPScanner)
+link_directories(/code/build/src)
 
 add_executable(explicit_messaging ExplicitMessagingExample.cpp)
 target_link_libraries(explicit_messaging EIPScanner)

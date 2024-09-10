@@ -8,8 +8,8 @@
 #include <cstdint>
 #include <vector>
 
-#include "Services.h"
-#include "EPath.h"
+#include "src/Services.h"
+#include "src/EPath.h"
 
 namespace eipScanner {
 namespace cip {
