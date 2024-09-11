@@ -7,9 +7,9 @@
 
 #include <vector>
 #include <functional>
-#include "DPIFaultObject.h"
-#include "SessionInfoIf.h"
-#include "DPIFaultParameter.h"
+#include "EIPScanner/vendor/ra/powerFlex525/DPIFaultObject.h"
+#include "EIPScanner/SessionInfoIf.h"
+#include "EIPScanner/vendor/ra/powerFlex525/DPIFaultParameter.h"
 
 namespace eipScanner {
 namespace vendor {

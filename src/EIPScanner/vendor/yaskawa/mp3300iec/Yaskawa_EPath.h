@@ -5,7 +5,7 @@
 #include <string>
 #include <cstdint>
 
-#include "cip/Types.h"
+#include "EIPScanner/cip/Types.h"
 
 
 namespace eipScanner {

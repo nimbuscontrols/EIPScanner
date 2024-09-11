@@ -2,11 +2,11 @@
 #define EIPSCANNER_YASKAWA_MESSAGEROUTER_H
 
 #include <memory>
-#include "Yaskawa_EPath.h"
-#include "cip/Services.h"
-#include "cip/MessageRouterResponse.h"
-#include "eip/CommonPacketItem.h"
-#include "SessionInfo.h"
+#include "EIPScanner/vendor/yaskawa/mp3300iec/Yaskawa_EPath.h"
+#include "EIPScanner/cip/Services.h"
+#include "EIPScanner/cip/MessageRouterResponse.h"
+#include "EIPScanner/eip/CommonPacketItem.h"
+#include "EIPScanner/SessionInfo.h"
 
 namespace eipScanner {
 	/**

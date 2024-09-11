@@ -8,9 +8,9 @@
 #endif
 
 #include <fstream>
-#include "FileObject.h"
-#include "utils/Logger.h"
-#include "fileObject/FileObjectState.h"
+#include <EIPScanner/FileObject.h>
+#include <EIPScanner/utils/Logger.h>
+#include <EIPScanner/fileObject/FileObjectState.h>
 
 using namespace eipScanner::cip;
 using eipScanner::SessionInfo;

@@ -1,14 +1,14 @@
 
 #include <cassert>
-#include "eip/EncapsPacketFactory.h"
-#include "utils/Buffer.h"
-#include "Yaskawa_MessageRouter.h"
-#include "Yaskawa_MessageRouterRequest.h"
-#include "cip/MessageRouterResponse.h"
-#include "eip/CommonPacketItemFactory.h"
-#include "eip/CommonPacket.h"
-#include "utils/Buffer.h"
-#include "utils/Logger.h"
+#include "EIPScanner/eip/EncapsPacketFactory.h"
+#include "EIPScanner/utils/Buffer.h"
+#include "EIPScanner/vendor/yaskawa/mp3300iec/Yaskawa_MessageRouter.h"
+#include "EIPScanner/vendor/yaskawa/mp3300iec/Yaskawa_MessageRouterRequest.h"
+#include "EIPScanner/cip/MessageRouterResponse.h"
+#include "EIPScanner/eip/CommonPacketItemFactory.h"
+#include "EIPScanner/eip/CommonPacket.h"
+#include "EIPScanner/utils/Buffer.h"
+#include "EIPScanner/utils/Logger.h"
 
 namespace eipScanner {
 	using namespace cip;

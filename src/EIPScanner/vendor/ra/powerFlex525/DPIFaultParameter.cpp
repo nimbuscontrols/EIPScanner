@@ -2,12 +2,12 @@
 // Created by James Roth on 12/19/19.
 //
 
-#include "DPIFaultParameter.h"
+#include "EIPScanner/vendor/ra/powerFlex525/DPIFaultParameter.h"
 
 #include <utility>
 
 
-#include "utils/Buffer.h"
+#include "EIPScanner/utils/Buffer.h"
 
 namespace eipScanner {
 namespace vendor {

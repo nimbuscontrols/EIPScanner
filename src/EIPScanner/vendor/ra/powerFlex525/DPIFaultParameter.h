@@ -5,12 +5,12 @@
 #ifndef EIPSCANNER_DPIFAULTPARAMETER_HPP
 #define EIPSCANNER_DPIFAULTPARAMETER_HPP
 
-#include "cip/CipString.h"
-#include "BaseObject.h"
-#include "SessionInfoIf.h"
-#include "MessageRouter.h"
-#include "ParameterObject.h"
-#include "DPIFaultCode.h"
+#include "EIPScanner/cip/CipString.h"
+#include "EIPScanner/BaseObject.h"
+#include "EIPScanner/SessionInfoIf.h"
+#include "EIPScanner/MessageRouter.h"
+#include "EIPScanner/ParameterObject.h"
+#include "EIPScanner/vendor/ra/powerFlex525/DPIFaultCode.h"
 
 namespace eipScanner {
 namespace vendor {

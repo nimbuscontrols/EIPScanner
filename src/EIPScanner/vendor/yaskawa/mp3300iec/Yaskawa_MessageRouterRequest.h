@@ -4,8 +4,8 @@
 #include <cstdint>
 #include <vector>
 
-#include "cip/Services.h"
-#include "Yaskawa_EPath.h"
+#include "EIPScanner/cip/Services.h"
+#include "EIPScanner/vendor/yaskawa/mp3300iec/Yaskawa_EPath.h"
 
 namespace eipScanner {
 namespace cip {

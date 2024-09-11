@@ -2,7 +2,7 @@
 // Created by James Roth on 12/18/19.
 //
 
-#include "DPIFaultCode.h"
+#include "EIPScanner/vendor/ra/powerFlex525/DPIFaultCode.h"
 
 
 namespace eipScanner {

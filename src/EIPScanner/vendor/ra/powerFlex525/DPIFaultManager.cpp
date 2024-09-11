@@ -2,9 +2,9 @@
 // Created by Aleksey Timin on 12/11/19.
 //
 
-#include "utils/Buffer.h"
-#include "utils/Logger.h"
-#include "DPIFaultManager.h"
+#include "EIPScanner/utils/Buffer.h"
+#include "EIPScanner/utils/Logger.h"
+#include "EIPScanner/vendor/ra/powerFlex525/DPIFaultManager.h"
 
 namespace eipScanner {
 namespace vendor {

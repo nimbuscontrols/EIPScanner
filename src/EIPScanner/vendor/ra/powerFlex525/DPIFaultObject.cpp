@@ -3,8 +3,8 @@
 //
 
 
-#include "DPIFaultObject.h"
-#include "utils/Buffer.h"
+#include "EIPScanner/vendor/ra/powerFlex525/DPIFaultObject.h"
+#include "EIPScanner/utils/Buffer.h"
 
 
 namespace eipScanner {

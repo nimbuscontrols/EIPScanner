@@ -1,6 +1,6 @@
-#include <utils/Buffer.h>
-#include "Yaskawa_MessageRouterRequest.h"
-#include "Yaskawa_EPath.h"
+#include "EIPScanner/utils/Buffer.h"
+#include "EIPScanner/vendor/yaskawa/mp3300iec/Yaskawa_MessageRouterRequest.h"
+#include "EIPScanner/vendor/yaskawa/mp3300iec/Yaskawa_EPath.h"
 
 namespace eipScanner {
 namespace cip {
