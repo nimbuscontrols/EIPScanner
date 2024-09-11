@@ -8,9 +8,9 @@
 #include <cstddef>
 #include <cstdint>
 #include <vector>
-#include "cip/CipString.h"
-#include "cip/CipRevision.h"
-#include "sockets/EndPoint.h"
+#include "src/cip/CipString.h"
+#include "src/cip/CipRevision.h"
+#include "src/sockets/EndPoint.h"
 
 namespace eipScanner {
 namespace utils {

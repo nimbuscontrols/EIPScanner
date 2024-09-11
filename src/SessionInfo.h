@@ -10,8 +10,8 @@
 #include <memory>
 #include <stdexcept>
 
-#include "SessionInfoIf.h"
-#include "sockets/TCPSocket.h"
+#include "src/SessionInfoIf.h"
+#include "src/sockets/TCPSocket.h"
 
 namespace eipScanner {
 	/**

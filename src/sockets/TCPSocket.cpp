@@ -15,9 +15,9 @@
 
 #include <fcntl.h>
 
-#include "utils/Logger.h"
-#include "TCPSocket.h"
-#include "Platform.h"
+#include "src/utils/Logger.h"
+#include "src/TCPSocket.h"
+#include "src/Platform.h"
 
 namespace eipScanner {
 	namespace sockets {

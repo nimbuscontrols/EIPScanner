@@ -5,12 +5,12 @@
 #ifndef EIPSCANNER_IDENTITYOBJECT_H
 #define EIPSCANNER_IDENTITYOBJECT_H
 
-#include "cip/CipString.h"
-#include "cip/CipRevision.h"
-#include "cip/Types.h"
-#include "SessionInfo.h"
-#include "MessageRouter.h"
-#include "BaseObject.h"
+#include "src/cip/CipString.h"
+#include "src/cip/CipRevision.h"
+#include "src/cip/Types.h"
+#include "src/SessionInfo.h"
+#include "src/MessageRouter.h"
+#include "src/BaseObject.h"
 
 namespace eipScanner {
 	/**

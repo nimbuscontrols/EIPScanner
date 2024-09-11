@@ -6,16 +6,16 @@
 #include <cstdlib>
 #include <random>
 
-#include "ConnectionManager.h"
-#include "eip/CommonPacket.h"
-#include "cip/connectionManager/ForwardOpenRequest.h"
-#include "cip/connectionManager/ForwardCloseRequest.h"
-#include "cip/connectionManager/LargeForwardOpenRequest.h"
-#include "cip/connectionManager/ForwardOpenResponse.h"
-#include "cip/connectionManager/NetworkConnectionParams.h"
-#include "cip/connectionManager/NetworkConnectionParametersBuilder.h"
-#include "utils/Logger.h"
-#include "utils/Buffer.h"
+#include "src/ConnectionManager.h"
+#include "src/eip/CommonPacket.h"
+#include "src/cip/connectionManager/ForwardOpenRequest.h"
+#include "src/cip/connectionManager/ForwardCloseRequest.h"
+#include "src/cip/connectionManager/LargeForwardOpenRequest.h"
+#include "src/cip/connectionManager/ForwardOpenResponse.h"
+#include "src/cip/connectionManager/NetworkConnectionParams.h"
+#include "src/cip/connectionManager/NetworkConnectionParametersBuilder.h"
+#include "src/utils/Logger.h"
+#include "src/utils/Buffer.h"
 
 namespace eipScanner {
 	using namespace cip::connectionManager;

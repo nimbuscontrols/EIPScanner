@@ -5,7 +5,7 @@
 #ifndef EIPSCANNER_FILEOBJECT_FILEOBJECTNONEXISTENTSTATE_H
 #define EIPSCANNER_FILEOBJECT_FILEOBJECTNONEXISTENTSTATE_H
 
-#include "FileObjectState.h"
+#include "src/FileObjectState.h"
 
 namespace eipScanner {
 namespace fileObject {

@@ -5,7 +5,7 @@
 #ifndef EIPSCANNER_BASEOBJECT_H
 #define EIPSCANNER_BASEOBJECT_H
 
-#include "cip/Types.h"
+#include "src/cip/Types.h"
 
 namespace eipScanner {
 	/**

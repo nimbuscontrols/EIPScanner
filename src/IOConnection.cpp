@@ -2,12 +2,12 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
-#include "IOConnection.h"
-#include "eip/CommonPacketItemFactory.h"
-#include "eip/CommonPacket.h"
-#include "cip/connectionManager/NetworkConnectionParams.h"
-#include "utils/Buffer.h"
-#include "utils/Logger.h"
+#include "src/IOConnection.h"
+#include "src/eip/CommonPacketItemFactory.h"
+#include "src/eip/CommonPacket.h"
+#include "src/cip/connectionManager/NetworkConnectionParams.h"
+#include "src/utils/Buffer.h"
+#include "src/utils/Logger.h"
 
 namespace eipScanner {
 	using utils::Logger;

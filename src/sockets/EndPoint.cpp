@@ -2,9 +2,9 @@
 // Created by Aleksey Timin on 12/10/19.
 //
 
-#include "EndPoint.h"
-#include "BaseSocket.h"
-#include "Platform.h"
+#include "src/EndPoint.h"
+#include "src/BaseSocket.h"
+#include "src/Platform.h"
 
 #if defined(__unix__) || defined(__APPLE__)
 #include <arpa/inet.h>

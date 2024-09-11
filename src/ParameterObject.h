@@ -7,9 +7,9 @@
 
 #include <cmath>
 #include <stdexcept>
-#include "MessageRouter.h"
-#include "utils/Buffer.h"
-#include "BaseObject.h"
+#include "src/MessageRouter.h"
+#include "src/utils/Buffer.h"
+#include "src/BaseObject.h"
 
 namespace eipScanner {
 

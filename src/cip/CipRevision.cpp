@@ -2,7 +2,8 @@
 // Created by Aleksey Timin on 12/8/19.
 //
 
-#include "CipRevision.h"
+#include "src/CipRevision.h"
+
 namespace eipScanner {
 namespace cip {
 

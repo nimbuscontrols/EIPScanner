@@ -2,11 +2,11 @@
 // Created by Aleksey Timin on 11/21/19.
 //
 #include <map>
-#include "FileObject.h"
-#include "fileObject/FileObjectState.h"
-#include "utils/Buffer.h"
-#include "utils/Logger.h"
-#include "cip/Services.h"
+#include "src/FileObject.h"
+#include "src/fileObject/FileObjectState.h"
+#include "src/utils/Buffer.h"
+#include "src/utils/Logger.h"
+#include "src/cip/Services.h"
 
 namespace eipScanner {
 	using utils::Buffer;

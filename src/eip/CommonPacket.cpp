@@ -2,9 +2,9 @@
 // Created by Aleksey Timin on 11/16/19.
 //
 #include <stdexcept>
-#include "CommonPacket.h"
-#include "utils/Buffer.h"
-#include "cip/Types.h"
+#include "src/CommonPacket.h"
+#include "src/utils/Buffer.h"
+#include "src/cip/Types.h"
 
 namespace eipScanner {
 namespace eip {

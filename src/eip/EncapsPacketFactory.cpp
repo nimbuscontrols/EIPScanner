@@ -2,8 +2,8 @@
 // Created by Aleksey Timin on 11/16/19.
 //
 
-#include <utils/Buffer.h>
-#include "EncapsPacketFactory.h"
+#include "src/utils/Buffer.h"
+#include "src/EncapsPacketFactory.h"
 
 namespace eipScanner {
 namespace eip {

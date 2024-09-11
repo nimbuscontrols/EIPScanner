@@ -2,8 +2,8 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
-#include "ForwardOpenResponse.h"
-#include "utils/Buffer.h"
+#include "src/ForwardOpenResponse.h"
+#include "src/utils/Buffer.h"
 
 namespace eipScanner {
 namespace cip {

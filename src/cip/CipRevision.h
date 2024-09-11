@@ -6,7 +6,7 @@
 #define EIPSCANNER_CIP_CIPREVISION_H
 
 #include <string>
-#include "Types.h"
+#include "src/Types.h"
 
 namespace eipScanner {
 namespace cip {

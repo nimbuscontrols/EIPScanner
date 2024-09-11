@@ -2,8 +2,8 @@
 // Created by Aleksey Timin on 12/8/19.
 //
 
-#include "IdentityObject.h"
-#include "utils/Buffer.h"
+#include "src/IdentityObject.h"
+#include "src/utils/Buffer.h"
 
 namespace eipScanner {
 	using namespace cip;

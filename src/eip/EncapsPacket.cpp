@@ -4,8 +4,8 @@
 
 #include <string>
 #include <stdexcept>
-#include "EncapsPacket.h"
-#include "utils/Buffer.h"
+#include "src/EncapsPacket.h"
+#include "src/utils/Buffer.h"
 
 using eipScanner::utils::Buffer;
 

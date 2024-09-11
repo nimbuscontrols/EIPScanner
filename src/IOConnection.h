@@ -8,8 +8,8 @@
 #include <memory>
 #include <vector>
 #include <functional>
-#include "cip/Types.h"
-#include "sockets/UDPSocket.h"
+#include "src/cip/Types.h"
+#include "src/sockets/UDPSocket.h"
 
 namespace eipScanner {
 	class ConnectionManager;

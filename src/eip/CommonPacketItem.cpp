@@ -2,8 +2,8 @@
 // Created by Aleksey Timin on 11/16/19.
 //
 
-#include "utils/Buffer.h"
-#include "CommonPacketItem.h"
+#include "src/utils/Buffer.h"
+#include "src/CommonPacketItem.h"
 
 namespace eipScanner {
 namespace eip {

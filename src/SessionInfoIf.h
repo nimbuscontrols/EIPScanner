@@ -6,8 +6,8 @@
 #define EIPSCANNER_SESSIONINFOIF_H
 
 #include <memory>
-#include "eip/EncapsPacket.h"
-#include "sockets/EndPoint.h"
+#include "src/eip/EncapsPacket.h"
+#include "src/sockets/EndPoint.h"
 
 namespace eipScanner {
 	/**

@@ -2,7 +2,7 @@
 // Created by Aleksey Timin on 11/23/19.
 //
 
-#include "FileObjectNonExistentState.h"
+#include "src/FileObjectNonExistentState.h"
 
 namespace eipScanner {
 namespace fileObject {

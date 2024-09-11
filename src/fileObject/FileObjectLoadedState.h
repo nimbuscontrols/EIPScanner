@@ -5,7 +5,7 @@
 #ifndef EIPSCANNER_FILEOBJECT_FILEOBJECTLOADEDSTATE_H
 #define EIPSCANNER_FILEOBJECT_FILEOBJECTLOADEDSTATE_H
 
-#include "FileObjectState.h"
+#include "src/FileObjectState.h"
 
 namespace eipScanner {
 namespace fileObject {

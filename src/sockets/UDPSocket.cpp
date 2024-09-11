@@ -12,9 +12,9 @@
 #include <ws2tcpip.h>
 #endif
 
-#include "utils/Logger.h"
-#include "UDPSocket.h"
-#include "Platform.h"
+#include "src/utils/Logger.h"
+#include "src/UDPSocket.h"
+#include "src/Platform.h"
 
 namespace eipScanner {
 namespace sockets {

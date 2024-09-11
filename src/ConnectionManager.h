@@ -6,12 +6,12 @@
 #define EIPSCANNER_CONNECTIONMANAGER_H
 
 #include <map>
-#include "MessageRouter.h"
-#include "IOConnection.h"
-#include "cip/connectionManager/ConnectionParameters.h"
-#include "cip/Services.h"
-#include "cip/Types.h"
-#include "sockets/UDPBoundSocket.h"
+#include "src/MessageRouter.h"
+#include "src/IOConnection.h"
+#include "src/cip/connectionManager/ConnectionParameters.h"
+#include "src/cip/Services.h"
+#include "src/cip/Types.h"
+#include "src/sockets/UDPBoundSocket.h"
 
 namespace eipScanner {
 	/**

@@ -2,7 +2,7 @@
 // Created by Aleksey Timin on 12/9/19.
 //
 
-#include "BaseObject.h"
+#include "src/BaseObject.h"
 
 namespace eipScanner {
 

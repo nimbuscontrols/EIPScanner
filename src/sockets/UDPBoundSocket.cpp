@@ -6,8 +6,8 @@
 //#include <sys/socket.h>
 //#include <netinet/in.h>
 
-#include "UDPBoundSocket.h"
-#include "Platform.h"
+#include "src/UDPBoundSocket.h"
+#include "src/Platform.h"
 
 namespace eipScanner {
 namespace sockets {

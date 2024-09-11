@@ -9,7 +9,7 @@
 #include <string>
 #include <cstdint>
 
-#include "Types.h"
+#include "src/Types.h"
 
 namespace eipScanner {
 namespace cip {

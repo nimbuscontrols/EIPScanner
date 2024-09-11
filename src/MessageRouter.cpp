@@ -3,15 +3,15 @@
 //
 
 #include <cassert>
-#include "eip/EncapsPacketFactory.h"
-#include "utils/Buffer.h"
-#include "MessageRouter.h"
-#include "cip/MessageRouterRequest.h"
-#include "cip/MessageRouterResponse.h"
-#include "eip/CommonPacketItemFactory.h"
-#include "eip/CommonPacket.h"
-#include "utils/Buffer.h"
-#include "utils/Logger.h"
+#include "src/eip/EncapsPacketFactory.h"
+#include "src/utils/Buffer.h"
+#include "src/MessageRouter.h"
+#include "src/cip/MessageRouterRequest.h"
+#include "src/cip/MessageRouterResponse.h"
+#include "src/eip/CommonPacketItemFactory.h"
+#include "src/eip/CommonPacket.h"
+#include "src/utils/Buffer.h"
+#include "src/utils/Logger.h"
 
 namespace eipScanner {
 	using namespace cip;

@@ -13,7 +13,7 @@
 #include <memory>
 #include <system_error>
 
-#include "EndPoint.h"
+#include "src/EndPoint.h"
 
 namespace eipScanner {
 namespace sockets {

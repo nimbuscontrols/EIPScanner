@@ -2,7 +2,7 @@
 // Created by Stefan Broekman on 02/04/21.
 //
 
-#include "Platform.h"
+#include "src/Platform.h"
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64)
 #include <windows.h>

@@ -6,11 +6,11 @@
 #define EIPSCANNER_MESSAGEROUTER_H
 
 #include <memory>
-#include "cip/EPath.h"
-#include "cip/Services.h"
-#include "cip/MessageRouterResponse.h"
-#include "eip/CommonPacketItem.h"
-#include "SessionInfo.h"
+#include "src/cip/EPath.h"
+#include "src/cip/Services.h"
+#include "src/cip/MessageRouterResponse.h"
+#include "src/eip/CommonPacketItem.h"
+#include "src/SessionInfo.h"
 
 namespace eipScanner {
 	/**

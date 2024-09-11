@@ -3,13 +3,13 @@
 //
 #include <system_error>
 
-#include "eip/EncapsPacketFactory.h"
-#include "eip/CommonPacket.h"
-#include "sockets/UDPSocket.h"
-#include "utils/Logger.h"
-#include "utils/Buffer.h"
+#include "src/eip/EncapsPacketFactory.h"
+#include "src/eip/CommonPacket.h"
+#include "src/sockets/UDPSocket.h"
+#include "src/utils/Logger.h"
+#include "src/utils/Buffer.h"
 
-#include "DiscoveryManager.h"
+#include "src/DiscoveryManager.h"
 
 namespace eipScanner {
 	using namespace cip;

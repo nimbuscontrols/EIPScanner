@@ -4,7 +4,7 @@
 #include <iostream>
 #include <map>
 
-#include "Logger.h"
+#include "src/Logger.h"
 
 namespace eipScanner {
 namespace utils {

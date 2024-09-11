@@ -7,10 +7,10 @@
 
 #include <stdexcept>
 
-#include "cip/Types.h"
-#include "cip/GeneralStatusCodes.h"
-#include "MessageRouter.h"
-#include "BaseObject.h"
+#include "src/cip/Types.h"
+#include "src/cip/GeneralStatusCodes.h"
+#include "src/MessageRouter.h"
+#include "src/BaseObject.h"
 
 namespace eipScanner {
 	namespace fileObject {

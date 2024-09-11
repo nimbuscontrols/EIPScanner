@@ -6,11 +6,11 @@
 #define EIPSCANNER_FILEOBJECT_FILEOBJECTSTATE_H
 
 #include <memory>
-#include "SessionInfo.h"
-#include "MessageRouter.h"
-#include "FileObject.h"
-#include "cip/GeneralStatusCodes.h"
-#include "utils/Logger.h"
+#include "src/SessionInfo.h"
+#include "src/MessageRouter.h"
+#include "src/FileObject.h"
+#include "src/cip/GeneralStatusCodes.h"
+#include "src/utils/Logger.h"
 
 namespace eipScanner {
 namespace fileObject {

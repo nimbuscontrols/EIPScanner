@@ -2,11 +2,11 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
-#include "ForwardOpenRequest.h"
+#include "src/ForwardOpenRequest.h"
 
 #include <utility>
 #include <assert.h>
-#include "utils/Buffer.h"
+#include "src/utils/Buffer.h"
 
 namespace eipScanner {
 namespace cip {

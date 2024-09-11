@@ -5,8 +5,8 @@
 #ifndef EIPSCANNER_DISCOVERYMANAGER_H
 #define EIPSCANNER_DISCOVERYMANAGER_H
 
-#include "IdentityObject.h"
-#include "sockets/Platform.h"
+#include "src/IdentityObject.h"
+#include "src/sockets/Platform.h"
 
 #if defined (__unix__) || defined(__APPLE__)
 #define DISCOVERY_SOCKET_RECEIVE_END_ERROR_CODE (EIPSCANNER_SOCKET_ERROR(EAGAIN))

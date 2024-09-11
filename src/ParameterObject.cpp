@@ -2,9 +2,9 @@
 // Created by Aleksey Timin on 12/4/19.
 //
 
-#include "ParameterObject.h"
-#include "utils/Buffer.h"
-#include "utils/Logger.h"
+#include "src/ParameterObject.h"
+#include "src/utils/Buffer.h"
+#include "src/utils/Logger.h"
 
 namespace eipScanner {
 	using utils::Buffer;

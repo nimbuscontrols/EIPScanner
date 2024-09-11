@@ -9,8 +9,7 @@
 #include <cstdint>
 #include <vector>
 
-#include "cip/Types.h"
-#include <vector>
+#include "src/cip/Types.h"
 
 namespace eipScanner {
 namespace eip {

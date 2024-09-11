@@ -2,8 +2,8 @@
 // Created by Aleksey Timin on 11/16/19.
 //
 #include <stdexcept>
-#include "utils/Buffer.h"
-#include "EPath.h"
+#include "src/utils/Buffer.h"
+#include "src/EPath.h"
 
 namespace eipScanner {
 namespace cip {

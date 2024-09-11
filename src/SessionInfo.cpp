@@ -4,10 +4,10 @@
 
 
 
-#include "SessionInfo.h"
-#include "utils/Logger.h"
-#include "eip/EncapsPacket.h"
-#include "eip/EncapsPacketFactory.h"
+#include "src/SessionInfo.h"
+#include "src/utils/Logger.h"
+#include "src/eip/EncapsPacket.h"
+#include "src/eip/EncapsPacketFactory.h"
 
 namespace eipScanner {
 

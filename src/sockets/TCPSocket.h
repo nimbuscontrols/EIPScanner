@@ -7,7 +7,7 @@
 
 #include <vector>
 #include <chrono>
-#include "BaseSocket.h"
+#include "src/BaseSocket.h"
 
 namespace eipScanner {
 namespace sockets {
