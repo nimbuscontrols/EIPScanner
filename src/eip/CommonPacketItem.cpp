@@ -3,7 +3,7 @@
 //
 
 #include "src/utils/Buffer.h"
-#include "src/CommonPacketItem.h"
+#include "src/eip/CommonPacketItem.h"
 
 namespace eipScanner {
 namespace eip {

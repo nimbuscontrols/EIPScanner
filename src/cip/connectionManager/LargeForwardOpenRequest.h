@@ -6,7 +6,7 @@
 #define EIPSCANNER_CIP_CONNECTIONMANAGER_LARGEFORWARDOPENREQUEST_H
 
 #include <vector>
-#include "src/ConnectionParameters.h"
+#include "src/cip/connectionManager/ConnectionParameters.h"
 
 namespace eipScanner {
 namespace cip {

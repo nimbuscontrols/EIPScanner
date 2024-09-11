@@ -2,7 +2,7 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
-#include "src/ForwardOpenRequest.h"
+#include "src/cip/connectionManager/ForwardOpenRequest.h"
 
 #include <utility>
 #include <assert.h>

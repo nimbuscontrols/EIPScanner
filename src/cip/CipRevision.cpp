@@ -2,7 +2,7 @@
 // Created by Aleksey Timin on 12/8/19.
 //
 
-#include "src/CipRevision.h"
+#include "src/cip/CipRevision.h"
 
 namespace eipScanner {
 namespace cip {

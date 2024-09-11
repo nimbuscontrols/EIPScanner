@@ -3,12 +3,12 @@
 //
 
 #include <map>
-#include "src/FileObjectState.h"
+#include "src/fileObject/FileObjectState.h"
 #include "src/utils/Buffer.h"
-#include "src/FileObjectNonExistentState.h"
-#include "src/FileObjectEmptyState.h"
-#include "src/FileObjectLoadedState.h"
-#include "src/FileObjectUploadInProgressState.h"
+#include "src/fileObject/FileObjectNonExistentState.h"
+#include "src/fileObject/FileObjectEmptyState.h"
+#include "src/fileObject/FileObjectLoadedState.h"
+#include "src/fileObject/FileObjectUploadInProgressState.h"
 
 namespace eipScanner {
 namespace fileObject {

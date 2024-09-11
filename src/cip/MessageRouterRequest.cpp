@@ -2,10 +2,10 @@
 // Created by Aleksey Timin on 11/16/19.
 //
 
-#include <utils/Buffer.h>
+#include "src/utils/Buffer.h"
 
-#include "src/MessageRouterRequest.h"
-#include "src/EPath.h"
+#include "src/cip/MessageRouterRequest.h"
+#include "src/cip/EPath.h"
 
 namespace eipScanner {
 namespace cip {

@@ -14,8 +14,8 @@
 #include <utility>
 #include <algorithm>
 
-#include "src/BaseSocket.h"
-#include "src/Platform.h"
+#include "src/sockets/BaseSocket.h"
+#include "src/sockets/Platform.h"
 
 namespace eipScanner {
 namespace sockets {

@@ -1,7 +1,7 @@
 //
 // Created by Aleksey Timin on 11/19/19.
 //
-#include "src/ForwardCloseRequest.h"
+#include "src/cip/connectionManager/ForwardCloseRequest.h"
 #include "src/utils/Buffer.h"
 
 namespace eipScanner {

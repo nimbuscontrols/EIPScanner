@@ -2,7 +2,7 @@
 // Created by flipback on 11/16/19.
 //
 
-#include "src/Buffer.h"
+#include "src/utils/Buffer.h"
 
 namespace eipScanner {
 namespace utils {

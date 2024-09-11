@@ -9,7 +9,7 @@
 #include <chrono>
 #include <memory>
 //#include <netinet/in.h>
-#include "src/UDPSocket.h"
+#include "src/sockets/UDPSocket.h"
 
 namespace eipScanner {
 namespace sockets {

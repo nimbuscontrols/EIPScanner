@@ -2,7 +2,7 @@
 // Created by Vincent Prince on 05/22/20.
 //
 
-#include "NetworkConnectionParametersBuilder.h"
+#include "src/cip/connectionManager/NetworkConnectionParametersBuilder.h"
 
 #include <utility>
 #include <assert.h>

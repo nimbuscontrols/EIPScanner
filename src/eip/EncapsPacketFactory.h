@@ -5,7 +5,7 @@
 #ifndef EIPSCANNER_EIP_ENCAPSPACKETFACTORY_H
 #define EIPSCANNER_EIP_ENCAPSPACKETFACTORY_H
 
-#include "src/EncapsPacket.h"
+#include "src/eip/EncapsPacket.h"
 #include "src/cip/Types.h"
 
 namespace eipScanner {

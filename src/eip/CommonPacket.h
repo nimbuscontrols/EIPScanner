@@ -5,7 +5,7 @@
 #ifndef EIPSCANNER_EIP_COMMONPACKET_H
 #define EIPSCANNER_EIP_COMMONPACKET_H
 
-#include "src/CommonPacketItem.h"
+#include "src/eip/CommonPacketItem.h"
 
 namespace eipScanner {
 namespace eip {

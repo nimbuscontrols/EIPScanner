@@ -13,8 +13,8 @@
 #endif
 
 #include "src/utils/Logger.h"
-#include "src/UDPSocket.h"
-#include "src/Platform.h"
+#include "src/sockets/UDPSocket.h"
+#include "src/sockets/Platform.h"
 
 namespace eipScanner {
 namespace sockets {

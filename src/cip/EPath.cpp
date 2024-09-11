@@ -3,7 +3,7 @@
 //
 #include <stdexcept>
 #include "src/utils/Buffer.h"
-#include "src/EPath.h"
+#include "src/cip/EPath.h"
 
 namespace eipScanner {
 namespace cip {

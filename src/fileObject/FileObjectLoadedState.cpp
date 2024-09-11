@@ -2,8 +2,8 @@
 // Created by Aleksey Timin on 11/23/19.
 //
 
-#include "src/FileObjectLoadedState.h"
-#include "src/FileObjectUploadInProgressState.h"
+#include "src/fileObject/FileObjectLoadedState.h"
+#include "src/fileObject/FileObjectUploadInProgressState.h"
 #include "src/utils/Buffer.h"
 
 namespace eipScanner {

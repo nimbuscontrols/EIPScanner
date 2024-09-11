@@ -3,7 +3,7 @@
 //
 
 #include "src/utils/Buffer.h"
-#include "src/EncapsPacketFactory.h"
+#include "src/eip/EncapsPacketFactory.h"
 
 namespace eipScanner {
 namespace eip {

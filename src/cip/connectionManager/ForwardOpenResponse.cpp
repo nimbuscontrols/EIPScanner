@@ -2,7 +2,7 @@
 // Created by Aleksey Timin on 11/18/19.
 //
 
-#include "src/ForwardOpenResponse.h"
+#include "src/cip/connectionManager/ForwardOpenResponse.h"
 #include "src/utils/Buffer.h"
 
 namespace eipScanner {

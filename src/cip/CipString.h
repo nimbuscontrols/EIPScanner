@@ -9,7 +9,7 @@
 #include <iterator>
 #include <string>
 #include <vector>
-#include "src/Types.h"
+#include "src/cip/Types.h"
 
 namespace eipScanner {
 namespace cip {

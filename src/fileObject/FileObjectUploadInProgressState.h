@@ -7,7 +7,7 @@
 
 #include <stdexcept>
 
-#include "src/FileObjectState.h"
+#include "src/fileObject/FileObjectState.h"
 #include "src/cip/Types.h"
 
 namespace eipScanner {

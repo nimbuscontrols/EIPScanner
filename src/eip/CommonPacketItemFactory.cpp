@@ -2,7 +2,7 @@
 // Created by Aleksey Timin on 11/16/19.
 //
 
-#include "src/CommonPacketItemFactory.h"
+#include "src/eip/CommonPacketItemFactory.h"
 #include "src/utils/Buffer.h"
 
 namespace eipScanner {

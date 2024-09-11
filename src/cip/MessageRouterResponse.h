@@ -10,7 +10,7 @@
 
 #include "src/cip/GeneralStatusCodes.h"
 
-#include "src/Services.h"
+#include "src/cip/Services.h"
 #include "src/eip/CommonPacketItem.h"
 
 namespace eipScanner {

@@ -2,7 +2,7 @@
 // Created by Aleksey Timin on 11/23/19.
 //
 
-#include "src/FileObjectEmptyState.h"
+#include "src/fileObject/FileObjectEmptyState.h"
 namespace eipScanner {
 namespace fileObject {
 	using utils::LogLevel;
