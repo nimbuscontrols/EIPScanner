@@ -3,8 +3,8 @@
 //
 
 #include <gtest/gtest.h>
-#include "eip/CommonPacketItem.h"
-#include "eip/CommonPacketItemFactory.h"
+#include "EIPScanner/eip/CommonPacketItem.h"
+#include "EIPScanner/eip/CommonPacketItemFactory.h"
 
 using eipScanner::eip::CommonPacketItem;
 using eipScanner::eip::CommonPacketItemFactory;

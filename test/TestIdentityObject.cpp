@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 #include "Mocks.h"
-#include "IdentityObject.h"
+#include "EIPScanner/IdentityObject.h"
 
 using namespace eipScanner;
 

@@ -2,8 +2,8 @@
 // Created by Aleksey Timin on 11/16/19.
 //
 #include <gtest/gtest.h>
-#include "eip/EncapsPacketFactory.h"
-#include "eip/EncapsPacket.h"
+#include "EIPScanner/eip/EncapsPacketFactory.h"
+#include "EIPScanner/eip/EncapsPacket.h"
 
 using eipScanner::eip::EncapsPacket;
 using eipScanner::eip::EncapsPacketFactory;
