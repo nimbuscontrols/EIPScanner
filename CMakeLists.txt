@@ -26,9 +26,11 @@ if (WIN32)
 	endif()
 endif()
 
-# TODO: Change the file structure so that every folder isn't included in the include directories
-include_directories(${PROJECT_SOURCE_DIR})
-add_subdirectory(src)
+# Setup the include structure so that every file is based off of the root of the project
+include_directories(src)
+
+# Actually add the source files for the project
+add_subdirectory(src/${CMAKE_PROJECT_NAME})
 
 if (EXAMPLE_ENABLED)
     add_subdirectory(examples)
