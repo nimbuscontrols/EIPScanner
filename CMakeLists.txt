@@ -26,7 +26,10 @@ if (WIN32)
 	endif()
 endif()
 
+# TODO: Change the file structure so that every folder isn't included in the include directories
+include_directories(${PROJECT_SOURCE_DIR})
 add_subdirectory(src)
+
 if (EXAMPLE_ENABLED)
     add_subdirectory(examples)
 endif()
@@ -36,7 +39,6 @@ if (TEST_ENABLED)
 endif()
 
 
-# configure_file(EIPScanner.pc.in EIPScanner.pc @ONLY)
+configure_file(EIPScanner.pc.in EIPScanner.pc @ONLY)
 
-# install(FILES ${CMAKE_BINARY_DIR}/EIPScanner.pc
-#           DESTINATION lib/pkgconfig)
+install(FILES ${CMAKE_BINARY_DIR}/EIPScanner.pc DESTINATION lib/pkgconfig)
