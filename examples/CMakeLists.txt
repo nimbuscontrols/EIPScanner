@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 
 # Remember to update the LIBRARY_PATH and LD_LIBRARY_PATH environment variables
-#   to the /usr/local/include/
-#   and   /usr/local/lib
+#   * export LIBRARY_PATH=/usr/local/include/
+#   * export LD_LIBRARY_PATH=/usr/local/lib/
 
 add_executable(explicit_messaging ExplicitMessagingExample.cpp)
 target_link_libraries(explicit_messaging PUBLIC EIPScanner)

@@ -14,7 +14,7 @@ project(EIPScanner
 set(CMAKE_CXX_STANDARD 20)
 option(ENABLE_VENDOR_SRC "Enable vendor source" ON)
 option(TEST_ENABLED "Enable unit test" OFF)
-option(EXAMPLE_ENABLED "Build examples" OFF)
+option(EXAMPLE_ENABLED "Build examples" ON)
 
 if (WIN32)
 	# Needed on MinGW with GCC 10 or lower
@@ -33,7 +33,16 @@ include_directories(src)
 add_subdirectory(src/${CMAKE_PROJECT_NAME})
 
 if (EXAMPLE_ENABLED)
-    add_subdirectory(examples)
+    set(EXAMPLES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/examples)
+
+    # Create the build directory if it doesn't exist
+    file(MAKE_DIRECTORY ${EXAMPLES_DIR}/build)
+    
+    # Run the other CMakeLists.txt file without any dependencies on this file
+    execute_process(COMMAND ${CMAKE_COMMAND} ${EXAMPLES_DIR} WORKING_DIRECTORY ${EXAMPLES_DIR}/build)
+
+    # Execute code during a `cmake --build` command
+    add_custom_target(EXAMPLES_TARGETS ALL COMMAND ${CMAKE_COMMAND} --build ${EXAMPLES_DIR}/build WORKING_DIRECTORY ${EXAMPLES_DIR}/build COMMENT "Building the examples sub-project")
 endif()
 
 if (TEST_ENABLED)
