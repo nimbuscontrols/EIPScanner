@@ -6,10 +6,10 @@
 #define EIPSCANNER_TEST_FILEOBJECT_MOCKS_H
 
 #include "../Mocks.h"
-#include "MessageRouter.h"
-#include "FileObject.h"
-#include "fileObject/FileObjectState.h"
-#include "utils/Buffer.h"
+#include "EIPScanner/MessageRouter.h"
+#include "EIPScanner/FileObject.h"
+#include "EIPScanner/fileObject/FileObjectState.h"
+#include "EIPScanner/utils/Buffer.h"
 
 namespace eipScanner {
 namespace fileObject {

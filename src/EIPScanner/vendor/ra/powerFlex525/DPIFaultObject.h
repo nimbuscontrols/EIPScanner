@@ -7,10 +7,10 @@
 
 #include <stdexcept>
 
-#include "cip/CipString.h"
-#include "BaseObject.h"
-#include "SessionInfoIf.h"
-#include "MessageRouter.h"
+#include "EIPScanner/cip/CipString.h"
+#include "EIPScanner/BaseObject.h"
+#include "EIPScanner/SessionInfoIf.h"
+#include "EIPScanner/MessageRouter.h"
 
 namespace eipScanner {
 namespace vendor {
