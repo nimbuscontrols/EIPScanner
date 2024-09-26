@@ -1,12 +1,9 @@
 set(SOURCE_FILES 
-        FileObjectEmptyState.cpp
-        FileObjectLoadedState.cpp
-        FileObjectNonExistentState.cpp
-        FileObjectState.cpp
-        FileObjectUploadInProgressState.cpp)
-
-add_library(EIPScannerFileObject SHARED ${SOURCE_FILES})
-add_library(EIPScannerFileObjectS STATIC ${SOURCE_FILES})
-
-target_link_libraries(EIPScannerFileObject EIPScanner)
-target_link_libraries(EIPScannerFileObjectS EIPScannerS)
+        ${CMAKE_CURRENT_LIST_DIR}/FileObjectEmptyState.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/FileObjectLoadedState.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/FileObjectNonExistentState.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/FileObjectState.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/FileObjectUploadInProgressState.cpp)
+        
+target_sources(EIPScanner PUBLIC ${SOURCE_FILES})
+target_sources(EIPScannerS PUBLIC ${SOURCE_FILES})

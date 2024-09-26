@@ -1,9 +1,7 @@
 set(SOURCE_FILES 
-        Logger.cpp
-        Buffer.cpp)
+        ${CMAKE_CURRENT_LIST_DIR}/Logger.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/Buffer.cpp)
 
-add_library(EIPScannerUtil SHARED ${SOURCE_FILES})
-add_library(EIPScannerUtilS STATIC ${SOURCE_FILES})
-
-target_link_libraries(EIPScannerUtil EIPScanner)
-target_link_libraries(EIPScannerUtilS EIPScannerS)
+        
+target_sources(EIPScanner PUBLIC ${SOURCE_FILES})
+target_sources(EIPScanner PUBLIC ${SOURCE_FILES})

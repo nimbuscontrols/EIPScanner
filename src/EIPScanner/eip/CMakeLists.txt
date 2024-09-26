@@ -1,12 +1,9 @@
 set(SOURCE_FILES 
-        CommonPacket.cpp
-        CommonPacketItem.cpp
-        CommonPacketItemFactory.cpp
-        EncapsPacket.cpp
-        EncapsPacketFactory.cpp)
+        ${CMAKE_CURRENT_LIST_DIR}/CommonPacket.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/CommonPacketItem.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/CommonPacketItemFactory.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/EncapsPacket.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/EncapsPacketFactory.cpp)
 
-add_library(EIPScannerEip SHARED ${SOURCE_FILES})
-add_library(EIPScannerEipS STATIC ${SOURCE_FILES})
-
-target_link_libraries(EIPScannerEip EIPScanner)
-target_link_libraries(EIPScannerEipS EIPScannerS)
+target_sources(EIPScanner PUBLIC ${SOURCE_FILES})
+target_sources(EIPScannerS PUBLIC ${SOURCE_FILES})

@@ -23,7 +23,8 @@ add_subdirectory(utils)
 
 # if vendor scripts are enabled
 if(ENABLE_VENDOR_SRC)
-        add_subdirectory(vendor)
+        add_subdirectory(vendor/ra)
+        add_subdirectory(vendor/yaskawa)
 endif()
 
 
@@ -46,5 +47,5 @@ install(TARGETS EIPScanner EIPScannerS
             DESTINATION lib)
 
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/
-        DESTINATION include/
+        DESTINATION include
         FILES_MATCHING PATTERN "*.h*")

@@ -1,13 +1,11 @@
 set(SOURCE_FILES 
-        BaseSocket.cpp
-        EndPoint.cpp
-        TCPSocket.cpp
-        UDPBoundSocket.cpp
-        UDPSocket.cpp
-        Platform.cpp)
+        ${CMAKE_CURRENT_LIST_DIR}/BaseSocket.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/EndPoint.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/TCPSocket.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/UDPBoundSocket.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/UDPSocket.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/Platform.cpp)
 
-add_library(EIPScannerSocket SHARED ${SOURCE_FILES})
-add_library(EIPScannerSocketS STATIC ${SOURCE_FILES})
-
-target_link_libraries(EIPScannerSocket EIPScanner)
-target_link_libraries(EIPScannerSocketS EIPScannerS)
+        
+target_sources(EIPScanner PUBLIC ${SOURCE_FILES})
+target_sources(EIPScanner PUBLIC ${SOURCE_FILES})
