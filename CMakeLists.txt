@@ -14,7 +14,7 @@ project(EIPScanner
 set(CMAKE_CXX_STANDARD 20)
 option(ENABLE_VENDOR_SRC "Enable vendor source" ON)
 option(TEST_ENABLED "Enable unit test" OFF)
-option(EXAMPLE_ENABLED "Build examples" ON)
+option(EXAMPLE_ENABLED "Build examples" OFF)
 
 if (WIN32)
 	# Needed on MinGW with GCC 10 or lower
