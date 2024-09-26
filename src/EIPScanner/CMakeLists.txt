@@ -25,3 +25,26 @@ add_subdirectory(utils)
 if(ENABLE_VENDOR_SRC)
         add_subdirectory(vendor)
 endif()
+
+
+if(WIN32)
+	target_link_libraries(EIPScanner ws2_32)
+	target_link_libraries(EIPScannerS ws2_32)
+endif()
+
+
+set_target_properties(
+        EIPScanner
+        PROPERTIES
+        VERSION ${EIPSCANNER_FULL_VERSION}
+        SOVERSION ${EIPSCANNER_MAJOR_VERSION})
+
+install(TARGETS EIPScanner EIPScannerS
+        LIBRARY
+            DESTINATION lib
+        ARCHIVE
+            DESTINATION lib)
+
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/
+        DESTINATION include/EIPScanner
+        FILES_MATCHING PATTERN "*.h*")
