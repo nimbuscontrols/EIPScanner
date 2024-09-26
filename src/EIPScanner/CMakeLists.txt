@@ -46,5 +46,5 @@ install(TARGETS EIPScanner EIPScannerS
             DESTINATION lib)
 
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/
-        DESTINATION include/EIPScanner
+        DESTINATION include/
         FILES_MATCHING PATTERN "*.h*")
