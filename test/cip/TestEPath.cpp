@@ -3,7 +3,7 @@
 //
 
 #include <gtest/gtest.h>
-#include "cip/EPath.h"
+#include "EIPScanner/cip/EPath.h"
 
 using eipScanner::cip::EPath;
 

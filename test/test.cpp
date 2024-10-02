@@ -3,7 +3,7 @@
 //
 
 #include <gtest/gtest.h>
-#include "utils/Logger.h"
+#include "EIPScanner/utils/Logger.h"
 
 int main(int argc, char **argv) {
 	eipScanner::utils::Logger::setLogLevel(eipScanner::utils::LogLevel::DEBUG);

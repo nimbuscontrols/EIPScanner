@@ -5,8 +5,8 @@
 
 #include <gtest/gtest.h>
 #include "Mocks.h"
-#include "vendor/ra/powerFlex525/DPIFaultObject.h"
-#include "vendor/ra/powerFlex525/DPIFaultParameter.h"
+#include "EIPScanner/vendor/ra/powerFlex525/DPIFaultObject.h"
+#include "EIPScanner/vendor/ra/powerFlex525/DPIFaultParameter.h"
 
 using namespace eipScanner;
 using namespace eipScanner::vendor::ra::powerFlex525;

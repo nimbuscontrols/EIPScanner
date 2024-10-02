@@ -1,6 +1,6 @@
 
 #include <gtest/gtest.h>
-#include "utils/Buffer.h"
+#include "EIPScanner/utils/Buffer.h"
 
 using namespace eipScanner;
 using eipScanner::utils::Buffer;

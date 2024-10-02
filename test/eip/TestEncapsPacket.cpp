@@ -3,7 +3,7 @@
 //
 
 #include <gtest/gtest.h>
-#include "eip/EncapsPacket.h"
+#include "EIPScanner/eip/EncapsPacket.h"
 
 using eipScanner::eip::EncapsPacket;
 using eipScanner::eip::EncapsCommands;
