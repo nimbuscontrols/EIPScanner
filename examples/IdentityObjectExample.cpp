@@ -7,8 +7,8 @@
 #define OS_Windows (1)
 #endif
 
-#include "IdentityObject.h"
-#include "utils/Logger.h"
+#include <EIPScanner/IdentityObject.h>
+#include <EIPScanner/utils/Logger.h>
 
 using eipScanner::IdentityObject;
 using eipScanner::SessionInfo;

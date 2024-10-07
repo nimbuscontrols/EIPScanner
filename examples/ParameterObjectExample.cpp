@@ -7,9 +7,9 @@
 #define OS_Windows (1)
 #endif
 
-#include "ParameterObject.h"
-#include "utils/Logger.h"
-#include "utils/Buffer.h"
+#include <EIPScanner/ParameterObject.h>
+#include <EIPScanner/utils/Logger.h>
+#include <EIPScanner/utils/Buffer.h>
 
 using namespace eipScanner::cip;
 using eipScanner::SessionInfo;

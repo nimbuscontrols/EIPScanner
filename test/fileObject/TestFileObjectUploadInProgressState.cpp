@@ -4,10 +4,10 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include "Mocks.h"
-#include "FileObject.h"
-#include "fileObject/FileObjectUploadInProgressState.h"
-#include "utils/Buffer.h"
+#include "FileObjectMocks.h"
+#include "EIPScanner/FileObject.h"
+#include "EIPScanner/fileObject/FileObjectUploadInProgressState.h"
+#include "EIPScanner/utils/Buffer.h"
 
 using namespace eipScanner;
 using eipScanner::fileObject::FileObjectUploadInProgressState;

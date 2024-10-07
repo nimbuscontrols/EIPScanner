@@ -8,11 +8,11 @@
 #endif
 
 #include <sstream>
-#include <cip/connectionManager/NetworkConnectionParams.h>
-#include "SessionInfo.h"
-#include "ConnectionManager.h"
-#include "utils/Logger.h"
-#include "utils/Buffer.h"
+#include <EIPScanner/cip/connectionManager/NetworkConnectionParams.h>
+#include <EIPScanner/SessionInfo.h>
+#include <EIPScanner/ConnectionManager.h>
+#include <EIPScanner/utils/Logger.h>
+#include <EIPScanner/utils/Buffer.h>
 
 using namespace eipScanner::cip;
 using eipScanner::SessionInfo;
