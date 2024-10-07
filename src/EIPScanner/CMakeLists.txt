@@ -25,7 +25,6 @@ add_subdirectory(utils)
 if(ENABLE_VENDOR_SRC)
         add_subdirectory(vendor/ra)
         add_subdirectory(vendor/yaskawa)
-        add_subdirectory(vendor/teknic)
 endif()
 
 
