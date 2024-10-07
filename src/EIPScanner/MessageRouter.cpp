@@ -40,7 +40,7 @@ namespace eipScanner {
 							   const std::vector<eip::CommonPacketItem>& additionalPacketItems) const {
 		assert(si);
 
-		Logger(LogLevel::INFO) << "Send request: service=0x" << std::hex << static_cast<int>(service)
+		Logger(LogLevel::DEBUG) << "Send request: service=0x" << std::hex << static_cast<int>(service)
 							   << " epath=" << path.toString();
 
 		MessageRouterRequest request{service, path, data, _use_8_bit_path_segments};
