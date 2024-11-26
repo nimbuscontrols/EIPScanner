@@ -17,8 +17,8 @@ namespace eipScanner {
 	public:
 		/**
 		 * @brief Creates an CIP instance
-		 * @param classId the class ID of the the new instance
-		 * @param instanceId the instance ID of the the new instanc
+		 * @param classId the class ID of the new instance
+		 * @param instanceId the instance ID of the new instanc
 		 */
 		BaseObject(cip::CipUint classId, cip::CipUint instanceId);
 
