@@ -2,24 +2,30 @@
 ===================
 
 Some devices only support 8-bit path segments. In order to set up
-**EIPScanner** to use 8-bit path segments, a *MessageRouter* with the
-**USE_8_BIT_PATH_SEGMENTS** flag set should be passed to the *ConnectionManager*
-upon construction:
+**EIPScanner** to use 8-bit path segments, specify the **use_8_bit_path_segments**
+parameter when creating the *SessionInfo* object for the adapter.
 
 .. code-block:: cpp
 
-    #include "MessageRouter.h"
+    #include <cip/connectionManager/NetworkConnectionParams.h>
     #include "ConnectionManager.h"
+    #include "MessageRouter.h"
+    #include "SessionInfo.h"
 
+    using eipScanner::cip::connectionManager::ConnectionParameters;
     using eipScanner::ConnectionManager;
     using eipScanner::MessageRouter;
+    using eipScanner::SessionInfo;
 
     int main()
     {
-        MessageRouter::SPtr mr_ptr = std::make_shared<MessageRouter>(MessageRouter::USE_8_BIT_PATH_SEGMENTS);
-        ConnectionManager _connectionManager = ConnectionManager(mr_ptr);
-   
-        /* ConnectionManager now uses 8-bit path segments */
+        auto si = std::make_shared<SessionInfo>("172.28.1.3", 0xAF12, true);
+
+        /* The connection now uses 8-bit path segments for the forward open*/
+        ConnectionManager connectionManager;
+        ConnectionParameters parameters;
+        auto io = connectionManager.forwardOpen(si, parameters);
+        connectionManager.forwardClose(si, io);
    
         return 0;
     }
