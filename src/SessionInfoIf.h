@@ -19,6 +19,8 @@ namespace eipScanner {
 	public:
 		using SPtr = std::shared_ptr<SessionInfoIf>;
 
+		virtual ~SessionInfoIf(){}
+
 		/**
 		 * Sends and receives EIP Encapsulation packet
 		 * @param packet the EIP Encapsulation packet to send
