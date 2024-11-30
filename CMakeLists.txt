@@ -16,6 +16,10 @@ option(ENABLE_VENDOR_SRC "Enable vendor source" ON)
 option(TEST_ENABLED "Enable unit test" OFF)
 option(EXAMPLE_ENABLED "Build examples" OFF)
 
+if (DEFINED "${PROJECT_NAME}_SHARED_LIBS")
+    set(BUILD_SHARED_LIBS "${${PROJECT_NAME}_SHARED_LIBS}")
+endif()
+
 if (WIN32)
 	# Needed on MinGW with GCC 10 or lower
 	add_compile_definitions(_WIN32_WINNT=0x0600)
