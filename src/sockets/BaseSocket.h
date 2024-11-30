@@ -15,6 +15,10 @@
 
 #include "EndPoint.h"
 
+#if !defined(_MSC_VER)
+# include <sys/time.h>
+#endif
+
 namespace eipScanner {
 namespace sockets {
 	class BaseSocket {
